@@ -3599,3 +3599,338 @@ section[id] { scroll-margin-top: 84px; }
 @media (max-width: 680px) {
   .storia-numbers-strip { grid-template-columns: 1fr 1fr; }
 }
+
+/* ============================================================
+   EFFETTI PREMIUM V13 — Visione dinamica
+   ============================================================ */
+
+/* ----- Effetto 2: Custom Cursor ----- */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+}
+#cursor {
+  width: 36px; height: 36px;
+  border: 1.5px solid #E85320;
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+#cursor-dot {
+  width: 5px; height: 5px;
+  background: #E85320;
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 100000;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s ease;
+  opacity: 0;
+}
+#cursor.visible { opacity: 1; }
+#cursor-dot.visible { opacity: 1; }
+#cursor.hover {
+  transform: translate(-50%, -50%) scale(2.2);
+  background: rgba(232,83,32,0.12);
+  border-color: #C8860A;
+}
+
+/* ----- Effetto 4: Marquee XL ----- */
+.marquee-xl {
+  overflow: hidden;
+  padding: 10px 0;
+  background: transparent;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin: 0;
+}
+.marquee-xl__track {
+  display: flex;
+  white-space: nowrap;
+  animation: marqueeXL 38s linear infinite;
+}
+.marquee-xl__track span {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: clamp(56px, 9vw, 130px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(245,200,66,0.20);
+  padding-right: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+@keyframes marqueeXL {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-xl:hover .marquee-xl__track {
+  animation-play-state: paused;
+}
+
+/* ----- Effetto 5: Gusti Scroll Pinning ----- */
+.gusti-scroll {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 400vh;
+}
+.gusti-scroll__sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gusti-bottle { width: min(360px, 80%); }
+.gusti-bottle img {
+  width: 100%;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+  filter: drop-shadow(0 40px 60px rgba(0,0,0,0.5));
+}
+.gusti-scroll__slides {
+  display: flex;
+  flex-direction: column;
+}
+.gusto-slide {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 60px;
+}
+.gusto-slide__num {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #E85320;
+  margin-bottom: 16px;
+  font-family: var(--font-label, 'Montserrat', sans-serif);
+  text-transform: uppercase;
+}
+.gusto-slide h2 {
+  font-family: var(--font-title, 'Playfair Display', serif);
+  font-size: clamp(32px, 3.5vw, 56px);
+  font-weight: 900;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.gusto-slide p {
+  font-size: 1rem;
+  color: var(--color-text-muted, #b0a090);
+  margin-bottom: 28px;
+  max-width: 380px;
+  line-height: 1.65;
+}
+@media (max-width: 900px) {
+  .gusti-scroll {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .gusti-scroll__sticky {
+    position: relative;
+    height: 50vw;
+    min-height: 200px;
+  }
+  .gusti-scroll__slides { display: block; }
+  .gusto-slide {
+    height: auto;
+    padding: 40px 24px;
+    min-height: 50vh;
+  }
+}
+
+/* ----- Effetto 7: Sauce Drip ----- */
+.product-card { overflow: visible; position: relative; }
+.card-drip {
+  position: absolute;
+  top: -65px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 10;
+}
+.card-drip__svg { width: 100%; }
+[data-gusto="porcini-speck"]    .card-drip { color: #7B4B2A; }
+[data-gusto="tartufo-pecorino"] .card-drip { color: #5a4a3a; }
+[data-gusto="paprika-bbq"]      .card-drip { color: #C8281E; }
+[data-gusto="teriyaki-zenzero"] .card-drip { color: #2D5016; }
+
+/* ----- Effetto 8: Hero Canvas particles ----- */
+#heroCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero { position: relative; }
+.hero__content,
+.hero__visual,
+.hero__bg-blobs,
+.hero__drip { position: relative; z-index: 1; }
+
+/* ----- Effetto 10: Video Section ----- */
+.video-section {
+  position: relative;
+  height: 65vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.video-overlay {
+  position: absolute; inset: 0;
+  background: rgba(13,7,2,0.65);
+  z-index: 1;
+}
+.video-content {
+  position: relative; z-index: 2;
+  text-align: center; color: #fff;
+}
+.video-content h2 {
+  font-family: var(--font-title, 'Playfair Display', serif);
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 900;
+  margin-bottom: 24px;
+}
+/* Placeholder animato quando non c'è il video */
+.video-placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a0d05 0%, #2a1008 50%, #0D0702 100%);
+  z-index: 0;
+  overflow: hidden;
+}
+.video-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(232,83,32,0.12) 0%, transparent 70%);
+  animation: videoPulse 4s ease-in-out infinite;
+}
+@keyframes videoPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.15); }
+}
+
+/* ----- Effetto 11: Page Loader ----- */
+#page-loader {
+  position: fixed;
+  inset: 0;
+  background: #0D0702;
+  z-index: 199999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  pointer-events: all;
+}
+#page-loader.done {
+  pointer-events: none;
+}
+.loader-logo {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.loader-bar {
+  width: 120px;
+  height: 1.5px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-bar__fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: #E85320;
+  border-radius: 2px;
+  transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ----- Effetto 12: Transition Overlay ----- */
+#transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0D0702;
+  z-index: 99998;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+/* ----- Effetto 13: Navbar Glassmorphism migliorato ----- */
+.navbar.scrolled {
+  background: rgba(13, 7, 2, 0.78) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.45) !important;
+}
+.navbar.scrolled .navbar__logo img {
+  filter: brightness(1.15);
+}
+.navbar__link {
+  position: relative;
+  padding-bottom: 3px;
+}
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1.5px;
+  background: #E85320;
+  transition: width 0.3s ease;
+}
+.navbar__link:hover::after,
+.navbar__link.active::after { width: 100%; }
+
+/* ----- Effetto 14: Color Theme per gusto ----- */
+:root { --accent-gusto: #E85320; }
+.ff-card[data-color]:hover .ff-card__name,
+.gusto-accent-text { color: var(--accent-gusto); }
+
+/* ----- Effetto 15: Scroll Progress Bar ----- */
+#scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: #E85320;
+  z-index: 100001;
+  width: 0%;
+  transform-origin: left;
+  pointer-events: none;
+  transition: width 0.05s linear;
+}
+
+/* ----- Effetto 9: Text Scramble ----- */
+[data-scramble] { display: inline-block; }
+
+/* ----- Reduced motion: ferma tutte le animazioni ----- */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-xl__track { animation: none !important; }
+  #cursor, #cursor-dot { display: none !important; }
+  .gusti-bottle img { transition: none !important; }
+  .card-drip { display: none !important; }
+  #page-loader { display: none !important; }
+  #transition-overlay { display: none !important; }
+}

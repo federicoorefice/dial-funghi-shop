@@ -402,12 +402,25 @@ function initCarousel() {
    RENDER FIOR DI FUNGHI GRID (home)
    ============================================================ */
 
+const GUSTO_COLORS = {
+  'porcini-speck':    '#7B4B2A',
+  'tartufo-pecorino': '#4a3828',
+  'paprika-bbq':      '#C8281E',
+  'teriyaki-zenzero': '#2D5016'
+};
+
 function renderFFGrid() {
   const grid = $('#ffGrid');
   if (!grid || typeof FIOR_DI_FUNGHI === 'undefined') return;
 
   grid.innerHTML = FIOR_DI_FUNGHI.map(p => `
-    <div class="ff-card" onclick="window.location='product.html?id=${p.id}'">
+    <div class="ff-card" data-gusto="${p.id}" data-color="${GUSTO_COLORS[p.id] || '#E85320'}" onclick="window.location='product.html?id=${p.id}'">
+      <div class="card-drip" aria-hidden="true">
+        <svg class="card-drip__svg" viewBox="0 0 20 60">
+          <path d="M10,0 Q14,20 14,35 Q14,50 10,55 Q6,50 6,35 Q6,20 10,0Z" fill="currentColor"/>
+          <circle cx="10" cy="57" r="3" fill="currentColor"/>
+        </svg>
+      </div>
       <div class="ff-card__accent"></div>
       <img
         src="${p.image}"
@@ -432,6 +445,8 @@ function renderFFGrid() {
         </button>
       </div>
     </div>`).join('');
+
+  setTimeout(() => { initSauceDrip(); initColorTheme(); }, 100);
 }
 
 /* ============================================================
@@ -447,7 +462,10 @@ function renderGammaGrid(filter = 'tutti') {
     : ALL_PRODUCTS.filter(p => p.category === filter).slice(0, 8);
 
   grid.innerHTML = products.map((p, i) => `
-    <div class="product-card" style="transition-delay:${i * 40}ms" onclick="window.location='product.html?id=${p.id}'">
+    <div class="product-card" style="transition-delay:${i * 40}ms"
+         data-gusto="${p.id}" data-color="${GUSTO_COLORS[p.id] || ''}"
+         onclick="window.location='product.html?id=${p.id}'">
+      ${GUSTO_COLORS[p.id] ? `<div class="card-drip" aria-hidden="true"><svg class="card-drip__svg" viewBox="0 0 20 60"><path d="M10,0 Q14,20 14,35 Q14,50 10,55 Q6,50 6,35 Q6,20 10,0Z" fill="currentColor"/><circle cx="10" cy="57" r="3" fill="currentColor"/></svg></div>` : ''}
       <div class="product-card__img-wrap">
         <img
           src="${p.image}"
@@ -1401,3 +1419,392 @@ function initStoriaCounters() {
 
   observer.observe(strip);
 }
+
+/* ============================================================
+   EFFETTI PREMIUM V13
+   ============================================================ */
+
+/* ----- Effetto 1: LENIS SMOOTH SCROLL ----- */
+function initLenis() {
+  try {
+    if (typeof Lenis === 'undefined') return;
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+    if (typeof ScrollTrigger !== 'undefined') {
+      lenis.on('scroll', ScrollTrigger.update);
+    }
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+    window._lenis = lenis;
+  } catch(e) { console.warn('Lenis init error:', e); }
+}
+
+/* ----- Effetto 2: CUSTOM CURSOR ----- */
+function initCustomCursor() {
+  const cursor    = document.getElementById('cursor');
+  const cursorDot = document.getElementById('cursor-dot');
+  if (!cursor || !cursorDot) return;
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+
+  let mouseX = 0, mouseY = 0;
+  let curX = 0, curY = 0;
+  let cursorVisible = false;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorDot.style.left = mouseX + 'px';
+    cursorDot.style.top  = mouseY + 'px';
+    if (!cursorVisible) {
+      cursor.classList.add('visible');
+      cursorDot.classList.add('visible');
+      cursorVisible = true;
+    }
+  });
+
+  function animateCursor() {
+    curX += (mouseX - curX) * 0.12;
+    curY += (mouseY - curY) * 0.12;
+    cursor.style.left = curX + 'px';
+    cursor.style.top  = curY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  function addHoverListeners() {
+    document.querySelectorAll('a, button, .product-card, .recipe-card, .cert-card, .ff-card, .gusto-slide')
+      .forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+  }
+  addHoverListeners();
+  // Re-run after dynamic content loads
+  setTimeout(addHoverListeners, 1500);
+}
+
+/* ----- Effetto 3: MAGNETIC BUTTONS ----- */
+function initMagneticButtons() {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  document.querySelectorAll('.btn--primary, .btn--outline, .btn--ghost, .magnetic').forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width  / 2;
+      const y = e.clientY - rect.top  - rect.height / 2;
+      if (typeof gsap !== 'undefined') {
+        gsap.to(btn, { x: x * 0.32, y: y * 0.32, duration: 0.4, ease: 'power2.out' });
+      }
+    });
+    btn.addEventListener('mouseleave', () => {
+      if (typeof gsap !== 'undefined') {
+        gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+      }
+    });
+  });
+}
+
+/* ----- Effetto 5: SCROLL PINNING GUSTI ----- */
+function initGustiScrollPin() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  document.querySelectorAll('.gusto-slide').forEach((slide) => {
+    ScrollTrigger.create({
+      trigger: slide,
+      start: 'top center',
+      end: 'bottom center',
+      onEnter: () => {
+        const color = slide.dataset.color;
+        if (color) {
+          gsap.to(document.documentElement, { '--accent-gusto': color, duration: 0.6, ease: 'power2.out' });
+          document.documentElement.style.setProperty('--accent-gusto', color);
+        }
+      },
+      onLeaveBack: () => {
+        document.documentElement.style.setProperty('--accent-gusto', '#E85320');
+      }
+    });
+  });
+}
+
+/* ----- Effetto 6: LIQUID SPLASH CURSOR (canvas) ----- */
+function initSplashCanvas() {
+  const isMobile = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+  if (isMobile) return;
+  const canvas = document.getElementById('splashCanvas');
+  if (!canvas) return;
+  try {
+    const ctx = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }, { passive: true });
+
+    const particles = [];
+    let mx = 0, my = 0, pmx = 0, pmy = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      const speed = Math.hypot(mx - pmx, my - pmy);
+      if (speed > 8) {
+        for (let i = 0; i < 3; i++) {
+          particles.push({
+            x: mx + (Math.random() - 0.5) * 10,
+            y: my + (Math.random() - 0.5) * 10,
+            vx: (Math.random() - 0.5) * 3,
+            vy: (Math.random() - 0.5) * 3 - 1,
+            life: 1,
+            size: Math.random() * 5 + 2,
+            hue: Math.random() > 0.5 ? '#E85320' : '#C8860A'
+          });
+        }
+      }
+      pmx = mx; pmy = my;
+    });
+
+    function renderSplash() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        p.vy += 0.08;
+        p.life -= 0.04;
+        if (p.life <= 0) { particles.splice(i, 1); continue; }
+        ctx.globalAlpha = p.life * 0.55;
+        ctx.fillStyle   = p.hue;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(renderSplash);
+    }
+    renderSplash();
+  } catch(e) { console.warn('Splash canvas error:', e); }
+}
+
+/* ----- Effetto 7: SAUCE DRIP ----- */
+function initSauceDrip() {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  if (typeof gsap === 'undefined') return;
+  document.querySelectorAll('.product-card[data-gusto], .ff-card[data-gusto]').forEach(card => {
+    const drip = card.querySelector('.card-drip');
+    if (!drip) return;
+    card.addEventListener('mouseenter', () => {
+      gsap.fromTo(drip,
+        { y: -65, opacity: 1 },
+        { y: 0, duration: 0.65, ease: 'power2.in', opacity: 1 }
+      );
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(drip, { y: -65, opacity: 0, duration: 0.3 });
+    });
+  });
+}
+
+/* ----- Effetto 8: THREE.JS PARTICLES HERO ----- */
+function initHeroParticles() {
+  const isMobile = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+  if (isMobile) return;
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+  try {
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 100);
+    camera.position.z = 3;
+
+    const COUNT = 180;
+    const geo   = new THREE.BufferGeometry();
+    const pos   = new Float32Array(COUNT * 3);
+    for (let i = 0; i < COUNT * 3; i++) pos[i] = (Math.random() - 0.5) * 6;
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+    const mat = new THREE.PointsMaterial({ color: 0xE85320, size: 0.035, transparent: true, opacity: 0.65 });
+    const points = new THREE.Points(geo, mat);
+    scene.add(points);
+
+    let mx = 0, my = 0;
+    window.addEventListener('mousemove', e => {
+      mx = (e.clientX / window.innerWidth  - 0.5) * 0.5;
+      my = (e.clientY / window.innerHeight - 0.5) * 0.5;
+    }, { passive: true });
+
+    (function animate() {
+      requestAnimationFrame(animate);
+      points.rotation.y += 0.0008;
+      points.rotation.x += 0.0004;
+      camera.position.x += (mx - camera.position.x) * 0.03;
+      camera.position.y += (-my - camera.position.y) * 0.03;
+      renderer.render(scene, camera);
+    })();
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+      camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
+      camera.updateProjectionMatrix();
+    }, { passive: true });
+  } catch(e) { console.warn('Three.js particles error:', e); }
+}
+
+/* ----- Effetto 9: TEXT SCRAMBLE ----- */
+function scrambleText(el) {
+  const chars  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@!';
+  const target = el.dataset.text || el.textContent;
+  let iteration = 0;
+  const interval = setInterval(() => {
+    el.textContent = target.split('').map((char, i) => {
+      if (char === ' ') return ' ';
+      if (i < iteration) return target[i];
+      return chars[Math.floor(Math.random() * chars.length)];
+    }).join('');
+    if (iteration >= target.length) clearInterval(interval);
+    iteration += 1/3;
+  }, 30);
+}
+
+function initScramble() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        scrambleText(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-scramble]').forEach(el => observer.observe(el));
+}
+
+/* ----- Effetto 11: PAGE LOADER ----- */
+function initPageLoader() {
+  const loader  = document.getElementById('page-loader');
+  if (!loader) return;
+  const logoEl  = loader.querySelector('.loader-logo');
+  const barFill = loader.querySelector('.loader-bar__fill');
+
+  if (logoEl) {
+    requestAnimationFrame(() => {
+      logoEl.style.opacity   = '1';
+      logoEl.style.transform = 'translateY(0)';
+    });
+  }
+  if (barFill) {
+    setTimeout(() => { barFill.style.width = '100%'; }, 100);
+  }
+
+  setTimeout(() => {
+    if (typeof gsap !== 'undefined') {
+      gsap.to(loader, {
+        yPercent: -100,
+        duration: 0.7,
+        ease: 'power3.inOut',
+        onComplete: () => { loader.style.display = 'none'; }
+      });
+    } else {
+      loader.style.display = 'none';
+    }
+  }, 1200);
+}
+
+/* ----- Effetto 12: PAGE TRANSITIONS ----- */
+function initPageTransitions() {
+  const overlay = document.getElementById('transition-overlay');
+  if (!overlay || typeof gsap === 'undefined') return;
+
+  // Reveal page on load
+  gsap.fromTo(overlay, { yPercent: 0 }, {
+    yPercent: -100, duration: 0.55,
+    ease: 'power3.inOut', delay: 0.05
+  });
+
+  // Intercept internal links
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('http') ||
+        href.startsWith('mailto') || href.startsWith('tel') ||
+        link.target === '_blank') return;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      gsap.to(overlay, {
+        yPercent: 0,
+        duration: 0.42,
+        ease: 'power3.inOut',
+        onComplete: () => { window.location.href = href; }
+      });
+    });
+  });
+}
+
+/* ----- Effetto 14: COLOR THEME PER GUSTO ----- */
+function initColorTheme() {
+  if (typeof gsap === 'undefined') return;
+  document.querySelectorAll('.ff-card[data-color], .product-card[data-color]').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      document.documentElement.style.setProperty('--accent-gusto', card.dataset.color);
+    });
+    card.addEventListener('mouseleave', () => {
+      document.documentElement.style.setProperty('--accent-gusto', '#E85320');
+    });
+  });
+}
+
+/* ----- Effetto 15: SCROLL PROGRESS BAR ----- */
+function initScrollProgress() {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  window.addEventListener('scroll', () => {
+    const scrolled  = window.scrollY;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll <= 0) return;
+    bar.style.width = ((scrolled / maxScroll) * 100) + '%';
+  }, { passive: true });
+}
+
+/* ----- Init all premium effects ----- */
+document.addEventListener('DOMContentLoaded', () => {
+  // Lenis (se CDN caricato)
+  initLenis();
+
+  // Cursor
+  initCustomCursor();
+
+  // Magnetic buttons
+  initMagneticButtons();
+
+  // Scroll progress bar
+  initScrollProgress();
+
+  // Text scramble
+  initScramble();
+
+  // Page loader
+  initPageLoader();
+
+  // Page transitions
+  initPageTransitions();
+
+  // Splash canvas
+  initSplashCanvas();
+
+  // Hero Three.js particles (solo index)
+  const path2 = window.location.pathname;
+  const page2 = path2.split('/').pop().replace('.html', '') || 'index';
+  if (page2 === 'index' || page2 === '' || path2 === '/') {
+    initHeroParticles();
+    initGustiScrollPin();
+    // Color theme per gusto
+    setTimeout(initColorTheme, 800);
+  }
+  // Sauce drip (su tutte le pagine)
+  setTimeout(initSauceDrip, 800);
+});
