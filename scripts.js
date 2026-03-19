@@ -963,48 +963,63 @@ function initRecipesPage() {
   const grid = $('#recipesGrid');
   if (!grid || typeof RECIPES === 'undefined') return;
 
-  let activeTag = 'Tutti';
-
-  function renderRecipes(tag) {
-    const filtered = tag === 'Tutti' ? RECIPES : RECIPES.filter(r => r.tags.includes(tag));
-    grid.innerHTML = filtered.map(r => `
-      <div class="recipe-card" data-id="${r.id}" onclick="openRecipeModal('${r.id}')">
-        <img src="${r.image}" alt="${r.title}" class="recipe-card__img" loading="lazy" onerror="this.style.background='var(--color-bg-mid)'">
-        <div class="recipe-card__body">
-          <div class="recipe-card__meta">
-            <span class="recipe-card__meta-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              ${r.time}
-            </span>
-            <span class="recipe-card__meta-item">${r.difficulty}</span>
-            <span class="recipe-card__meta-item">${r.servings} pers.</span>
-          </div>
-          <h3 class="recipe-card__title">${r.title}</h3>
-          <p class="recipe-card__sub">${r.subtitle}</p>
-          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;">
-            ${r.tags.map(t => `<span class="tag" style="font-size:0.58rem; padding:3px 9px;">${t}</span>`).join('')}
-          </div>
+  // 1 — Render tutte le 12 card con data-attributes
+  grid.innerHTML = RECIPES.map(r => `
+    <div class="recipe-card"
+         data-id="${r.id}"
+         data-gusto="${r.gusto}"
+         data-vegetariano="${r.vegetariano}"
+         data-vegan="${r.vegan}"
+         data-glutenfree="${r.glutenfree}"
+         onclick="openRecipeModal('${r.id}')">
+      <img src="${r.image}" alt="${r.title}" class="recipe-card__img" loading="lazy" onerror="this.style.background='var(--color-bg-mid)'">
+      <div class="recipe-card__body">
+        <div class="recipe-card__meta">
+          <span class="recipe-card__meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${r.time}
+          </span>
+          <span class="recipe-card__meta-item">${r.difficulty}</span>
+          <span class="recipe-card__meta-item">${r.servings} pers.</span>
         </div>
-      </div>`).join('');
-  }
+        <h3 class="recipe-card__title">${r.title}</h3>
+        <p class="recipe-card__sub">${r.subtitle}</p>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;">
+          ${r.tags.map(t => `<span class="tag" style="font-size:0.58rem; padding:3px 9px;">${t}</span>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
 
-  // Render tag filters
-  const tagsEl = $('#recipeTags');
-  if (tagsEl && typeof getAllRecipeTags !== 'undefined') {
-    const tags = getAllRecipeTags();
-    tagsEl.innerHTML = tags.map(t => `
-      <button class="tag ${t === 'Tutti' ? 'active' : ''}" data-tag="${t}">${t}</button>`).join('');
-    tagsEl.addEventListener('click', e => {
-      const btn = e.target.closest('.tag');
-      if (!btn) return;
-      $$('#recipeTags .tag').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
-      activeTag = btn.dataset.tag;
-      renderRecipes(activeTag);
+  // 2 — Funzione filtro su data-attributes
+  function filterRecipes(filter) {
+    const cards = $$('.recipe-card', grid);
+    cards.forEach(card => {
+      let show = false;
+      switch (filter) {
+        case 'tutti':       show = true; break;
+        case 'vegetariano': show = card.dataset.vegetariano === 'true'; break;
+        case 'vegan':       show = card.dataset.vegan === 'true'; break;
+        case 'gluten-free': show = card.dataset.glutenfree === 'true'; break;
+        default:            show = card.dataset.gusto === filter; break;
+      }
+      card.style.display = show ? '' : 'none';
     });
   }
 
-  renderRecipes('Tutti');
+  // 3 — Render pulsanti filtro
+  const tagsEl = $('#recipeTags');
+  if (tagsEl && typeof getAllRecipeTags !== 'undefined') {
+    const filters = getAllRecipeTags();
+    tagsEl.innerHTML = filters.map(f => `
+      <button class="tag ${f.value === 'tutti' ? 'active' : ''}" data-filter="${f.value}">${f.label}</button>`).join('');
+    tagsEl.addEventListener('click', e => {
+      const btn = e.target.closest('[data-filter]');
+      if (!btn) return;
+      $$('#recipeTags [data-filter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterRecipes(btn.dataset.filter);
+    });
+  }
 }
 
 /* ============================================================

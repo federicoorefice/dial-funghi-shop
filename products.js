@@ -30,6 +30,7 @@ const FIOR_DI_FUNGHI = [
     stripePaymentLink: 'STRIPE_LINK_FFPS',
     ingredients: 'Funghi porcini, speck (carne di suino, sale, aromi naturali), olio extravergine di oliva, aceto di vino, sale, aglio.',
     allergens: 'Può contenere tracce di glutine.',
+    usage: 'Scalda 2 min in padella o usa direttamente su pasta, risotto, hamburger e bruschette. Ottima anche fredda su formaggi stagionati. Agitare prima dell\'uso.',
     usageIdeas: ['Pasta', 'Bruschette', 'Carni grigliate', 'Formaggi', 'Risotti'],
     nutritionPer100g: {
       energia: '180 kcal',
@@ -61,6 +62,7 @@ const FIOR_DI_FUNGHI = [
     stripePaymentLink: 'STRIPE_LINK_FFTAP',
     ingredients: 'Funghi (porcini, champignon), tartufo estivo (Tuber aestivum), pecorino stagionato, olio extravergine di oliva, sale.',
     allergens: 'Contiene latte. Senza glutine.',
+    usage: 'Spalmala su crostini e bruschette. Su pasta: aggiungi a fine cottura con una noce di burro. Su uova strapazzate a fuoco spento. Perfetta anche per farcire tartine e pizzette bianche. Agitare prima dell\'uso.',
     usageIdeas: ['Pasta', 'Uova', 'Crostini', 'Risotto', 'Pizza bianca'],
     nutritionPer100g: {
       energia: '195 kcal',
@@ -92,6 +94,7 @@ const FIOR_DI_FUNGHI = [
     stripePaymentLink: 'STRIPE_LINK_FFPAB',
     ingredients: 'Funghi porcini, paprika affumicata, pomodoro, cipolla, olio di girasole, aceto di mele, zucchero di canna, sale, pepe nero.',
     allergens: 'Senza glutine. Senza lattosio.',
+    usage: 'Perfetta su carni alla griglia durante e dopo la cottura. Su hamburger, patatine, hot dog. Mix con maionese per una salsa BBQ cremosa. Agitare prima dell\'uso.',
     usageIdeas: ['Hamburger', 'Carni grigliate', 'Patatine', 'Panini', 'Verdure arrosto'],
     nutritionPer100g: {
       energia: '165 kcal',
@@ -124,6 +127,7 @@ const FIOR_DI_FUNGHI = [
     stripePaymentLink: 'STRIPE_LINK_FFT',
     ingredients: 'Funghi porcini, salsa di soia (acqua, soia, frumento, sale), zenzero, mirin, olio di sesamo, zucchero di canna, aglio.',
     allergens: 'Contiene soia e frumento (tracce). Verificare etichetta per versione GF certificata.',
+    usage: 'Marina pollo, salmone o tofu per 30 min prima della cottura. In wok: aggiungi negli ultimi 2 min. Su riso: versa calda subito prima di servire. Ottima anche come dip per ravioli al vapore. Agitare prima dell\'uso.',
     usageIdeas: ['Salmone', 'Pollo', 'Riso', 'Noodles', 'Verdure saltate', 'Marinature'],
     nutritionPer100g: {
       energia: '172 kcal',
@@ -430,217 +434,217 @@ const CATEGORIES = [
 ];
 
 /* ============================================================
-   RICETTE — 16 ricette con filtri
+   RICETTE — 12 ricette Fior di Funghi (3 per gusto)
    ============================================================ */
 
 const RECIPES = [
+  /* ── PORCINI E SPECK ── */
   {
-    id: 'risotto-porcini-speck',
-    title: 'Risotto Porcini e Speck',
+    id: 'porcini-speck-risotto',
+    title: 'Risotto cremoso al fungo',
     subtitle: 'Il classico trentino in versione squeeze',
-    image: 'IMMAGINI /fior di funghi prodotti /ricette /risotto porcini .png',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_7ep7wg7ep7wg7ep7.png',
     time: '25 min',
     difficulty: 'Facile',
     servings: 2,
-    tags: ['Primo', 'Trentino', 'Inverno'],
+    gusto: 'porcini-speck',
+    vegetariano: false,
+    vegan: false,
+    glutenfree: true,
+    tags: ['Porcini e Speck'],
     productUsed: 'ffps-180-01',
-    ingredients: ['320g riso Carnaroli', '2 cucchiai Fior di Funghi Porcini e Speck', '1 scalogno', '1/2 bicchiere vino bianco', 'brodo vegetale q.b.', 'burro', 'grana padano', 'erba cipollina'],
-    steps: ['Soffriggere lo scalogno nel burro.', 'Tostare il riso 2 minuti.', 'Sfumare con il vino.', 'Aggiungere brodo a mestoli fino a cottura.', 'A fuoco spento mantecare con burro, grana e 2 cucchiai di Fior di Funghi.', 'Guarnire con erba cipollina.']
+    ingredients: ['320g riso Carnaroli', '2 cucchiai Fior di Funghi Porcini e Speck', '50g speck a julienne', '1 scalogno', '½ bicchiere vino bianco', 'brodo vegetale q.b.', 'burro', 'grana padano', 'erba cipollina'],
+    steps: ['Soffriggere lo scalogno nel burro.', 'Tostare il riso 2 minuti.', 'Sfumare con il vino.', 'Aggiungere brodo a mestoli fino a cottura.', 'A fuoco spento mantecare con burro, grana e 2 cucchiai di Fior di Funghi Porcini e Speck.', 'Guarnire con speck croccante ed erba cipollina.']
   },
   {
-    id: 'pasta-tartufo-pecorino',
-    title: 'Pasta Tartufo e Pecorino',
-    subtitle: 'Pronta in 10 minuti, gourmet per sempre',
-    image: 'IMMAGINI /fior di funghi prodotti /ricette /tartufo e pecorino .png',
-    time: '10 min',
-    difficulty: 'Facilissima',
-    servings: 2,
-    tags: ['Primo', 'Vegetariano', 'Veloce'],
-    productUsed: 'fftap-180-01',
-    ingredients: ['320g pasta (spaghetti o pici)', '3 cucchiai Fior di Funghi Tartufo e Pecorino', 'pecorino grattugiato', 'pepe nero', 'olio extravergine'],
-    steps: ['Cuocere la pasta in abbondante acqua salata.', 'Scolare al dente conservando un mestolo di acqua di cottura.', 'In padella sciogliere Fior di Funghi con un filo d\'olio.', 'Mantecare la pasta con la salsa e acqua di cottura.', 'Servire con pecorino grattugiato e pepe nero.']
-  },
-  {
-    id: 'panino-bbq',
-    title: 'Smash Burger ai Funghi BBQ',
+    id: 'porcini-speck-burger',
+    title: 'Burger gourmet con fungo',
     subtitle: 'Street food con anima di bosco',
-    image: 'IMMAGINI /fior di funghi prodotti /ricette /panino bbq.png',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_3e5yjg3e5yjg3e5y.png',
     time: '15 min',
     difficulty: 'Facile',
     servings: 2,
-    tags: ['Secondo', 'Vegan', 'Street Food'],
-    productUsed: 'ffpab-180-01',
-    ingredients: ['2 burger bun brioche', '2 hamburger (manzo o vegetale)', '2 cucchiai Fior di Funghi Paprika e BBQ', 'insalata iceberg', 'pomodoro', 'cipolla caramellata', 'cheddar'],
-    steps: ['Cuocere l\'hamburger su piastra calda.', 'Tostare il bun tagliato.', 'Spalmare Fior di Funghi BBQ sul pane.', 'Comporre: bun, insalata, hamburger, cheddar, cipolla, pomodoro.', 'Chiudere e servire immediatamente.']
+    gusto: 'porcini-speck',
+    vegetariano: false,
+    vegan: false,
+    glutenfree: true,
+    tags: ['Porcini e Speck'],
+    productUsed: 'ffps-180-01',
+    ingredients: ['2 burger bun brioche', '2 hamburger di manzo', '2 cucchiai Fior di Funghi Porcini e Speck', 'insalata iceberg', 'pomodoro', 'cipolla caramellata', 'cheddar'],
+    steps: ['Cuocere l\'hamburger su piastra calda.', 'Tostare il bun tagliato a metà.', 'Spalmare Fior di Funghi Porcini e Speck generosamente sul pane.', 'Comporre: bun, insalata, hamburger, cheddar, cipolla, pomodoro.', 'Chiudere e servire immediatamente.']
   },
   {
-    id: 'salmone-teriyaki',
-    title: 'Salmone al Teriyaki e Zenzero',
-    subtitle: 'Fusion con porcini italiani',
-    image: 'IMMAGINI /fior di funghi prodotti /ricette /teriaky zenzero e salmone .png',
-    time: '20 min',
-    difficulty: 'Facile',
-    servings: 2,
-    tags: ['Secondo', 'Pesce', 'Fusion', 'Limited Edition'],
-    productUsed: 'fft-180-01',
-    ingredients: ['2 filetti salmone', '3 cucchiai Fior di Funghi Teriyaki e Zenzero', 'riso basmati', 'sesamo', 'cipollotto', 'lime'],
-    steps: ['Marinare il salmone con Fior di Funghi per 15 minuti.', 'Cuocere in padella calda 3 min per lato.', 'Servire sul riso basmati.', 'Guarnire con sesamo, cipollotto e spicchio di lime.']
-  },
-  {
-    id: 'bruschette-porcini',
-    title: 'Bruschette ai Porcini',
+    id: 'porcini-speck-bruschette',
+    title: 'Bruschette autunnali',
     subtitle: 'L\'antipasto che scompare in secondi',
-    image: 'IMMAGINI /fior di funghi prodotti /foto hero tutti insieme i flaconi /flaconi hero insieme render.png',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_hdanb0hdanb0hdan.png',
     time: '5 min',
     difficulty: 'Facilissima',
     servings: 4,
-    tags: ['Antipasto', 'Veloce', 'Vegetariano'],
+    gusto: 'porcini-speck',
+    vegetariano: false,
+    vegan: false,
+    glutenfree: false,
+    tags: ['Porcini e Speck'],
     productUsed: 'ffps-180-01',
-    ingredients: ['8 fette pane casereccio', '4 cucchiai Fior di Funghi Porcini e Speck', 'olio extravergine', 'aglio', 'prezzemolo'],
-    steps: ['Tostare le fette di pane.', 'Sfregare con l\'aglio.', 'Distribuire Fior di Funghi generosamente.', 'Filo d\'olio e prezzemolo.', 'Servire calde.']
+    ingredients: ['8 fette pane casereccio', '4 cucchiai Fior di Funghi Porcini e Speck', '4 fette speck', 'olio extravergine', 'aglio', 'prezzemolo'],
+    steps: ['Tostare le fette di pane.', 'Sfregare ogni fetta con aglio.', 'Distribuire Fior di Funghi generosamente.', 'Aggiungere lo speck.', 'Filo d\'olio e prezzemolo fresco. Servire calde.']
   },
+  /* ── TARTUFO E PECORINO ── */
   {
-    id: 'uova-tartufo',
-    title: 'Uova al Tartufo',
-    subtitle: 'Colazione o brunch di lusso in 8 minuti',
-    image: 'IMMAGINI /fior di funghi prodotti /flaconi shop /tartufo e pecorino render.png',
+    id: 'tartufo-pecorino-uova',
+    title: 'Uova strapazzate al tartufo',
+    subtitle: 'Brunch di lusso in 8 minuti',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_y3e4lqy3e4lqy3e4.png',
     time: '8 min',
     difficulty: 'Facilissima',
     servings: 1,
-    tags: ['Colazione', 'Brunch', 'Vegetariano', 'Veloce'],
+    gusto: 'tartufo-pecorino',
+    vegetariano: true,
+    vegan: false,
+    glutenfree: true,
+    tags: ['Tartufo e Pecorino'],
     productUsed: 'fftap-180-01',
     ingredients: ['2 uova', '1 cucchiaio Fior di Funghi Tartufo e Pecorino', 'burro', 'toast', 'erba cipollina'],
-    steps: ['Sciogliere il burro in padella.', 'Cuocere le uova all\'occhio di bue.', 'A cottura ultimata aggiungere Fior di Funghi.', 'Servire con toast e erba cipollina.']
+    steps: ['Sciogliere il burro in padella a fuoco medio-basso.', 'Sbattere le uova e versarle in padella.', 'Mescolare dolcemente fino a cottura morbida.', 'A fuoco spento aggiungere Fior di Funghi Tartufo e Pecorino.', 'Servire con toast ed erba cipollina.']
   },
   {
-    id: 'risotto-porcini-secchi',
-    title: 'Risotto ai Porcini Secchi',
-    subtitle: 'Il classico intramontabile con i nostri porcini',
-    image: 'IMMAGINI /fior di funghi prodotti /ricette /risotto porcini .png',
-    time: '30 min',
-    difficulty: 'Media',
-    servings: 4,
-    tags: ['Primo', 'Classico', 'Invernale'],
-    productUsed: 'dial-porcini-secchi-60g',
-    ingredients: ['30g Porcini Secchi Speciali Dial', '320g riso Carnaroli', 'brodo vegetale', 'scalogno', 'vino bianco secco', 'burro', 'grana padano'],
-    steps: ['Ammollare i porcini in acqua tiepida 20 min.', 'Soffriggere lo scalogno.', 'Tostare il riso.', 'Aggiungere porcini strizzati e la loro acqua filtrata.', 'Portare a cottura con brodo.', 'Mantecare con burro e grana.']
-  },
-  {
-    id: 'polenta-funghi',
-    title: 'Polenta ai Funghi Porcini',
-    subtitle: 'Il piatto della tradizione trentina',
-    image: 'IMMAGINI /foto aziende dial /stabilimento/stabilimento 1.jpg',
-    time: '15 min',
-    difficulty: 'Facile',
-    servings: 4,
-    tags: ['Primo', 'Trentino', 'Invernale', 'Vegan'],
-    productUsed: 'dial-polenta-porcini-01',
-    ingredients: ['300g Polenta ai Funghi Porcini Dial', '1.2L acqua', 'sale', 'burro o olio EVO', 'funghi freschi (facoltativi)'],
-    steps: ['Portare a bollore l\'acqua salata.', 'Versare la polenta a pioggia mescolando.', 'Cuocere 5-8 min mescolando continuamente.', 'Servire morbida o lasciar rapprendere.', 'Accompagnare con funghi trifolati.']
-  },
-  {
-    id: 'pasta-finferli',
-    title: 'Tagliatelle ai Finferli',
-    subtitle: 'Il profumo dei boschi estivi in tavola',
-    image: 'IMMAGINI /altri prodotti dial /3 - FUNGHI SECCHI SACCHETTO e BARATTOLO/382025 - DIAL FUNGHI - SET IMMAGINI - PRODOTTO 7  - FUNGHI FINFERLI SACCHETTO/FINFERLI SECCHI RENDER.png',
-    time: '25 min',
-    difficulty: 'Facile',
-    servings: 4,
-    tags: ['Primo', 'Estate', 'Vegetariano'],
-    productUsed: 'dial-finferli-50g',
-    ingredients: ['20g Finferli Secchi Dial', '400g tagliatelle fresche', 'aglio', 'prezzemolo', 'olio EVO', 'vino bianco', 'panna (facoltativa)'],
-    steps: ['Ammollare i finferli in acqua tiepida 20 min.', 'Soffriggere aglio in olio.', 'Aggiungere finferli e sfumare con vino.', 'Cuocere la pasta e saltare nella salsa.', 'Servire con prezzemolo fresco.']
-  },
-  {
-    id: 'ramen-shiitake',
-    title: 'Ramen ai Funghi Shiitake',
-    subtitle: 'Umami profondo in stile Tokyo',
-    image: 'IMMAGINI /altri prodotti dial /3 - FUNGHI SECCHI SACCHETTO e BARATTOLO/382025 - DIAL FUNGHI - SET IMMAGINI - PRODOTTO 8  - FUNGHI SHIITAKE BARATTOLO/BOX SHITAKE RENDER.png',
-    time: '30 min',
-    difficulty: 'Media',
-    servings: 2,
-    tags: ['Primo', 'Fusion', 'Vegan'],
-    productUsed: 'dial-shiitake-400g',
-    ingredients: ['30g Shiitake Secchi Dial', 'noodles ramen', 'brodo dashi o vegetale', 'miso', 'cipollotto', 'uovo sodo', 'alga nori', 'zenzero'],
-    steps: ['Ammollare gli shiitake 30 min e conservare il brodo.', 'Preparare il brodo con il liquido degli shiitake + dashi + miso.', 'Cuocere i noodles.', 'Comporre la ciotola: noodles, brodo, shiitake, uovo, cipollotto, nori.']
-  },
-  {
-    id: 'crostini-morchelle',
-    title: 'Crostini con Morchelle e Crema',
-    subtitle: 'Fine dining in 15 minuti',
-    image: 'IMMAGINI /altri prodotti dial /3 - FUNGHI SECCHI SACCHETTO e BARATTOLO/382025 - DIAL FUNGHI - SET IMMAGINI - PRODOTTO 6  - FUNGHI MORCHELLE SACCHETTO/MORCHELLE SECCHE RENDER.png',
-    time: '15 min',
-    difficulty: 'Facile',
-    servings: 4,
-    tags: ['Antipasto', 'Gourmet', 'Vegetariano'],
-    productUsed: 'dial-morchelle-20g',
-    ingredients: ['10g Morchelle Secche Dial', '8 crostini pane artigianale', 'panna fresca', 'burro', 'scalogno', 'timo', 'sale e pepe'],
-    steps: ['Ammollare le morchelle 20 min.', 'Soffriggere lo scalogno nel burro.', 'Aggiungere morchelle e sfumare con acqua di ammollo.', 'Aggiungere panna e ridurre.', 'Distribuire sui crostini e guarnire con timo.']
-  },
-  {
-    id: 'pollo-grigliata-montagna',
-    title: 'Pollo alla Grigliata di Montagna',
-    subtitle: 'Il tocco di bosco che fa la differenza',
-    image: 'IMMAGINI /altri prodotti dial /1 - CONDIMENTI/382025 - DIAL FUNGHI - SET IMMAGINI - PRODOTTO 1 - GRIGLIATA DI MONTAGNA/PREPARATO grigliata di montagna .png',
-    time: '30 min',
-    difficulty: 'Facile',
-    servings: 4,
-    tags: ['Secondo', 'Carne', 'Grigliata', 'Estate'],
-    productUsed: 'dial-grigliata-01',
-    ingredients: ['1kg petto di pollo', '2 cucchiaini Grigliata di Montagna Dial', 'olio EVO', 'succo di limone'],
-    steps: ['Marinare il pollo con il preparato, olio e limone 30 min.', 'Grigliare a fuoco medio-alto 5-6 min per lato.', 'Lasciar riposare 5 min prima di servire.']
-  },
-  {
-    id: 'spaghetti-porcini-preparato',
-    title: 'Spaghetti ai Funghi Porcini',
-    subtitle: 'Il condimento pronto che non ti tradisce mai',
-    image: 'IMMAGINI /altri prodotti dial /1 - CONDIMENTI/382025 - DIAL FUNGHI - SET IMMAGINI - PRODOTTO 2 - PREPARATO FUNGHI PORCINI/PREPARATO FUNGHI PORCINI RENDER.png',
-    time: '15 min',
+    id: 'tartufo-pecorino-toast',
+    title: 'Toast gourmet',
+    subtitle: 'Prosciutto, fichi e tartufo — combo perfetta',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_1wtxiy1wtxiy1wtx.png',
+    time: '5 min',
     difficulty: 'Facilissima',
-    servings: 4,
-    tags: ['Primo', 'Classico', 'Veloce'],
-    productUsed: 'dial-pasta-porcini-01',
-    ingredients: ['400g spaghetti', '1 bustina Preparato Pasta Porcini Dial', 'olio EVO', 'aglio', 'prezzemolo', 'acqua di cottura'],
-    steps: ['Cuocere la pasta al dente.', 'In padella rosolare aglio in olio.', 'Sciogliere il preparato con acqua di cottura.', 'Saltare la pasta nella salsa.', 'Servire con prezzemolo fresco.']
+    servings: 2,
+    gusto: 'tartufo-pecorino',
+    vegetariano: false,
+    vegan: false,
+    glutenfree: false,
+    tags: ['Tartufo e Pecorino'],
+    productUsed: 'fftap-180-01',
+    ingredients: ['4 fette pane in cassetta', '2 cucchiai Fior di Funghi Tartufo e Pecorino', '4 fette prosciutto crudo', 'marmellata di fichi', 'rucola'],
+    steps: ['Tostare le fette di pane.', 'Spalmare Fior di Funghi su ogni fetta.', 'Aggiungere il prosciutto crudo.', 'Un cucchiaino di marmellata di fichi.', 'Completare con rucola fresca.']
   },
   {
-    id: 'box-estate-picnic',
-    title: 'Picnic da Box Estate',
-    subtitle: 'Tutto il necessario per un picnic gourmet',
-    image: 'IMMAGINI /altri prodotti dial /4 - BOX/382025 - DIAL FUNGHI - SET IMMAGINI - PRODOTTO 9  - BOX ESTATE/box estate .png',
+    id: 'tartufo-pecorino-tagliolini',
+    title: 'Tagliolini al tartufo',
+    subtitle: 'Pronto in 10 minuti, gourmet per sempre',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_b0t32pb0t32pb0t3.png',
+    time: '10 min',
+    difficulty: 'Facilissima',
+    servings: 2,
+    gusto: 'tartufo-pecorino',
+    vegetariano: true,
+    vegan: false,
+    glutenfree: false,
+    tags: ['Tartufo e Pecorino'],
+    productUsed: 'fftap-180-01',
+    ingredients: ['320g tagliolini freschi', '3 cucchiai Fior di Funghi Tartufo e Pecorino', 'burro', 'pecorino grattugiato', 'pepe nero'],
+    steps: ['Cuocere i tagliolini in abbondante acqua salata.', 'Scolare al dente conservando un mestolo di acqua di cottura.', 'Mantecare con burro e Fior di Funghi Tartufo e Pecorino.', 'Aggiungere acqua di cottura per cremosità.', 'Servire con pecorino grattugiato e pepe nero macinato fresco.']
+  },
+  /* ── PAPRIKA E BBQ ── */
+  {
+    id: 'paprika-bbq-costine',
+    title: 'Costine BBQ',
+    subtitle: 'Il twist gourmet che i carnivori cercavano',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_7x0iwd7x0iwd7x0i.png',
+    time: '60 min',
+    difficulty: 'Media',
+    servings: 4,
+    gusto: 'paprika-bbq',
+    vegetariano: false,
+    vegan: false,
+    glutenfree: true,
+    tags: ['Paprika e BBQ'],
+    productUsed: 'ffpab-180-01',
+    ingredients: ['1kg costine di maiale', '3 cucchiai Fior di Funghi Paprika e BBQ', 'paprika affumicata', 'aglio in polvere', 'sale', 'pepe'],
+    steps: ['Marinare le costine con Fior di Funghi BBQ per 1 ora.', 'Cuocere in forno a 180°C per 45 minuti.', 'Grigliare a fuoco alto gli ultimi 5 min per la crosticina caramellata.', 'Spennellare con altra salsa a fine cottura e servire subito.']
+  },
+  {
+    id: 'paprika-bbq-patatine',
+    title: 'Patatine al forno',
+    subtitle: 'Croccanti fuori, morbide dentro',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_vktq7bvktq7bvktq.png',
+    time: '35 min',
+    difficulty: 'Facile',
+    servings: 4,
+    gusto: 'paprika-bbq',
+    vegetariano: true,
+    vegan: true,
+    glutenfree: true,
+    tags: ['Paprika e BBQ'],
+    productUsed: 'ffpab-180-01',
+    ingredients: ['800g patate', '2 cucchiai Fior di Funghi Paprika e BBQ', 'olio EVO', 'rosmarino fresco', 'sale grosso'],
+    steps: ['Tagliare le patate a spicchi con la buccia.', 'Condire con Fior di Funghi BBQ, olio e rosmarino.', 'Distribuire su teglia con carta forno.', 'Cuocere a 200°C per 30 min girando a metà cottura.']
+  },
+  {
+    id: 'paprika-bbq-hotdog',
+    title: 'Hot dog gourmet',
+    subtitle: 'Street food con anima di bosco',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_jm0zbtjm0zbtjm0z.png',
+    time: '10 min',
+    difficulty: 'Facilissima',
+    servings: 2,
+    gusto: 'paprika-bbq',
+    vegetariano: false,
+    vegan: false,
+    glutenfree: false,
+    tags: ['Paprika e BBQ'],
+    productUsed: 'ffpab-180-01',
+    ingredients: ['2 panini per hot dog', '2 salsicce', '2 cucchiai Fior di Funghi Paprika e BBQ', 'cipolla crispy', 'senape', 'cetrioli sott\'aceto'],
+    steps: ['Cuocere le salsicce alla griglia o in padella.', 'Tostare leggermente il panino.', 'Inserire la salsiccia.', 'Aggiungere Fior di Funghi BBQ generosamente.', 'Completare con cipolla crispy e fettine di cetriolo.']
+  },
+  /* ── TERIYAKI E ZENZERO ── */
+  {
+    id: 'teriyaki-salmone',
+    title: 'Salmone alla brace',
+    subtitle: 'Fusion con porcini italiani',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_jevjlbjevjlbjevj.png',
     time: '20 min',
     difficulty: 'Facile',
-    servings: 4,
-    tags: ['Antipasto', 'Estate', 'Picnic', 'Outdoor'],
-    productUsed: 'dial-box-estate',
-    ingredients: ['1 Box Estate Dial', 'pane casereccio', 'pomodori freschi', 'mozzarella', 'basilico', 'olio EVO'],
-    steps: ['Preparare i crostini con il preparato per bruschetta.', 'Grigliare verdure con la grigliata di montagna.', 'Abbinare i finferli a un filo d\'olio su fettine di pane.', 'Completare con pomodori secchi come antipasto.']
-  },
-  {
-    id: 'box-inverno-regalo',
-    title: 'Cena delle Feste con Box Inverno',
-    subtitle: 'Una cassetta, una serata indimenticabile',
-    image: 'IMMAGINI /altri prodotti dial /4 - BOX/382025 - DIAL FUNGHI - SET IMMAGINI - PRODOTTO 12  - BOX INVERNO_nuovo/BOX INVERNO.png',
-    time: '45 min',
-    difficulty: 'Media',
-    servings: 6,
-    tags: ['Primo', 'Secondo', 'Feste', 'Inverno', 'Gourmet'],
-    productUsed: 'dial-box-inverno',
-    ingredients: ['1 Box Inverno Dial (Morchelle + Porcini + Finferli)', 'pasta fresca all\'uovo', 'burro', 'grana padano', 'scalogno', 'vino bianco', 'brodo vegetale'],
-    steps: ['Usare i porcini per un risotto mantecato.', 'Le morchelle per un sugo elegante con pasta fresca.', 'I finferli saltati come contorno.', 'Aprire la cassetta a tavola per l\'effetto scenografico.']
-  },
-  {
-    id: 'tartare-bbq',
-    title: 'Tartare di Manzo con Fior di Funghi BBQ',
-    subtitle: 'Il twist che i food lover cercavano',
-    image: 'IMMAGINI /fior di funghi prodotti /flaconi shop /bbq e paprika.png',
-    time: '10 min',
-    difficulty: 'Media',
     servings: 2,
-    tags: ['Secondo', 'Carne', 'Gourmet', 'No cottura'],
-    productUsed: 'ffpab-180-01',
-    ingredients: ['300g manzo macinato fine', '1 cucchiaio Fior di Funghi Paprika BBQ', 'capperi', 'senape', 'tuorlo', 'erba cipollina', 'crostini'],
-    steps: ['Condire la carne con tutti gli ingredienti e Fior di Funghi BBQ.', 'Modellare con coppapasta.', 'Guarnire con tuorlo e erba cipollina.', 'Servire con crostini caldi.']
+    gusto: 'teriyaki-zenzero',
+    vegetariano: false,
+    vegan: false,
+    glutenfree: false,
+    tags: ['Teriyaki e Zenzero'],
+    productUsed: 'fft-180-01',
+    ingredients: ['2 filetti salmone', '3 cucchiai Fior di Funghi Teriyaki e Zenzero', 'riso basmati', 'sesamo tostato', 'cipollotto', 'lime'],
+    steps: ['Marinare il salmone con Fior di Funghi per 15 minuti.', 'Cuocere su griglia calda 3 min per lato.', 'Servire sul riso basmati cotto.', 'Guarnire con sesamo, cipollotto a rondelle e spicchio di lime.']
+  },
+  {
+    id: 'teriyaki-pollo-bowl',
+    title: 'Bowl di pollo teriyaki',
+    subtitle: 'Il comfort bowl che conquista tutti',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_q7qbs9q7qbs9q7qb.png',
+    time: '25 min',
+    difficulty: 'Facile',
+    servings: 2,
+    gusto: 'teriyaki-zenzero',
+    vegetariano: false,
+    vegan: false,
+    glutenfree: false,
+    tags: ['Teriyaki e Zenzero'],
+    productUsed: 'fft-180-01',
+    ingredients: ['400g petto di pollo', '3 cucchiai Fior di Funghi Teriyaki e Zenzero', 'riso basmati', 'avocado', 'edamame', 'sesamo', 'cipollotto'],
+    steps: ['Marinare il pollo con Fior di Funghi per 20 minuti.', 'Cuocere in padella calda 5-6 min per lato.', 'Affettare a striscioline.', 'Comporre la bowl: riso, pollo, avocado a fette, edamame.', 'Guarnire con sesamo tostato e cipollotto.']
+  },
+  {
+    id: 'teriyaki-wok-verdure',
+    title: 'Wok di verdure fusion',
+    subtitle: 'Il piatto vegan che sorprende tutti',
+    image: 'IMMAGINI /fior di funghi prodotti /ricetta copia /Gemini_Generated_Image_6oi92p6oi92p6oi9.png',
+    time: '15 min',
+    difficulty: 'Facile',
+    servings: 2,
+    gusto: 'teriyaki-zenzero',
+    vegetariano: true,
+    vegan: true,
+    glutenfree: false,
+    tags: ['Teriyaki e Zenzero'],
+    productUsed: 'fft-180-01',
+    ingredients: ['200g tofu sodo', '2 cucchiai Fior di Funghi Teriyaki e Zenzero', 'broccoli', 'carote', 'peperone rosso', 'cipollotto', 'olio di sesamo', 'riso basmati'],
+    steps: ['Tagliare tofu e verdure a pezzi uniformi.', 'Scaldare il wok al massimo con olio di sesamo.', 'Saltare le verdure 3-4 minuti a fuoco vivo.', 'Aggiungere il tofu e Fior di Funghi Teriyaki.', 'Saltare altri 2 minuti. Servire sul riso con sesamo.']
   }
 ];
 
@@ -776,10 +780,17 @@ function formatPrice(price) {
 }
 
 /**
- * Tutti i tag ricette unici
+ * Filtri ricette — fissi, basati su gusto e dieta
  */
 function getAllRecipeTags() {
-  const tags = new Set(['Tutti']);
-  RECIPES.forEach(r => r.tags.forEach(t => tags.add(t)));
-  return Array.from(tags);
+  return [
+    { label: 'Tutti',             value: 'tutti' },
+    { label: 'Porcini e Speck',   value: 'porcini-speck' },
+    { label: 'Tartufo e Pecorino',value: 'tartufo-pecorino' },
+    { label: 'Paprika e BBQ',     value: 'paprika-bbq' },
+    { label: 'Teriyaki e Zenzero',value: 'teriyaki-zenzero' },
+    { label: 'Vegetariano',       value: 'vegetariano' },
+    { label: 'Vegan',             value: 'vegan' },
+    { label: 'Gluten Free',       value: 'gluten-free' }
+  ];
 }

@@ -132,16 +132,7 @@
         <div class="accordion">
           <div class="accordion-item">
             <button class="accordion-btn">
-              Descrizione completa
-              <span class="accordion-icon"></span>
-            </button>
-            <div class="accordion-body">
-              <div class="accordion-body-inner" id="accordionDesc">—</div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <button class="accordion-btn">
-              Ingredienti & Allergeni
+              Ingredienti
               <span class="accordion-icon"></span>
             </button>
             <div class="accordion-body">
@@ -150,7 +141,7 @@
           </div>
           <div class="accordion-item">
             <button class="accordion-btn">
-              Come usarlo
+              Come si usa
               <span class="accordion-icon"></span>
             </button>
             <div class="accordion-body">
@@ -159,14 +150,25 @@
           </div>
           <div class="accordion-item">
             <button class="accordion-btn">
-              Spedizione & Resi
+              Valori Nutrizionali
+              <span class="accordion-icon"></span>
+            </button>
+            <div class="accordion-body">
+              <div class="accordion-body-inner" id="accordionNutrition">—</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-btn">
+              Spedizione e Resi
               <span class="accordion-icon"></span>
             </button>
             <div class="accordion-body">
               <div class="accordion-body-inner">
-                <p>Spedizione standard: <strong>€4,90</strong> — gratuita sopra €30.</p>
-                <p style="margin-top:8px;">Consegna stimata: <strong>2-4 giorni lavorativi</strong> in tutta Italia.</p>
-                <p style="margin-top:8px;">Per problemi con il tuo ordine scrivi a <a href="mailto:info@dialfunghi.it" style="color:var(--color-accent);">info@dialfunghi.it</a></p>
+                <p>Spedizione standard: <strong>€4,90</strong></p>
+                <p style="margin-top:6px;">Spedizione <strong>gratuita</strong> per ordini superiori a <strong>€30,00</strong></p>
+                <p style="margin-top:6px;">Consegna stimata: <strong>2–4 giorni lavorativi</strong></p>
+                <p style="margin-top:6px;">Diritto di recesso: entro 14 giorni dall'acquisto, prodotto integro e sigillato.</p>
+                <p style="margin-top:8px;">Per assistenza: <a href="mailto:info@dialfunghi.it" style="color:var(--color-accent);">info@dialfunghi.it</a> | <a href="tel:+390461534505" style="color:var(--color-accent);">0461 534505</a></p>
               </div>
             </div>
           </div>
@@ -233,6 +235,11 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           info@dialfunghi.it
         </div>
+        <div style="margin-top:12px;">
+          <a href="https://www.dialfunghi.it" target="_blank" rel="noopener noreferrer" class="footer__link" style="color:var(--color-accent); font-weight:600;">
+            Sito ufficiale dialfunghi.it ↗
+          </a>
+        </div>
       </div>
     </div>
     <div class="footer__bottom">
@@ -287,23 +294,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const bc = document.getElementById('productBreadcrumb');
     if (bc) bc.textContent = product.name;
 
-    // Accordion descriptions
-    const aDesc = document.getElementById('accordionDesc');
-    if (aDesc) aDesc.textContent = product.description;
-
+    // Accordion — Ingredienti
     const aIng = document.getElementById('accordionIngredients');
     if (aIng) aIng.innerHTML = `
-      ${product.ingredients ? `<p><strong>Ingredienti:</strong> ${product.ingredients}</p>` : ''}
-      ${product.allergens ? `<p style="margin-top:8px;"><strong>Allergeni:</strong> ${product.allergens}</p>` : ''}
+      ${product.ingredients ? `<p style="line-height:1.7;">${product.ingredients}</p>` : ''}
+      ${product.allergens ? `<p style="margin-top:10px; font-size:0.85rem; color:var(--color-text-muted);"><strong>Allergeni:</strong> ${product.allergens}</p>` : ''}
     `;
 
+    // Accordion — Come si usa
     const aUsage = document.getElementById('accordionUsage');
-    if (aUsage && product.usageIdeas) {
-      aUsage.innerHTML = `
-        <p style="margin-bottom:10px;">Ideale per:</p>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          ${product.usageIdeas.map(u => `<span class="tag">${u}</span>`).join('')}
-        </div>`;
+    if (aUsage) {
+      aUsage.innerHTML = product.usage
+        ? `<p style="line-height:1.75;">${product.usage}</p>
+           ${product.usageIdeas ? `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">${product.usageIdeas.map(u => `<span class="tag">${u}</span>`).join('')}</div>` : ''}`
+        : product.usageIdeas
+          ? `<div style="display:flex; flex-wrap:wrap; gap:8px;">${product.usageIdeas.map(u => `<span class="tag">${u}</span>`).join('')}</div>`
+          : '—';
+    }
+
+    // Accordion — Valori Nutrizionali
+    const aNutr = document.getElementById('accordionNutrition');
+    if (aNutr && product.nutritionPer100g) {
+      const n = product.nutritionPer100g;
+      aNutr.innerHTML = `
+        <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--color-border);">
+              <th style="text-align:left; padding:6px 0; font-family:var(--font-label); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-text-muted);">Nutriente</th>
+              <th style="text-align:right; padding:6px 0; font-family:var(--font-label); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-text-muted);">Per 100g</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--color-border);"><td style="padding:7px 0;">Energia</td><td style="text-align:right; font-weight:600;">${n.energia}</td></tr>
+            <tr style="border-bottom:1px solid var(--color-border);"><td style="padding:7px 0;">Grassi</td><td style="text-align:right; font-weight:600;">${n.grassi}</td></tr>
+            <tr style="border-bottom:1px solid var(--color-border);"><td style="padding:7px 0; padding-left:16px; color:var(--color-text-muted); font-size:0.82rem;">di cui saturi</td><td style="text-align:right; color:var(--color-text-muted); font-size:0.82rem;">—</td></tr>
+            <tr style="border-bottom:1px solid var(--color-border);"><td style="padding:7px 0;">Carboidrati</td><td style="text-align:right; font-weight:600;">${n.carboidrati}</td></tr>
+            <tr style="border-bottom:1px solid var(--color-border);"><td style="padding:7px 0; padding-left:16px; color:var(--color-text-muted); font-size:0.82rem;">di cui zuccheri</td><td style="text-align:right; color:var(--color-text-muted); font-size:0.82rem;">—</td></tr>
+            <tr style="border-bottom:1px solid var(--color-border);"><td style="padding:7px 0;">Proteine</td><td style="text-align:right; font-weight:600;">${n.proteine}</td></tr>
+            <tr><td style="padding:7px 0;">Sale</td><td style="text-align:right; font-weight:600;">${n.sale}</td></tr>
+          </tbody>
+        </table>`;
     }
 
     // Thumb principale
