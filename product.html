@@ -54,8 +54,10 @@
 
       <!-- GALLERY -->
       <div class="product-gallery reveal--left">
-        <div class="product-gallery__main">
-          <img id="productImage" src="" alt="" onerror="this.style.opacity='0.4'">
+        <div class="product-gallery__main product-main-img-wrapper">
+          <img id="productImage" src="" alt=""
+               class="product-main-img"
+               onerror="this.style.opacity='0.4'">
         </div>
         <!-- Immagine expo (opzionale) -->
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;" id="productThumbsRow">
@@ -350,6 +352,37 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   observer.observe(document.getElementById('productTitle') || document.body, { childList: true, subtree: true, characterData: true });
 });
+
+// Ratio detection: se l'immagine è una scheda tecnica orizzontale (fronte+retro)
+// mostra solo il lato sinistro (fronte) via object-position
+(function() {
+  const img = document.getElementById('productImage');
+  if (!img) return;
+  function applyRatioCrop() {
+    const ratio = img.naturalWidth / img.naturalHeight;
+    if (ratio > 1.4) {
+      // Scheda tecnica orizzontale: mostra solo il fronte (lato sinistro)
+      img.style.objectFit = 'cover';
+      img.style.objectPosition = '18% center';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.maxHeight = '480px';
+    } else {
+      img.style.objectFit = 'contain';
+      img.style.objectPosition = 'center';
+    }
+  }
+  if (img.complete && img.naturalWidth) {
+    applyRatioCrop();
+  } else {
+    img.addEventListener('load', applyRatioCrop);
+  }
+  // Re-applica quando il src cambia (prodotto caricato da JS)
+  const srcObserver = new MutationObserver(() => {
+    img.addEventListener('load', applyRatioCrop, { once: true });
+  });
+  srcObserver.observe(img, { attributes: true, attributeFilter: ['src'] });
+})();
 </script>
 <script src="scripts.js"></script>
 </body>

@@ -53,11 +53,16 @@
 <!-- FILTERS -->
 <section style="background:var(--color-bg); padding:40px 0 0;">
   <div class="container">
-    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:40px;">
-      <span class="label" style="color:var(--color-text-muted); flex-shrink:0;">Filtra per:</span>
-      <div id="recipeTags" style="display:flex; gap:8px; flex-wrap:wrap;">
-        <!-- Generato da JS -->
-      </div>
+    <div class="recipes-filters">
+      <button class="filter-btn active" data-filter="tutti">Tutti</button>
+      <button class="filter-btn" data-filter="porcini-speck">Porcini e Speck</button>
+      <button class="filter-btn" data-filter="tartufo-pecorino">Tartufo e Pecorino</button>
+      <button class="filter-btn" data-filter="paprika-bbq">Paprika e BBQ</button>
+      <button class="filter-btn" data-filter="teriyaki-zenzero">Teriyaki e Zenzero</button>
+      <button class="filter-btn" data-filter="funghi-secchi">Funghi Secchi</button>
+      <button class="filter-btn" data-filter="vegetariano">Vegetariano</button>
+      <button class="filter-btn" data-filter="vegan">Vegan</button>
+      <button class="filter-btn" data-filter="gluten-free">Gluten Free</button>
     </div>
   </div>
 </section>
@@ -66,7 +71,7 @@
 <section class="section" style="background:var(--color-bg); padding-top:0;">
   <div class="container">
     <div class="recipes-grid" id="recipesGrid">
-      <!-- Generato da JS -->
+      <!-- Popolato da JS -->
     </div>
   </div>
 </section>

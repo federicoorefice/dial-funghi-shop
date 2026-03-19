@@ -959,67 +959,85 @@ function initAccordions() {
    RECIPES PAGE
    ============================================================ */
 
-function initRecipesPage() {
-  const grid = $('#recipesGrid');
-  if (!grid || typeof RECIPES === 'undefined') return;
+/* Render lista ricette nella griglia */
+function renderRecipes(list) {
+  const grid = document.querySelector('.recipes-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
 
-  // 1 — Render tutte le 12 card con data-attributes
-  grid.innerHTML = RECIPES.map(r => `
-    <div class="recipe-card"
-         data-id="${r.id}"
-         data-gusto="${r.gusto}"
-         data-vegetariano="${r.vegetariano}"
-         data-vegan="${r.vegan}"
-         data-glutenfree="${r.glutenfree}"
-         onclick="openRecipeModal('${r.id}')">
-      <img src="${r.image}" alt="${r.title}" class="recipe-card__img" loading="lazy" onerror="this.style.background='var(--color-bg-mid)'">
+  if (!list || list.length === 0) {
+    grid.innerHTML = '<p class="no-results">Nessuna ricetta trovata per questo filtro.</p>';
+    return;
+  }
+
+  list.forEach(r => {
+    const hasImg = r.image && r.image.trim() !== '';
+    const imgHTML = hasImg
+      ? `<img src="${r.image}" alt="${r.title}" loading="lazy"
+              style="width:100%;height:100%;object-fit:cover;"
+              onerror="this.parentElement.dataset.gusto='${r.gusto}';this.remove();">`
+      : '';
+
+    const badges = [];
+    if (r.vegetariano) badges.push('<span class="badge badge--veg">Vegetariano</span>');
+    if (r.vegan)       badges.push('<span class="badge badge--vegan">Vegan</span>');
+    if (r.glutenfree)  badges.push('<span class="badge badge--gf">Gluten Free</span>');
+
+    const card = document.createElement('article');
+    card.className = 'recipe-card';
+    card.dataset.gusto       = r.gusto;
+    card.dataset.vegetariano = r.vegetariano;
+    card.dataset.vegan       = r.vegan;
+    card.dataset.glutenfree  = r.glutenfree;
+
+    card.innerHTML = `
+      <div class="recipe-card__img-wrap" data-gusto="${r.gusto}">${imgHTML}</div>
       <div class="recipe-card__body">
         <div class="recipe-card__meta">
-          <span class="recipe-card__meta-item">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="recipe-card__time">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             ${r.time}
           </span>
-          <span class="recipe-card__meta-item">${r.difficulty}</span>
-          <span class="recipe-card__meta-item">${r.servings} pers.</span>
+          <span class="recipe-card__diff">${r.difficulty}</span>
         </div>
         <h3 class="recipe-card__title">${r.title}</h3>
         <p class="recipe-card__sub">${r.subtitle}</p>
-        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;">
-          ${r.tags.map(t => `<span class="tag" style="font-size:0.58rem; padding:3px 9px;">${t}</span>`).join('')}
-        </div>
-      </div>
-    </div>`).join('');
+        <div class="recipe-card__badges">${badges.join('')}</div>
+        <button class="recipe-card__btn"
+                onclick="openRecipeModal('${r.id}')"
+                aria-label="Leggi ricetta ${r.title}">
+          Leggi la ricetta
+        </button>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
 
-  // 2 — Funzione filtro su data-attributes
-  function filterRecipes(filter) {
-    const cards = $$('.recipe-card', grid);
-    cards.forEach(card => {
-      let show = false;
-      switch (filter) {
-        case 'tutti':       show = true; break;
-        case 'vegetariano': show = card.dataset.vegetariano === 'true'; break;
-        case 'vegan':       show = card.dataset.vegan === 'true'; break;
-        case 'gluten-free': show = card.dataset.glutenfree === 'true'; break;
-        default:            show = card.dataset.gusto === filter; break;
-      }
-      card.style.display = show ? '' : 'none';
-    });
-  }
-
-  // 3 — Render pulsanti filtro
-  const tagsEl = $('#recipeTags');
-  if (tagsEl && typeof getAllRecipeTags !== 'undefined') {
-    const filters = getAllRecipeTags();
-    tagsEl.innerHTML = filters.map(f => `
-      <button class="tag ${f.value === 'tutti' ? 'active' : ''}" data-filter="${f.value}">${f.label}</button>`).join('');
-    tagsEl.addEventListener('click', e => {
-      const btn = e.target.closest('[data-filter]');
-      if (!btn) return;
-      $$('#recipeTags [data-filter]').forEach(b => b.classList.remove('active'));
+/* Logica filtri su .filter-btn */
+function initFilters() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      filterRecipes(btn.dataset.filter);
+      const f = btn.dataset.filter;
+      let filtered;
+      if (typeof RECIPES === 'undefined') return;
+      switch (f) {
+        case 'tutti':       filtered = RECIPES; break;
+        case 'vegetariano': filtered = RECIPES.filter(r => r.vegetariano); break;
+        case 'vegan':       filtered = RECIPES.filter(r => r.vegan); break;
+        case 'gluten-free': filtered = RECIPES.filter(r => r.glutenfree); break;
+        default:            filtered = RECIPES.filter(r => r.gusto === f);
+      }
+      renderRecipes(filtered);
     });
-  }
+  });
+}
+
+function initRecipesPage() {
+  if (typeof RECIPES === 'undefined') return;
+  renderRecipes(RECIPES);
+  initFilters();
 }
 
 /* ============================================================
