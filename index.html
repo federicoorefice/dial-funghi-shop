@@ -15,7 +15,7 @@
 <nav class="navbar navbar--transparent" id="navbar">
   <div class="navbar__inner">
     <a href="index.html" class="navbar__logo">
-      <img src="IMMAGINI /logo fior di funghi /fior di funghi logo .png" alt="Fior di Funghi">
+      <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" style="height:44px;width:auto;">
     </a>
 
     <ul class="navbar__nav">
@@ -46,6 +46,8 @@
   <div class="hero__bg-blobs">
     <div class="hero__blob hero__blob--1"></div>
     <div class="hero__blob hero__blob--2"></div>
+    <div class="hero-bg-blob hero-bg-blob--circle"></div>
+    <div class="hero-bg-blob hero-bg-blob--bottom"></div>
   </div>
 
   <!-- Content -->
@@ -89,12 +91,14 @@
       </svg>
     </div>
 
-    <div class="hero__bottles">
-      <img
-        src="IMMAGINI /fior di funghi prodotti /foto hero tutti insieme i flaconi /flaconi hero insieme render.png"
-        alt="Fior di Funghi — tutti e 4 i gusti"
-        class="hero__bottle-img"
-      >
+    <div class="hero-bottles-container">
+      <div class="hero__bottles">
+        <img
+          src="IMMAGINI /fior di funghi prodotti /foto hero tutti insieme i flaconi /flaconi hero insieme render.png"
+          alt="Fior di Funghi — tutti e 4 i gusti"
+          class="hero__bottle-img"
+        >
+      </div>
     </div>
   </div>
 </section>
@@ -325,71 +329,76 @@
 <!-- ============================================================
      STORIA AZIENDALE
      ============================================================ -->
-<section class="section section-storia" id="storia">
+<section class="storia-v2" id="storia">
   <div class="container">
-    <div class="storia-layout">
-      <!-- Immagini -->
-      <div class="storia-images reveal--left">
+    <div class="storia-v2__header reveal">
+      <span class="section-label">Chi siamo</span>
+      <h2>Dal Trentino, con passione.</h2>
+      <p style="color:var(--color-text-muted);margin-top:12px;font-size:1.1rem;">Dal 1992 portiamo l'eccellenza del bosco sulle tavole italiane.</p>
+    </div>
+
+    <!-- Row 1: testo sx + immagine dx -->
+    <div class="storia-v2__row reveal">
+      <div class="storia-v2__text">
+        <p class="storia-content__text">
+          Dial S.r.l. nasce nel 1992 a Pergine Valsugana, nel cuore del Trentino, fondata con un obiettivo preciso: selezionare e confezionare i migliori funghi italiani, rispettando la qualità della materia prima e la tradizione alpina.
+        </p>
+        <p class="storia-content__text" style="margin-top:16px;">
+          In oltre 30 anni abbiamo costruito una filiera certificata, investito in tecnologia sostenibile — 100% energia rinnovabile — e conquistato i principali riconoscimenti internazionali: BRC Food Safety, IFS Food, ICEA Bio e Qualità Vegan.
+        </p>
+        <p class="storia-content__text" style="margin-top:16px;">
+          Fior di Funghi è la nostra risposta alla cucina moderna: il sapore autentico del bosco, nel formato più pratico e versatile che esista.
+        </p>
+        <p class="storia-v2__quote">"Dal bosco alla tavola. Sempre in buone mani."</p>
+        <a href="https://www.dialfunghi.it" target="_blank" rel="noopener noreferrer" class="footer__dial-link" style="margin-top:24px;display:inline-flex;align-items:center;gap:6px;color:var(--color-accent-red);font-weight:600;">
+          Scopri di più su dialfunghi.it
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="storia-v2__img">
         <img
           src="IMMAGINI /foto aziende dial /stabilimento/stabilimento 1.jpg"
           alt="Stabilimento Dial Funghi — Pergine Valsugana"
-          class="storia-img storia-img--tall"
+          loading="lazy"
         >
+      </div>
+    </div>
+
+    <!-- Row 2: immagine sx + testo dx -->
+    <div class="storia-v2__row storia-v2__row--reverse reveal">
+      <div class="storia-v2__text">
+        <span class="section-label">Laboratorio e qualità</span>
+        <h3 style="margin-top:12px;">Tecnologia al servizio della tradizione.</h3>
+        <p class="storia-content__text" style="margin-top:16px;">
+          Ogni lotto viene analizzato nel nostro laboratorio interno. Selezioniamo solo funghi italiani di prima scelta, essiccati lentamente a bassa temperatura per conservare profumo e sapore originali.
+        </p>
+      </div>
+      <div class="storia-v2__img">
         <img
           src="IMMAGINI /foto aziende dial /lab/lab 1.png"
           alt="Laboratorio Dial Funghi"
-          class="storia-img storia-img--wide"
-        >
-        <img
-          src="IMMAGINI /foto aziende dial /macchinari/macchinario 1 .png"
-          alt="Macchinari Dial Funghi"
-          class="storia-img storia-img--wide"
+          loading="lazy"
         >
       </div>
+    </div>
 
-      <!-- Testo -->
-      <div class="storia-content reveal--right">
-        <span class="section-label">Chi siamo</span>
-        <h2>Dall'82 alle Dolomiti.<br><em style="font-style:italic;">Funghi veri.</em></h2>
-
-        <p class="storia-content__text" style="margin-top:24px;">
-          Dial S.r.l. nasce nel 1992 a Pergine Valsugana, nel cuore del Trentino, con una missione semplice: portare il sapore autentico del bosco sulle tavole italiane. In oltre 30 anni, abbiamo selezionato, essiccato e confezionato i migliori funghi di montagna, sempre a mano, sempre con rispetto per il prodotto naturale.
-        </p>
-        <p class="storia-content__text">
-          Oggi siamo il marchio di riferimento in Italia per i funghi secchi premium. Fior di Funghi è la nostra risposta alla cucina moderna: il sapore di sempre, nel formato del futuro.
-        </p>
-
-        <!-- Numeri chiave -->
-        <div class="storia-numbers">
-          <div class="storia-num">
-            <div class="storia-num__value">1992</div>
-            <div class="storia-num__label">Anno di fondazione</div>
-          </div>
-          <div class="storia-num">
-            <div class="storia-num__value">30+</div>
-            <div class="storia-num__label">Anni di esperienza</div>
-          </div>
-          <div class="storia-num">
-            <div class="storia-num__value">12</div>
-            <div class="storia-num__label">Prodotti in gamma</div>
-          </div>
-          <div class="storia-num">
-            <div class="storia-num__value">4</div>
-            <div class="storia-num__label">Certificazioni internazionali</div>
-          </div>
-        </div>
-
-        <!-- Certificazioni -->
-        <div class="certificazioni">
-          <p class="certificazioni__label">Certificazioni</p>
-          <div class="certificazioni__logos">
-            <img src="IMMAGINI /certificazioni /brc render.png" alt="BRC Food Safety" class="cert-logo">
-            <img src="IMMAGINI /certificazioni /ifs render.png" alt="IFS Food" class="cert-logo">
-            <img src="IMMAGINI /certificazioni /CERTIFICAZIONE BIO RENDER.png" alt="ICEA Bio" class="cert-logo">
-            <img src="IMMAGINI /certificazioni /vegan certificazione.png" alt="Qualità Vegan" class="cert-logo">
-            <img src="IMMAGINI /certificazioni /euk.png" alt="EUK" class="cert-logo">
-          </div>
-        </div>
+    <!-- Numeri chiave animati -->
+    <div class="storia-numbers-strip reveal" id="storiaNumbers">
+      <div>
+        <div class="storia-num-v2__value" data-target="1992" data-suffix="">1992</div>
+        <div class="storia-num-v2__label">Anno di fondazione</div>
+      </div>
+      <div>
+        <div class="storia-num-v2__value" data-target="30" data-suffix="+">30+</div>
+        <div class="storia-num-v2__label">Anni di esperienza</div>
+      </div>
+      <div>
+        <div class="storia-num-v2__value" data-target="100" data-suffix="%">100%</div>
+        <div class="storia-num-v2__label">Energia rinnovabile</div>
+      </div>
+      <div>
+        <div class="storia-num-v2__value" data-target="4" data-suffix="">4</div>
+        <div class="storia-num-v2__label">Certificazioni internazionali</div>
       </div>
     </div>
   </div>
@@ -401,6 +410,43 @@
     <path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" fill="#1C0E05"/>
   </svg>
 </div>
+
+<!-- ============================================================
+     CERTIFICAZIONI
+     ============================================================ -->
+<section class="section-certificazioni" id="certificazioni">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <span class="section-label">Qualità certificata</span>
+      <h2 style="margin-top:8px;">Ogni prodotto, ogni standard.</h2>
+      <p style="color:var(--color-text-muted);margin-top:12px;max-width:540px;margin-left:auto;margin-right:auto;">
+        Ogni prodotto nasce in uno stabilimento certificato ai più alti standard internazionali.
+      </p>
+    </div>
+    <div class="cert-grid stagger-children">
+      <div class="cert-card">
+        <img src="IMMAGINI /certificazioni /brc render.png" alt="BRC Food Safety" class="cert-card__logo" loading="lazy">
+        <p class="cert-card__name">BRC Food Safety</p>
+      </div>
+      <div class="cert-card">
+        <img src="IMMAGINI /certificazioni /ifs render.png" alt="IFS Food" class="cert-card__logo" loading="lazy">
+        <p class="cert-card__name">IFS Food</p>
+      </div>
+      <div class="cert-card">
+        <img src="IMMAGINI /certificazioni /CERTIFICAZIONE BIO RENDER.png" alt="ICEA Biologico" class="cert-card__logo" loading="lazy">
+        <p class="cert-card__name">ICEA Biologico</p>
+      </div>
+      <div class="cert-card">
+        <img src="IMMAGINI /certificazioni /vegan certificazione.png" alt="Qualità Vegan" class="cert-card__logo" loading="lazy">
+        <p class="cert-card__name">Qualità Vegan</p>
+      </div>
+      <div class="cert-card">
+        <img src="IMMAGINI /certificazioni /euk.png" alt="EUK" class="cert-card__logo" loading="lazy">
+        <p class="cert-card__name">EUK</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============================================================
      PREVIEW RICETTE
@@ -438,10 +484,10 @@
       <h2>Cosa pensano<br>i nostri clienti</h2>
     </div>
 
-    <div class="reviews-carousel">
-      <div class="reviews-track" id="reviewsTrack">
+    <div class="reviews-slider-wrap" id="reviewsSlider">
+      <div class="reviews-slide active">
         <div class="review-card">
-          <div class="review-card__stars">
+          <div class="review-card__stars" style="color:var(--color-gold);display:flex;gap:4px;margin-bottom:16px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -449,11 +495,13 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
           <p class="review-card__text">"Il Tartufo e Pecorino è diventato il mio condimento fisso per la pasta. In 5 minuti ottengo un piatto da ristorante. Non riesco più a starne senza."</p>
-          <span class="review-card__author">Martina R. — Milano</span>
+          <span class="review-card__name">Martina R.</span><span class="review-card__author"> — Milano &nbsp;★★★★★</span>
         </div>
+      </div>
 
+      <div class="reviews-slide">
         <div class="review-card">
-          <div class="review-card__stars">
+          <div class="review-card__stars" style="color:var(--color-gold);display:flex;gap:4px;margin-bottom:16px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -461,11 +509,13 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
           <p class="review-card__text">"Ho regalato il Box Inverno ai miei genitori per Natale. Si sono commossi. La cassetta in legno è bellissima, i funghi fantastici. Prodotto di altissima qualità."</p>
-          <span class="review-card__author">Lorenzo B. — Trento</span>
+          <span class="review-card__name">Lorenzo B.</span><span class="review-card__author"> — Trento &nbsp;★★★★★</span>
         </div>
+      </div>
 
+      <div class="reviews-slide">
         <div class="review-card">
-          <div class="review-card__stars">
+          <div class="review-card__stars" style="color:var(--color-gold);display:flex;gap:4px;margin-bottom:16px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -473,12 +523,13 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
           <p class="review-card__text">"Ho scoperto il Teriyaki e Zenzero per sbaglio e ora è il mio preferito. Sul salmone è una bomba. Spero non finisca mai la Limited Edition!"</p>
-          <span class="review-card__author">Chiara M. — Bologna</span>
+          <span class="review-card__name">Chiara M.</span><span class="review-card__author"> — Bologna &nbsp;★★★★★</span>
         </div>
+      </div>
 
-        <!-- Duplicati per autoplay -->
+      <div class="reviews-slide">
         <div class="review-card">
-          <div class="review-card__stars">
+          <div class="review-card__stars" style="color:var(--color-gold);display:flex;gap:4px;margin-bottom:16px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -486,16 +537,54 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
           <p class="review-card__text">"I porcini secchi Qualità Extra sono i migliori che abbia mai comprato. Aroma intenso, nessun pezzo di scarto. Il risotto che ho preparato era da standing ovation."</p>
-          <span class="review-card__author">Gabriele F. — Verona</span>
+          <span class="review-card__name">Gabriele F.</span><span class="review-card__author"> — Verona &nbsp;★★★★★</span>
+        </div>
+      </div>
+
+      <div class="reviews-slide">
+        <div class="review-card">
+          <div class="review-card__stars" style="color:var(--color-gold);display:flex;gap:4px;margin-bottom:16px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="review-card__text">"Finalmente una salsa ai funghi che ha davvero sapore di fungo. Il Porcini e Speck sul risotto è spettacolare — cremoso e intenso. Lo ordino ogni mese senza falta."</p>
+          <span class="review-card__name">Stefano V.</span><span class="review-card__author"> — Torino &nbsp;★★★★★</span>
+        </div>
+      </div>
+
+      <div class="reviews-slide">
+        <div class="review-card">
+          <div class="review-card__stars" style="color:var(--color-gold);display:flex;gap:4px;margin-bottom:16px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="review-card__text">"Prodotto di qualità vera, si sente che viene da un'azienda seria. Ho visitato il sito Dial e mi ha convinto ancora di più. Riacquisto."</p>
+          <span class="review-card__name">Anna P.</span><span class="review-card__author"> — Firenze &nbsp;★★★★★</span>
         </div>
       </div>
     </div>
 
-    <div class="carousel-dots" id="carouselDots">
-      <button class="carousel-dot active" aria-label="Recensione 1"></button>
-      <button class="carousel-dot" aria-label="Recensione 2"></button>
-      <button class="carousel-dot" aria-label="Recensione 3"></button>
-      <button class="carousel-dot" aria-label="Recensione 4"></button>
+    <div class="reviews-nav">
+      <button class="reviews-nav__btn" id="reviewsPrev" aria-label="Recensione precedente">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="reviews-nav__dots" id="reviewsDots">
+        <button class="reviews-nav__dot active" aria-label="1"></button>
+        <button class="reviews-nav__dot" aria-label="2"></button>
+        <button class="reviews-nav__dot" aria-label="3"></button>
+        <button class="reviews-nav__dot" aria-label="4"></button>
+        <button class="reviews-nav__dot" aria-label="5"></button>
+        <button class="reviews-nav__dot" aria-label="6"></button>
+      </div>
+      <button class="reviews-nav__btn" id="reviewsNext" aria-label="Recensione successiva">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
     </div>
   </div>
 </section>
@@ -586,11 +675,16 @@
       <!-- Col 1: Brand -->
       <div>
         <div class="footer__logo">
-          <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi">
+          <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" style="height:44px;width:auto;">
         </div>
-        <p class="footer__tagline">
+        <p class="footer__dial-tagline">Fior di Funghi è un marchio Dial S.r.l.</p>
+        <p class="footer__tagline" style="margin-top:8px;">
           Leader italiano nei funghi secchi premium dal 1992. Nati in Trentino, amati in tutta Italia.
         </p>
+        <a href="https://www.dialfunghi.it" target="_blank" rel="noopener noreferrer" class="footer__dial-link">
+          Visita dialfunghi.it
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
         <div class="footer__social">
           <a href="#" class="footer__social-link" aria-label="Instagram">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -651,7 +745,7 @@
     </div>
 
     <div class="footer__bottom">
-      <p class="footer__copy">&copy; 2024 Dial S.r.l. — Tutti i diritti riservati</p>
+      <p class="footer__copy">&copy; 2025 Dial S.r.l. — Tutti i diritti riservati</p>
       <div class="footer__legal">
         <a href="#">Privacy Policy</a>
         <a href="#">Cookie Policy</a>

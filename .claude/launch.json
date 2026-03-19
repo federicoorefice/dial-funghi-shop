@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Python HTTP Server",
+      "runtimeExecutable": "/opt/homebrew/bin/npx",
+      "runtimeArgs": ["serve", "/Users/federicoorefice/Desktop/claude lavora qui x sito "],
+      "port": 8080,
+      "autoPort": true
+    }
+  ]
+}

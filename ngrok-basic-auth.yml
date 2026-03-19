@@ -1,0 +1,8 @@
+on_http_request:
+  - actions:
+      - type: "basic-auth"
+        config:
+          realm: "Dial Funghi Shop"
+          credentials:
+            - "federico:K6v9Qp3tX1mR"
+          enforce: true

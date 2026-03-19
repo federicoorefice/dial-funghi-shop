@@ -1247,6 +1247,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initStatCounter();
     initParallax();
     initCarousel();
+    initReviewsSlider();
+    initStoriaCounters();
   }
 
   if (page === 'shop') {
@@ -1286,4 +1288,83 @@ function initRecipeModalListeners() {
   $('#recipeModalClose')?.addEventListener('click', closeRecipeModal);
   modal.querySelector('.recipe-modal__backdrop')?.addEventListener('click', closeRecipeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRecipeModal(); });
+}
+
+/* ============================================================
+   REVIEWS SLIDER V2
+   ============================================================ */
+function initReviewsSlider() {
+  const slider = document.getElementById('reviewsSlider');
+  if (!slider) return;
+
+  const slides = slider.querySelectorAll('.reviews-slide');
+  const dots   = document.querySelectorAll('#reviewsDots .reviews-nav__dot');
+  let current  = 0;
+  let timer;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dots[current]?.classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current]?.classList.add('active');
+  }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 5000);
+  }
+
+  document.getElementById('reviewsPrev')?.addEventListener('click', () => { goTo(current - 1); startTimer(); });
+  document.getElementById('reviewsNext')?.addEventListener('click', () => { goTo(current + 1); startTimer(); });
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => { goTo(i); startTimer(); });
+  });
+
+  // Swipe touch
+  let touchStartX = 0;
+  slider.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  slider.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { goTo(current + (diff > 0 ? 1 : -1)); startTimer(); }
+  });
+
+  startTimer();
+}
+
+/* ============================================================
+   STORIA COUNTERS V2 — animazione numeri on scroll
+   ============================================================ */
+function initStoriaCounters() {
+  const strip = document.getElementById('storiaNumbers');
+  if (!strip) return;
+
+  function animateValue(el, from, to, duration) {
+    let start = null;
+    const suffix = el.dataset.suffix || '';
+    const step = ts => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      const val = Math.floor(p * (to - from) + from);
+      el.textContent = val + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        strip.querySelectorAll('.storia-num-v2__value').forEach(el => {
+          const target = parseInt(el.dataset.target || el.textContent, 10);
+          const from   = target > 100 ? target - 200 : 0;
+          animateValue(el, from, target, 1500);
+        });
+        observer.unobserve(strip);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(strip);
 }

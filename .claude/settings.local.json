@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd ~/Desktop/\"claude lavora qui x sito \")",
+      "Bash(BASE='/Users/federicoorefice/Desktop/claude lavora qui x sito ')",
+      "Bash(mkdir -p \"$BASE/img\")",
+      "Bash(cp \"$BASE/flaconi/porcini e speck .png\" \"$BASE/img/porcini-speck.png\")",
+      "Bash(cp \"$BASE/flaconi/tartufo e pecorino.png\" \"$BASE/img/tartufo-pecorino.png\")",
+      "Bash(cp \"$BASE/flaconi/bbq.jpeg\" \"$BASE/img/bbq.jpeg\")",
+      "Bash(cp \"$BASE/flaconi/teriaky e zenzero fronte.png\" \"$BASE/img/teriyaki-fronte.png\")",
+      "Bash(cp \"$BASE/flaconi/teriaky e zenzero completa.png\" \"$BASE/img/teriyaki-completa.png\")",
+      "Bash(cp \"$BASE/flaconi/teriaky e zenzero retro.png\" \"$BASE/img/teriyaki-retro.png\")",
+      "Bash(cp \"$BASE/LAVORO FINITO FOLDER/colori migliorati versione nero /diversi colori lavoro folder dial prova  \\(1\\)/6.png\" \"$BASE/img/promo-burger.png\")",
+      "Bash(cp \"$BASE/LAVORO FINITO FOLDER/colori migliorati versione nero /diversi colori lavoro folder dial prova  \\(1\\)/7.png\" \"$BASE/img/gamma.png\")",
+      "Bash(cp \"$BASE/LAVORO FINITO FOLDER/colori migliorati versione nero /diversi colori lavoro folder dial prova  \\(1\\)/8.png\" \"$BASE/img/food-photography.png\")",
+      "Bash(cp \"$BASE/LAVORO FINITO FOLDER/colori migliorati versione nero /diversi colori lavoro folder dial prova  \\(1\\)/9.png\" \"$BASE/img/scheda-tecnica.png\")",
+      "Bash(cp \"$BASE/IMBALLO TUTTI GUSTI .png\" \"$BASE/img/imballo-tutti.png\")",
+      "Bash(cp \"$BASE/imballo finale .png\" \"$BASE/img/imballo-finale.png\")",
+      "Bash(cp \"$BASE/immagini creative flaocni per presentazioini /BBQ PANINO.png\" \"$BASE/img/bbq-panino.png\")",
+      "Bash(cp \"$BASE/immagini creative flaocni per presentazioini /PORCINI E SPECK + HAMBURGHER .png\" \"$BASE/img/porcini-hamburger.png\")",
+      "Bash(cp \"$BASE/immagini creative flaocni per presentazioini /TERIAKY CON IL SALMONE .png\" \"$BASE/img/teriyaki-salmone.png\")",
+      "Bash(cp \"$BASE/immagini creative flaocni per presentazioini /TRATUFO E PECORINO CON PANE .png\" \"$BASE/img/tartufo-pane.png\")",
+      "Bash(cp \"$BASE/immagini creative flaocni per presentazioini /porcini e piatto con pollo.png\" \"$BASE/img/porcini-pollo.png\")",
+      "Bash(cp \"$BASE/immagini creative flaocni per presentazioini /porcini su tagliere con contorno porcin .png\" \"$BASE/img/porcini-tagliere.png\")",
+      "Read(//Users/federicoorefice/Desktop/claude lavora qui x sito /$BASE/**)",
+      "WebFetch(domain:www.dialfunghi.it)",
+      "WebFetch(domain:www.amazon.it)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(ngrok version:*)",
+      "Bash(brew install:*)",
+      "Bash(curl -s https://ipv4.icanhazip.com)",
+      "Bash(curl -s --max-time 5 -o /dev/null -w \"%{http_code}\" https://bitter-things-joke.loca.lt/)",
+      "Bash(SITE=\"/Users/federicoorefice/Desktop/claude lavora qui x sito \")",
+      "Read(//Users/federicoorefice/Desktop/claude lavora qui x sito /**)",
+      "Bash(node -e \"console.log\\(''node ok''\\)\")",
+      "Bash(npm install:*)",
+      "Bash(npm list:*)",
+      "Bash(node remove-bg.js)",
+      "Bash(node -e \"const j = require\\(''jimp''\\); console.log\\(Object.keys\\(j\\).slice\\(0,20\\)\\)\")",
+      "Bash(node -e \"const { Jimp } = require\\(''jimp''\\); console.log\\(typeof Jimp.read, typeof Jimp.prototype.scan\\)\")"
+    ]
+  }
+}
