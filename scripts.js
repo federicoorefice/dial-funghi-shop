@@ -414,7 +414,7 @@ function renderFFGrid() {
   if (!grid || typeof FIOR_DI_FUNGHI === 'undefined') return;
 
   grid.innerHTML = FIOR_DI_FUNGHI.map(p => `
-    <div class="ff-card" data-gusto="${p.id}" data-color="${GUSTO_COLORS[p.id] || '#E85320'}" onclick="window.location='product.html?id=${p.id}'">
+    <div class="ff-card" data-gusto="${p.id}" data-color="${GUSTO_COLORS[p.id] || '#E85320'}" onclick="window.location='product?id=${p.id}'">
       <div class="card-drip" aria-hidden="true">
         <svg class="card-drip__svg" viewBox="0 0 20 60">
           <path d="M10,0 Q14,20 14,35 Q14,50 10,55 Q6,50 6,35 Q6,20 10,0Z" fill="currentColor"/>
@@ -464,7 +464,7 @@ function renderGammaGrid(filter = 'tutti') {
   grid.innerHTML = products.map((p, i) => `
     <div class="product-card" style="transition-delay:${i * 40}ms"
          data-gusto="${p.id}" data-color="${GUSTO_COLORS[p.id] || ''}"
-         onclick="window.location='product.html?id=${p.id}'">
+         onclick="window.location='product?id=${p.id}'">
       ${GUSTO_COLORS[p.id] ? `<div class="card-drip" aria-hidden="true"><svg class="card-drip__svg" viewBox="0 0 20 60"><path d="M10,0 Q14,20 14,35 Q14,50 10,55 Q6,50 6,35 Q6,20 10,0Z" fill="currentColor"/><circle cx="10" cy="57" r="3" fill="currentColor"/></svg></div>` : ''}
       <div class="product-card__img-wrap">
         <img
@@ -583,7 +583,7 @@ function initShopPage() {
     if (countEl) countEl.textContent = `${products.length} prodotti`;
 
     grid.innerHTML = products.map((p, i) => `
-      <div class="product-card" style="transition-delay:${i * 30}ms" onclick="window.location='product.html?id=${p.id}'">
+      <div class="product-card" style="transition-delay:${i * 30}ms" onclick="window.location='product?id=${p.id}'">
         <div class="product-card__img-wrap">
           <img
             src="${p.image}"
@@ -927,7 +927,7 @@ function renderRelated(currentProduct) {
     .slice(0, 4);
 
   grid.innerHTML = related.map(p => `
-    <div class="product-card" onclick="window.location='product.html?id=${p.id}'">
+    <div class="product-card" onclick="window.location='product?id=${p.id}'">
       <div class="product-card__img-wrap">
         <img src="${p.image}" alt="${p.imageAlt}" class="product-card__img" loading="lazy" onerror="this.style.opacity='0.4'">
         <div class="product-card__badges">
