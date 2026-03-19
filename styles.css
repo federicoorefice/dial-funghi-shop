@@ -3874,7 +3874,7 @@ section[id] { scroll-margin-top: 84px; }
   inset: 0;
   background: #0D0702;
   z-index: 99998;
-  transform: translateY(100%);
+  transform: translateY(-100%);
   pointer-events: none;
 }
 

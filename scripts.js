@@ -1699,21 +1699,21 @@ function initPageLoader() {
     });
   }
   if (barFill) {
-    setTimeout(() => { barFill.style.width = '100%'; }, 100);
+    setTimeout(() => { barFill.style.width = '100%'; }, 50);
   }
 
   setTimeout(() => {
     if (typeof gsap !== 'undefined') {
       gsap.to(loader, {
         yPercent: -100,
-        duration: 0.7,
+        duration: 0.5,
         ease: 'power3.inOut',
         onComplete: () => { loader.style.display = 'none'; }
       });
     } else {
       loader.style.display = 'none';
     }
-  }, 1200);
+  }, 600);
 }
 
 /* ----- Effetto 12: PAGE TRANSITIONS ----- */
@@ -1721,11 +1721,19 @@ function initPageTransitions() {
   const overlay = document.getElementById('transition-overlay');
   if (!overlay || typeof gsap === 'undefined') return;
 
-  // Reveal page on load
-  gsap.fromTo(overlay, { yPercent: 0 }, {
-    yPercent: -100, duration: 0.55,
-    ease: 'power3.inOut', delay: 0.05
-  });
+  // Solo se vengo da una navigazione interna (flag in sessionStorage)
+  // faccio l'animazione d'entrata. Al primo caricamento diretto
+  // l'overlay resta fuori schermo (translateY(100%) da CSS).
+  if (sessionStorage.getItem('dial_transition') === '1') {
+    sessionStorage.removeItem('dial_transition');
+    gsap.fromTo(overlay, { yPercent: 0, y: 0 }, {
+      yPercent: -100, y: 0, duration: 0.55,
+      ease: 'power3.inOut', delay: 0.05
+    });
+  } else {
+    // Prima visita o ricaricamento diretto: nascondi subito l'overlay
+    gsap.set(overlay, { yPercent: -100, y: 0 });
+  }
 
   // Intercept internal links
   document.querySelectorAll('a[href]').forEach(link => {
@@ -1735,8 +1743,9 @@ function initPageTransitions() {
         link.target === '_blank') return;
     link.addEventListener('click', (e) => {
       e.preventDefault();
+      sessionStorage.setItem('dial_transition', '1');
       gsap.to(overlay, {
-        yPercent: 0,
+        yPercent: 0, y: 0,
         duration: 0.42,
         ease: 'power3.inOut',
         onComplete: () => { window.location.href = href; }
