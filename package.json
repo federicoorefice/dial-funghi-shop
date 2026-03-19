@@ -1,0 +1,23 @@
+{
+  "name": "dial-funghi-shop",
+  "version": "1.0.0",
+  "description": "Shop online Dial Funghi",
+  "author": "Federico Orefice",
+  "private": true,
+  "scripts": {
+    "start": "live-server --port=8000 --open=index.html",
+    "dev": "live-server --port=8000 --open=index.html --wait=300",
+    "optimize": "node scripts/optimize-images.js",
+    "css": "postcss styles.css -o styles.min.css",
+    "watch-css": "postcss styles.css -o styles.min.css --watch"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.27",
+    "live-server": "^1.2.2",
+    "postcss": "^8.5.8",
+    "postcss-cli": "^11.0.1"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
+}

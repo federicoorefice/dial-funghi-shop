@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ricette — Dial Funghi | 16 ricette con funghi porcini</title>
+  <meta name="description" content="Scopri 16 ricette originali con Fior di Funghi e i prodotti Dial. Dai risotti ai burger, dalla pasta al salmone. Facili, veloci e deliziose.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <img src="IMMAGINI /logo fior di funghi /fior di funghi logo .png" alt="Fior di Funghi">
+    </a>
+    <ul class="navbar__nav">
+      <li><a href="index.html" class="navbar__link">Home</a></li>
+      <li><a href="shop.html" class="navbar__link">Shop</a></li>
+      <li><a href="recipes.html" class="navbar__link" style="color:var(--color-text-light);">Ricette</a></li>
+      <li><a href="index.html#storia" class="navbar__link">Chi Siamo</a></li>
+    </ul>
+    <div class="navbar__actions">
+      <button class="navbar__cart-btn" id="cartToggle" aria-label="Apri carrello">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrello
+        <span class="navbar__cart-count" id="cartCount">0</span>
+      </button>
+      <button class="navbar__hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-label">Ispirazione in cucina</span>
+    <h1>16 ricette per<br><em style="font-style:italic; color:var(--color-accent);">ogni occasione.</em></h1>
+    <p>Dai primi veloci ai piatti gourmet. Con Fior di Funghi bastano pochi secondi per trasformare qualsiasi piatto.</p>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave-divider" style="background:#1C0E05; margin-top:-1px;">
+  <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C480,48 960,0 1440,48 L1440,0 L0,0 Z" fill="#1C0E05"/>
+  </svg>
+</div>
+
+<!-- FILTERS -->
+<section style="background:var(--color-bg); padding:40px 0 0;">
+  <div class="container">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:40px;">
+      <span class="label" style="color:var(--color-text-muted); flex-shrink:0;">Filtra per:</span>
+      <div id="recipeTags" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <!-- Generato da JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECIPES GRID -->
+<section class="section" style="background:var(--color-bg); padding-top:0;">
+  <div class="container">
+    <div class="recipes-grid" id="recipesGrid">
+      <!-- Generato da JS -->
+    </div>
+  </div>
+</section>
+
+<!-- CTA SHOP -->
+<section style="background:var(--color-bg-dark); padding:80px 0;">
+  <div class="container text-center">
+    <span class="section-label">Pronto a cucinare?</span>
+    <h2 style="color:var(--color-text-light); margin-bottom:16px;">Ordina i tuoi<br><em style="font-style:italic; color:var(--color-accent);">prodotti preferiti.</em></h2>
+    <p style="color:rgba(245,236,215,0.5); margin-bottom:36px; max-width:440px; margin-inline:auto; font-size:0.95rem; line-height:1.7;">Spedizione gratuita sopra €30 — consegna in 2-4 giorni lavorativi.</p>
+    <a href="shop.html" class="btn btn--primary btn--lg">
+      Vai allo Shop
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo"><img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi"></div>
+        <p class="footer__tagline">Leader italiano nei funghi secchi premium dal 1992.</p>
+      </div>
+      <div>
+        <p class="footer__col-title">Shop</p>
+        <ul class="footer__links">
+          <li><a href="shop.html" class="footer__link">Tutti i prodotti</a></li>
+          <li><a href="shop.html?cat=fior-di-funghi" class="footer__link">Fior di Funghi</a></li>
+          <li><a href="shop.html?cat=box" class="footer__link">Box Regalo</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Naviga</p>
+        <ul class="footer__links">
+          <li><a href="index.html" class="footer__link">Home</a></li>
+          <li><a href="recipes.html" class="footer__link">Ricette</a></li>
+          <li><a href="cart.html" class="footer__link">Carrello</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Contatti</p>
+        <div class="footer__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          info@dialfunghi.it
+        </div>
+        <div class="footer__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Pergine Valsugana (TN)
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p class="footer__copy">&copy; 2024 Dial S.r.l. — P.IVA 02439500220</p>
+      <div class="footer__legal"><a href="#">Privacy</a><a href="#">Cookie</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- RECIPE MODAL -->
+<div class="recipe-modal" id="recipeModal" role="dialog" aria-modal="true" aria-labelledby="recipeModalTitle">
+  <div class="recipe-modal__backdrop"></div>
+  <div class="recipe-modal__box">
+    <button class="recipe-modal__close" id="recipeModalClose" aria-label="Chiudi ricetta">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <img id="recipeModalImg" src="" alt="" class="recipe-modal__img" onerror="this.style.display='none'">
+    <div class="recipe-modal__body">
+      <!-- Meta -->
+      <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:16px;">
+        <span style="display:flex; align-items:center; gap:6px; font-family:var(--font-label); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-text-muted);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="recipeModalTime"></span>
+        </span>
+        <span style="display:flex; align-items:center; gap:6px; font-family:var(--font-label); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-text-muted);" id="recipeModalDiff"></span>
+        <span style="display:flex; align-items:center; gap:6px; font-family:var(--font-label); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-text-muted);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span id="recipeModalServings"></span>
+        </span>
+      </div>
+
+      <h2 style="font-family:var(--font-title); font-size:1.8rem; margin-bottom:8px;" id="recipeModalTitle"></h2>
+      <p style="color:var(--color-text-muted); font-style:italic; margin-bottom:24px; font-size:0.9rem;" id="recipeModalSub"></p>
+
+      <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:32px;">
+        <div>
+          <p style="font-family:var(--font-label); font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:12px;">Ingredienti</p>
+          <ul id="recipeModalIngredients" style="padding:0;"></ul>
+        </div>
+        <div>
+          <p style="font-family:var(--font-label); font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:12px;">Preparazione</p>
+          <ol id="recipeModalSteps" style="padding:0;"></ol>
+        </div>
+      </div>
+
+      <div id="recipeModalProduct" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-label="Carrello">
+  <div class="cart-sidebar__header">
+    <h2 class="cart-sidebar__title">Il tuo carrello</h2>
+    <button class="cart-sidebar__close" id="cartClose" aria-label="Chiudi">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-sidebar__shipping-bar">
+    <p class="shipping-text" id="shippingText">Aggiungi prodotti al carrello</p>
+    <div class="shipping-progress"><div class="shipping-progress__fill" id="shippingFill" style="width:0%"></div></div>
+  </div>
+  <div class="cart-sidebar__items" id="cartItems"></div>
+  <div class="cart-sidebar__footer" id="cartFooter" style="display:none;">
+    <div class="cart-sidebar__subtotal"><span>Subtotale</span><span id="cartSubtotal">€0,00</span></div>
+    <div class="cart-sidebar__shipping-line"><span>Spedizione</span><span id="cartShipping">€4,90</span></div>
+    <div class="cart-sidebar__total"><span>Totale</span><span id="cartTotal">€0,00</span></div>
+    <a href="cart.html" class="btn btn--primary cart-sidebar__checkout-btn">Vai al checkout <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+</aside>
+
+<div class="toast-container" id="toastContainer"></div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="products.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>

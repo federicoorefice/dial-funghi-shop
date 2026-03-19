@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop — Dial Funghi | Fior di Funghi e prodotti premium</title>
+  <meta name="description" content="Acquista online i prodotti Dial Funghi: Fior di Funghi squeeze, funghi secchi premium, condimenti e box regalo. Spedizione gratuita sopra €30.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <img src="IMMAGINI /logo fior di funghi /fior di funghi logo .png" alt="Fior di Funghi">
+    </a>
+    <ul class="navbar__nav">
+      <li><a href="index.html" class="navbar__link">Home</a></li>
+      <li><a href="shop.html" class="navbar__link" style="color:var(--color-text-light);">Shop</a></li>
+      <li><a href="recipes.html" class="navbar__link">Ricette</a></li>
+      <li><a href="index.html#storia" class="navbar__link">Chi Siamo</a></li>
+    </ul>
+    <div class="navbar__actions">
+      <button class="navbar__cart-btn" id="cartToggle" aria-label="Apri carrello">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrello
+        <span class="navbar__cart-count" id="cartCount">0</span>
+      </button>
+      <button class="navbar__hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-label">Tutti i prodotti</span>
+    <h1>Il meglio del bosco,<br><em style="font-style:italic; color:var(--color-accent);">direttamente a casa tua.</em></h1>
+    <p>Funghi porcini, condimenti, salse squeeze e box regalo. Spedizione gratuita sopra €30.</p>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave-divider" style="background:#1C0E05; margin-top:-1px;">
+  <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C360,48 1080,0 1440,48 L1440,0 L0,0 Z" fill="#1C0E05"/>
+  </svg>
+</div>
+
+<!-- STICKY FILTERS -->
+<div class="shop-filters" id="shopFilters">
+  <div class="container shop-filters__inner">
+    <div class="tabs" id="shopTabs" role="tablist">
+      <button class="tab-btn active" data-filter="tutti" role="tab" aria-selected="true">Tutti</button>
+      <button class="tab-btn tab-btn--promo" data-filter="promo" role="tab" aria-selected="false" aria-label="Vai alle promo">
+        Promozioni
+      </button>
+      <button class="tab-btn" data-filter="fior-di-funghi" role="tab">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--color-accent)" style="display:inline; margin-right:4px;"><circle cx="12" cy="12" r="8"/></svg>
+        Fior di Funghi
+      </button>
+      <button class="tab-btn" data-filter="funghi-secchi" role="tab">Funghi Secchi</button>
+      <button class="tab-btn" data-filter="condimenti" role="tab">Condimenti</button>
+      <button class="tab-btn" data-filter="polenta" role="tab">Polenta</button>
+      <button class="tab-btn" data-filter="box" role="tab">Box Regalo</button>
+    </div>
+    <span class="shop-filters__count" id="shopCount"></span>
+  </div>
+</div>
+
+<!-- PRODUCTS GRID -->
+<section class="section shop-grid" style="padding-top:40px; background:var(--color-bg);">
+  <div class="container">
+
+    <!-- Banner Fior di Funghi (top) -->
+    <div class="reveal" style="margin-bottom:48px; background:var(--color-bg-dark); border-radius:var(--radius-xl); padding:40px 48px; display:flex; align-items:center; justify-content:space-between; gap:32px; flex-wrap:wrap; border:1px solid var(--color-border-dark);">
+      <div>
+        <span class="section-label">Novità assoluta</span>
+        <h2 style="color:var(--color-text-light); font-size:clamp(1.5rem,3vw,2.5rem);">Fior di Funghi<br><em style="font-style:italic; color:var(--color-accent);">La prima salsa squeeze.</em></h2>
+        <p style="color:rgba(245,236,215,0.55); margin-top:12px; max-width:420px; font-size:0.9rem; line-height:1.7;">4 gusti, certificato Gluten Free, 100% funghi italiani. Premi e condisci, senza sprechi.</p>
+      </div>
+      <img src="IMMAGINI /fior di funghi prodotti /foto hero tutti insieme i flaconi /flaconi hero insieme render.png"
+           alt="Fior di Funghi tutti i gusti"
+           style="height:180px; object-fit:contain; filter:drop-shadow(0 16px 32px rgba(0,0,0,0.4));"
+           onerror="this.style.display='none'">
+    </div>
+
+    <!-- Grid prodotti (renderizzata da JS) -->
+    <div class="gamma-grid" id="shopGrid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">
+    </div>
+  </div>
+</section>
+
+<!-- PROMO SECTION -->
+<section class="section promo-section" id="promoSection" style="background:var(--color-bg); padding-top:20px;">
+  <div class="container">
+    <div class="promo-banner reveal">
+      <div class="promo-banner__left">
+        <span class="section-label">Offerte del momento</span>
+        <h2 class="promo-banner__title">Promo bundle<br><em>risparmio intelligente</em></h2>
+        <p class="promo-banner__sub">Sconti medi 10–15% (mai oltre 20%). Abbina prodotti “utility” con le nostre salse più amate.</p>
+        <div class="promo-banner__meta">
+          <span class="promo-pill">Max -20%</span>
+          <span class="promo-pill">Bundle pronti</span>
+          <span class="promo-pill">Aggiungi in 1 click</span>
+        </div>
+      </div>
+      <div class="promo-banner__right" aria-hidden="true">
+        <div class="promo-banner__spark"></div>
+        <div class="promo-banner__img">
+          <img src="IMMAGINI /fior di funghi prodotti /foto hero tutti insieme i flaconi /flaconi hero insieme render.png" alt="" onerror="this.style.display='none'">
+        </div>
+      </div>
+    </div>
+
+    <div class="promo-header">
+      <div>
+        <h3 class="promo-header__h">Scegli una promo</h3>
+        <p class="promo-header__p">Scorri le card: ogni promo mostra risparmio e prodotti inclusi.</p>
+      </div>
+      <div class="promo-nav">
+        <button class="promo-nav__btn" id="promoPrev" aria-label="Promo precedenti">←</button>
+        <button class="promo-nav__btn" id="promoNext" aria-label="Promo successive">→</button>
+      </div>
+    </div>
+
+    <div class="promo-slider no-scrollbar" id="promoSlider" tabindex="0" aria-label="Slider promo"></div>
+    <div class="promo-dots" id="promoDots" aria-label="Indicatori promo"></div>
+  </div>
+</section>
+
+<!-- BANNER SPEDIZIONE -->
+<section style="background:var(--color-accent); padding:40px 0; margin-top:60px;">
+  <div class="container" style="display:flex; align-items:center; justify-content:center; gap:48px; flex-wrap:wrap; text-align:center;">
+    <div style="display:flex; align-items:center; gap:14px; color:#fff;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <div>
+        <p style="font-family:var(--font-label); font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; opacity:0.8; margin-bottom:2px;">Spedizione gratuita</p>
+        <p style="font-family:var(--font-title); font-size:1.1rem; font-weight:700;">Sopra €30 di acquisto</p>
+      </div>
+    </div>
+    <div style="width:1px; height:40px; background:rgba(255,255,255,0.25);"></div>
+    <div style="display:flex; align-items:center; gap:14px; color:#fff;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div>
+        <p style="font-family:var(--font-label); font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; opacity:0.8; margin-bottom:2px;">Prodotto certificato</p>
+        <p style="font-family:var(--font-title); font-size:1.1rem; font-weight:700;">BRC · IFS · Bio · Vegan</p>
+      </div>
+    </div>
+    <div style="width:1px; height:40px; background:rgba(255,255,255,0.25);"></div>
+    <div style="display:flex; align-items:center; gap:14px; color:#fff;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <div>
+        <p style="font-family:var(--font-label); font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; opacity:0.8; margin-bottom:2px;">Consegna rapida</p>
+        <p style="font-family:var(--font-title); font-size:1.1rem; font-weight:700;">2-4 giorni lavorativi</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo"><img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi"></div>
+        <p class="footer__tagline">Leader italiano nei funghi secchi premium dal 1992. Nati in Trentino, amati in tutta Italia.</p>
+        <div class="footer__social">
+          <a href="#" class="footer__social-link" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="footer__social-link" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="footer__col-title">Prodotti</p>
+        <ul class="footer__links">
+          <li><a href="shop.html?cat=fior-di-funghi" class="footer__link">Fior di Funghi</a></li>
+          <li><a href="shop.html?cat=funghi-secchi" class="footer__link">Funghi Secchi</a></li>
+          <li><a href="shop.html?cat=condimenti" class="footer__link">Condimenti</a></li>
+          <li><a href="shop.html?cat=box" class="footer__link">Box Regalo</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Informazioni</p>
+        <ul class="footer__links">
+          <li><a href="index.html#storia" class="footer__link">Chi Siamo</a></li>
+          <li><a href="recipes.html" class="footer__link">Ricette</a></li>
+          <li><a href="cart.html" class="footer__link">Carrello</a></li>
+          <li><a href="#" class="footer__link">FAQ Spedizioni</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Contatti</p>
+        <div class="footer__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          info@dialfunghi.it
+        </div>
+        <div class="footer__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.61 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          0461 534505
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p class="footer__copy">&copy; 2024 Dial S.r.l. — P.IVA 02439500220</p>
+      <div class="footer__legal">
+        <a href="#">Privacy</a>
+        <a href="#">Cookie</a>
+        <a href="#">Termini</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-label="Carrello">
+  <div class="cart-sidebar__header">
+    <h2 class="cart-sidebar__title">Il tuo carrello</h2>
+    <button class="cart-sidebar__close" id="cartClose" aria-label="Chiudi carrello">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-sidebar__shipping-bar">
+    <p class="shipping-text" id="shippingText">Aggiungi prodotti al carrello</p>
+    <div class="shipping-progress"><div class="shipping-progress__fill" id="shippingFill" style="width:0%"></div></div>
+  </div>
+  <div class="cart-sidebar__items" id="cartItems"></div>
+  <div class="cart-sidebar__footer" id="cartFooter" style="display:none;">
+    <div class="cart-sidebar__subtotal"><span>Subtotale</span><span id="cartSubtotal">€0,00</span></div>
+    <div class="cart-sidebar__shipping-line"><span>Spedizione</span><span id="cartShipping">€4,90</span></div>
+    <div class="cart-sidebar__total"><span>Totale</span><span id="cartTotal">€0,00</span></div>
+    <a href="cart.html" class="btn btn--primary cart-sidebar__checkout-btn">Vai al checkout <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <a href="shop.html" style="display:block; text-align:center; margin-top:12px; font-size:0.78rem; color:var(--color-text-muted);">Continua lo shopping</a>
+  </div>
+</aside>
+
+<div class="toast-container" id="toastContainer"></div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="products.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>
