@@ -3955,6 +3955,13 @@ body.cursor-circle #cursor.hover {
   background: #0D0702;  /* stesso colore dell'hero per raccordo */
   overflow: hidden;
 }
+/* Hero nascosta durante intro, poi fade-in fluido */
+body.intro-playing .hero {
+  opacity: 0;
+}
+body .hero {
+  transition: opacity 0.5s ease 0.15s;
+}
 #forest-slides { position: absolute; inset: 0; z-index: 1; }
 .forest-slide {
   position: absolute; inset: 0;

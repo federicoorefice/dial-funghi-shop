@@ -40,7 +40,7 @@ function initForestIntro() {
 
   var SLIDE_DURATION = 1200;  // ms per slide — LENTO
   var CROSSFADE      = 600;   // ms crossfade
-  var TOTAL_DURATION = 5000;  // 5 secondi per 4 foto
+  var TOTAL_DURATION = 6000;  // 6 secondi per 4 foto + fade fluido
   var currentSlide   = 0;
 
   // Precarica tutte le immagini
@@ -147,23 +147,33 @@ function initForestIntro() {
     })();
   }
 
+  // Aggiungi classe per nascondere hero durante intro
+  document.body.classList.add('intro-playing');
+
   // Logo appare a 2.5 secondi
   setTimeout(function() {
     gsap.to(logoEl, { opacity: 1, duration: 0.8, ease: 'power2.out' });
   }, 2500);
 
-  // A 4.8s il logo esce, sfondo diventa nero hero
+  // A 4s il logo esce
   setTimeout(function() {
     gsap.to(logoEl, { opacity: 0, duration: 0.5 });
-    gsap.to(introEl, { backgroundColor: '#0D0702', duration: 1.0 });
-  }, 4800);
+  }, 4000);
 
-  // A 7s: slide l'overlay verso l'alto — hero sotto ha stesso sfondo
+  // A TOTAL_DURATION - 1500ms: fade slides+particles a nero graduale
+  setTimeout(function() {
+    gsap.to('#forest-slides', { opacity: 0, duration: 0.8 });
+    gsap.to('#forest-particles', { opacity: 0, duration: 0.8 });
+    gsap.to(introEl, { backgroundColor: '#0D0702', duration: 1.0 });
+  }, TOTAL_DURATION - 1500);
+
+  // A TOTAL_DURATION: slide-up fluido + mostra hero
   setTimeout(function() {
     document.body.style.overflow = '';
+    document.body.classList.remove('intro-playing');
     gsap.to(introEl, {
       yPercent: -100,
-      duration: 1.0,
+      duration: 1.2,
       ease: 'power2.inOut',
       onComplete: function() { introEl.remove(); }
     });
