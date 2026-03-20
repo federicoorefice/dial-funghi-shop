@@ -6,6 +6,175 @@
 if (typeof gsap !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
+   FOREST INTRO — Animazione Bosco -> Spazio
+   Compare una sola volta per sessione (sessionStorage)
+   ============================================================ */
+
+function shouldSkipIntro() {
+  if (sessionStorage.getItem('dial-intro-seen')) return true;
+  if (window.innerWidth < 768) return true;
+  const nav = navigator.connection || navigator.mozConnection;
+  if (nav && (nav.saveData || nav.effectiveType === '2g')) return true;
+  return false;
+}
+
+function initForestIntro() {
+  if (shouldSkipIntro()) {
+    const el = document.getElementById('forest-intro');
+    if (el) el.remove();
+    return;
+  }
+
+  const introEl   = document.getElementById('forest-intro');
+  const logoEl    = document.getElementById('forest-logo');
+  const slideEls  = document.querySelectorAll('.forest-slide');
+  const canvas    = document.getElementById('forest-particles');
+  if (!introEl || !slideEls.length) return;
+
+  // Blocca scroll durante intro
+  document.body.style.overflow = 'hidden';
+
+  let currentSlide = 0;
+  const SLIDE_DURATION = 580;
+  const TOTAL_DURATION = 3500;
+
+  function showSlide(n) {
+    slideEls.forEach(s => {
+      s.classList.remove('active');
+      s.style.opacity = '0';
+    });
+    const slide = slideEls[n];
+    if (!slide) return;
+    if (!slide.style.backgroundImage || slide.style.backgroundImage === '') {
+      slide.style.backgroundImage = "url('" + slide.dataset.src + "')";
+    }
+    slide.style.opacity = '1';
+    slide.classList.add('active');
+  }
+
+  // Preload prima immagine, poi mostra
+  const firstImg = new Image();
+  firstImg.onload = function() { showSlide(0); };
+  firstImg.src = slideEls[0].dataset.src;
+
+  const slideInterval = setInterval(function() {
+    currentSlide++;
+    if (currentSlide < slideEls.length) {
+      showSlide(currentSlide);
+    } else {
+      clearInterval(slideInterval);
+    }
+  }, SLIDE_DURATION);
+
+  // Particelle Three.js sopra le foto
+  if (canvas && typeof THREE !== 'undefined') {
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
+
+    var scene  = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(
+      70, window.innerWidth / window.innerHeight, 0.01, 100
+    );
+    camera.position.z = 4;
+
+    var COUNT = 220;
+    var geo   = new THREE.BufferGeometry();
+    var pos   = new Float32Array(COUNT * 3);
+    for (var i = 0; i < COUNT * 3; i += 3) {
+      pos[i]   = (Math.random() - 0.5) * 8;
+      pos[i+1] = (Math.random() - 0.5) * 8;
+      pos[i+2] = (Math.random() - 0.5) * 14;
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+    function makeCircleTex(r, g, b) {
+      var sz = 48, c = document.createElement('canvas');
+      c.width = c.height = sz;
+      var ctx = c.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(sz/2, sz/2, sz/2-2, 0, Math.PI*2);
+      ctx.fillStyle = 'rgb(' + Math.round(r*255) + ',' + Math.round(g*255) + ',' + Math.round(b*255) + ')';
+      ctx.fill();
+      return new THREE.CanvasTexture(c);
+    }
+
+    var mat = new THREE.PointsMaterial({
+      size: 0.07, transparent: true, opacity: 0.5,
+      alphaTest: 0.4, depthWrite: false,
+      map: makeCircleTex(0.25, 0.55, 0.15)
+    });
+    var pts = new THREE.Points(geo, mat);
+    scene.add(pts);
+
+    var camZ = 4;
+    var startTime = Date.now();
+
+    (function animatePts() {
+      var elapsed  = Date.now() - startTime;
+      var progress = Math.min(elapsed / TOTAL_DURATION, 1);
+
+      camZ -= 0.012;
+      if (camZ < -6) camZ = 3;
+      camera.position.z = camZ;
+
+      pts.rotation.y += 0.0005;
+
+      // Crossfade colore: verde -> arancio
+      if (progress > 0.5) {
+        var t = (progress - 0.5) * 2;
+        mat.color = new THREE.Color(
+          0.25 + t * (0.91 - 0.25),
+          0.55 - t * (0.55 - 0.33),
+          0.15 - t * 0.15
+        );
+      }
+
+      renderer.render(scene, camera);
+      if (elapsed < TOTAL_DURATION + 500)
+        requestAnimationFrame(animatePts);
+      else
+        renderer.dispose();
+    })();
+  }
+
+  // Logo appare a metà sequenza
+  setTimeout(function() {
+    if (typeof gsap !== 'undefined') {
+      gsap.to(logoEl, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+    } else {
+      logoEl.style.opacity = '1';
+    }
+  }, 1500);
+
+  // Fine: chiudi intro
+  setTimeout(function() {
+    sessionStorage.setItem('dial-intro-seen', '1');
+    clearInterval(slideInterval);
+    document.body.style.overflow = '';
+
+    if (typeof gsap !== 'undefined') {
+      gsap.to(logoEl, { opacity: 0, duration: 0.3 });
+      gsap.to(introEl, {
+        yPercent: -100,
+        duration: 0.75,
+        ease: 'power3.inOut',
+        delay: 0.25,
+        onComplete: function() { introEl.remove(); }
+      });
+    } else {
+      introEl.remove();
+    }
+  }, TOTAL_DURATION);
+}
+
+// Chiama initForestIntro appena il DOM è pronto
+document.addEventListener('DOMContentLoaded', function() {
+  initForestIntro();
+});
+
+/* ============================================================
    UTILS
    ============================================================ */
 
