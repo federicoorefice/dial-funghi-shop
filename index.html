@@ -118,17 +118,19 @@
       <circle cx="50" cy="50" r="50" fill="#C8860A" opacity="0.06"/>
     </svg>
 
-    <div class="hero-bottles-container">
-      <div class="hero__bottles">
-        <div class="hero-bottles-wrapper">
-          <img
-            src="IMMAGINI /fior di funghi prodotti /foto hero tutti insieme i flaconi /flaconi hero insieme render.png"
-            alt="Fior di Funghi — tutti e 4 i gusti"
-            class="hero__bottle-img"
-          >
-          <div class="hero-bottles-shadow" aria-hidden="true"></div>
-        </div>
-      </div>
+    <div class="hero-bottles-scene">
+      <img class="hero-bottle hero-bottle--1"
+           src="IMMAGINI /fior di funghi prodotti /flaconi shop /porcini e speck render .png"
+           alt="Porcini e Speck">
+      <img class="hero-bottle hero-bottle--2"
+           src="IMMAGINI /fior di funghi prodotti /flaconi shop /tartufo e pecorino render.png"
+           alt="Tartufo e Pecorino">
+      <img class="hero-bottle hero-bottle--3"
+           src="IMMAGINI /fior di funghi prodotti /flaconi shop /bbq e paprika.png"
+           alt="Paprika e BBQ">
+      <img class="hero-bottle hero-bottle--4"
+           src="IMMAGINI /fior di funghi prodotti /flaconi shop /teriaky e zenzero render.png"
+           alt="Teriyaki e Zenzero">
     </div>
   </div>
 </section>
@@ -183,33 +185,42 @@
 <section class="gusti-scroll" id="gusti">
   <!-- Lato sinistro: bottiglia sticky -->
   <div class="gusti-scroll__sticky">
-    <div class="gusti-bottle">
-      <img src="IMMAGINI /fior di funghi prodotti /foto hero tutti insieme i flaconi /flaconi hero insieme render.png"
-           alt="Fior di Funghi" id="gustiBottleImg"
-           onerror="this.style.opacity='0.5'">
+    <div class="gusti-bottle-container">
+      <img id="gusto-img-1" class="gusto-bottle active"
+           src="IMMAGINI /fior di funghi prodotti /flaconi shop /porcini e speck render .png"
+           alt="Porcini e Speck">
+      <img id="gusto-img-2" class="gusto-bottle"
+           src="IMMAGINI /fior di funghi prodotti /flaconi shop /tartufo e pecorino render.png"
+           alt="Tartufo e Pecorino">
+      <img id="gusto-img-3" class="gusto-bottle"
+           src="IMMAGINI /fior di funghi prodotti /flaconi shop /bbq e paprika.png"
+           alt="Paprika e BBQ">
+      <img id="gusto-img-4" class="gusto-bottle"
+           src="IMMAGINI /fior di funghi prodotti /flaconi shop /teriaky e zenzero render.png"
+           alt="Teriyaki e Zenzero">
     </div>
   </div>
   <!-- Lato destro: 4 gusti che scorrono -->
   <div class="gusti-scroll__slides">
-    <div class="gusto-slide" data-color="#7B4B2A">
+    <div class="gusto-slide" data-color="#7B4B2A" data-img="1">
       <span class="gusto-slide__num">01</span>
       <h2 data-scramble>Porcini e Speck</h2>
       <p>Il gusto intenso dei porcini con la nota affumicata dello speck. Perfetto su risotto, pasta e bruschette.</p>
       <a href="product?id=ffps-180-01" class="btn btn--primary">Scopri →</a>
     </div>
-    <div class="gusto-slide" data-color="#4a3828">
+    <div class="gusto-slide" data-color="#4a3828" data-img="2">
       <span class="gusto-slide__num">02</span>
       <h2 data-scramble>Tartufo e Pecorino</h2>
       <p>Elegante, raffinata. Con Pecorino Romano DOP per un gusto complesso e persistente.</p>
       <a href="product?id=fftap-180-01" class="btn btn--primary">Scopri →</a>
     </div>
-    <div class="gusto-slide" data-color="#B83020">
+    <div class="gusto-slide" data-color="#B83020" data-img="3">
       <span class="gusto-slide__num">03</span>
       <h2 data-scramble>Paprika e BBQ</h2>
       <p>Intensa, affumicata, irresistibile. La scelta perfetta per grigliate, burger e verdure.</p>
       <a href="product?id=ffpab-180-01" class="btn btn--primary">Scopri →</a>
     </div>
-    <div class="gusto-slide" data-color="#2D5016">
+    <div class="gusto-slide" data-color="#2D5016" data-img="4">
       <span class="gusto-slide__num">04 ★</span>
       <h2 data-scramble>Teriyaki e Zenzero</h2>
       <p>Limited Edition. La fusion che non ti aspetti: dolce, speziata, orientale.</p>
@@ -936,7 +947,15 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- Effetto 2: Custom Cursor -->
-<div id="cursor" aria-hidden="true"></div>
+<div id="cursor" aria-hidden="true">
+  <svg class="cursor-mushroom" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:28px;">
+    <path d="M12 2 C6 2 2 7 2 11 C2 13 4 14 6 14 L18 14 C20 14 22 13 22 11 C22 7 18 2 12 2Z" fill="#E85320"/>
+    <rect x="9" y="14" width="6" height="10" rx="3" fill="#F5ECD7"/>
+    <circle cx="9" cy="9" r="1.5" fill="white" opacity="0.8"/>
+    <circle cx="15" cy="8" r="1" fill="white" opacity="0.8"/>
+    <circle cx="13" cy="12" r="1" fill="white" opacity="0.6"/>
+  </svg>
+</div>
 <div id="cursor-dot" aria-hidden="true"></div>
 
 <!-- Effetto 6: Liquid Splash Canvas -->

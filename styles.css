@@ -453,6 +453,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
     #0D0702;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -491,8 +492,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: calc(var(--nav-h) + 40px) 0 80px clamp(24px, 5vw, 80px);
-  padding-right: 40px;
+  padding: 0 40px 0 clamp(24px, 5vw, 80px);
 }
 
 .hero__label {
@@ -603,53 +603,67 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   padding-top: var(--nav-h);
 }
 
-.hero__bottles {
+/* ----- Hero Bottles Scene: 4 bottiglie animate a ventaglio ----- */
+.hero-bottles-scene {
   position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: min(560px, 88vw);
+  height: 520px;
 }
-
-.hero__bottle-img {
-  width: min(640px, 90vw);
-  max-width: none;
-  position: relative;
-  z-index: 1;
-  filter:
-    drop-shadow(0 60px 90px rgba(0,0,0,0.65))
-    drop-shadow(0 20px 40px rgba(200,40,20,0.28));
-}
-
-/* Wrapper luce dinamica attorno alle bottiglie */
-.hero-bottles-wrapper {
-  position: relative;
-}
-.hero-bottles-wrapper::after {
-  content: '';
+.hero-bottle {
   position: absolute;
-  inset: -20px;
-  background: radial-gradient(
-    ellipse 60% 40% at 50% 30%,
-    rgba(255,200,100,0.12) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
-  animation: lightPulse 3.8s ease-in-out infinite;
+  height: 340px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 30px 50px rgba(0,0,0,0.55));
+  transform-origin: bottom center;
 }
-@keyframes lightPulse {
-  0%,100% { opacity: 0.6; transform: translateX(-8%) scaleX(0.9); }
-  50%      { opacity: 1;   transform: translateX(8%)  scaleX(1.1); }
+.hero-bottle--1 {
+  left: 0%; bottom: 0;
+  transform: rotate(-15deg);
+  animation: bottleFloat1 3.8s ease-in-out infinite;
+  z-index: 1;
+}
+.hero-bottle--2 {
+  left: 20%; bottom: 0;
+  transform: rotate(-5deg);
+  animation: bottleFloat2 4.2s ease-in-out infinite 0.3s;
+  z-index: 2;
+}
+.hero-bottle--3 {
+  left: 40%; bottom: 0;
+  transform: rotate(5deg);
+  animation: bottleFloat3 3.6s ease-in-out infinite 0.6s;
+  z-index: 3;
+}
+.hero-bottle--4 {
+  left: 60%; bottom: 0;
+  transform: rotate(15deg);
+  animation: bottleFloat4 4s ease-in-out infinite 0.9s;
+  z-index: 4;
 }
 
-/* Ombra a terra nascosta — era visibile come blob marrone */
-.hero-bottles-shadow {
-  display: none;
+@keyframes bottleFloat1 {
+  0%,100% { transform: rotate(-15deg) translateY(0); }
+  50%     { transform: rotate(-12deg) translateY(-18px); }
 }
-@keyframes shadowPulse {
-  0%,100% { transform: translateX(-50%) scaleX(0.85); opacity: 0.7; }
-  50%      { transform: translateX(-50%) scaleX(1.15); opacity: 0.4; }
+@keyframes bottleFloat2 {
+  0%,100% { transform: rotate(-5deg) translateY(0); }
+  50%     { transform: rotate(-3deg) translateY(-22px); }
+}
+@keyframes bottleFloat3 {
+  0%,100% { transform: rotate(5deg) translateY(0); }
+  50%     { transform: rotate(3deg) translateY(-20px); }
+}
+@keyframes bottleFloat4 {
+  0%,100% { transform: rotate(15deg) translateY(0); }
+  50%     { transform: rotate(12deg) translateY(-16px); }
+}
+
+@media (max-width: 767px) {
+  .hero-bottle--1, .hero-bottle--4 { display: none; }
+  .hero-bottle--2 { left: 10%; }
+  .hero-bottle--3 { left: 50%; }
+  .hero-bottles-scene { height: 380px; }
 }
 
 /* Decorazioni SVG hero */
@@ -3608,21 +3622,26 @@ section[id] { scroll-margin-top: 84px; }
 @media (pointer: fine) {
   * { cursor: none !important; }
 }
+/* Cursore fungo — default */
 #cursor {
-  width: 36px; height: 36px;
-  border: 1.5px solid #E85320;
-  border-radius: 50%;
   position: fixed;
   top: 0; left: 0;
   pointer-events: none;
   z-index: 99999;
-  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
   transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
+  transition: opacity 0.2s ease, transform 0.15s ease;
   opacity: 0;
 }
+#cursor .cursor-mushroom {
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  transition: transform 0.2s ease;
+}
+#cursor.hover .cursor-mushroom {
+  transform: scale(1.3);
+}
 #cursor-dot {
-  width: 5px; height: 5px;
+  width: 4px; height: 4px;
   background: #E85320;
   border-radius: 50%;
   position: fixed;
@@ -3635,10 +3654,18 @@ section[id] { scroll-margin-top: 84px; }
 }
 #cursor.visible { opacity: 1; }
 #cursor-dot.visible { opacity: 1; }
-#cursor.hover {
-  transform: translate(-50%, -50%) scale(2.2);
-  background: rgba(232,83,32,0.12);
-  border-color: #C8860A;
+
+/* Fallback cerchio — aggiungi class="cursor-circle" su body per usarlo */
+body.cursor-circle #cursor .cursor-mushroom { display: none; }
+body.cursor-circle #cursor {
+  width: 20px; height: 20px;
+  border: 1px solid rgba(232, 83, 32, 0.7);
+  border-radius: 50%;
+  mix-blend-mode: difference;
+}
+body.cursor-circle #cursor.hover {
+  width: 48px; height: 48px;
+  background: rgba(232,83,32,0.08);
 }
 
 /* ----- Effetto 4: Marquee XL ----- */
@@ -3689,11 +3716,25 @@ section[id] { scroll-margin-top: 84px; }
   align-items: center;
   justify-content: center;
 }
-.gusti-bottle { width: min(360px, 80%); }
-.gusti-bottle img {
+.gusti-bottle-container {
+  position: relative;
+  width: 320px;
+  height: 480px;
+}
+.gusto-bottle {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  transition: opacity 0.4s ease, filter 0.4s ease;
-  filter: drop-shadow(0 40px 60px rgba(0,0,0,0.5));
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  filter: drop-shadow(0 30px 50px rgba(0,0,0,0.45));
+}
+.gusto-bottle.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 .gusti-scroll__slides {
   display: flex;
@@ -3924,6 +3965,35 @@ section[id] { scroll-margin-top: 84px; }
 
 /* ----- Effetto 9: Text Scramble ----- */
 [data-scramble] { display: inline-block; }
+
+/* ----- TASK 4: Contrasto testi su sfondo chiaro ----- */
+/* Arancio/rosso su sfondo bianco: usa #B8411A (5.1:1) invece di #E85320 (3.2:1) */
+.product-card__brand,
+.section-label,
+.gusto-slide__num {
+  color: #B8411A;
+}
+
+/* Nomi prodotto su card chiare: marrone scuro leggibile */
+.product-card .product-card__name,
+.product-card h3 {
+  color: #1C0E05;
+  font-weight: 700;
+}
+
+/* Prezzi su sfondo chiaro */
+.product-card__price,
+.product-card .price {
+  color: #B8411A;
+  font-weight: 700;
+}
+
+/* Titoli sezione su sfondo chiaro */
+.section--warm h2,
+.section-ff h2 {
+  color: #1C0E05;
+  font-weight: 800;
+}
 
 /* ----- Reduced motion: ferma tutte le animazioni ----- */
 @media (prefers-reduced-motion: reduce) {

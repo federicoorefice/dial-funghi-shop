@@ -1511,25 +1511,33 @@ function initMagneticButtons() {
 }
 
 /* ----- Effetto 5: SCROLL PINNING GUSTI ----- */
+function switchGusto(n) {
+  document.querySelectorAll('.gusto-bottle')
+    .forEach(img => img.classList.remove('active'));
+  const target = document.getElementById('gusto-img-' + n);
+  if (target) target.classList.add('active');
+  const slide = document.querySelector('.gusto-slide:nth-child(' + n + ')');
+  if (slide && slide.dataset.color) {
+    gsap.to(document.documentElement, {
+      '--accent-gusto': slide.dataset.color,
+      duration: 0.4
+    });
+  }
+}
+
 function initGustiScrollPin() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  document.querySelectorAll('.gusto-slide').forEach((slide) => {
+  document.querySelectorAll('.gusto-slide').forEach((slide, i) => {
     ScrollTrigger.create({
       trigger: slide,
       start: 'top center',
       end: 'bottom center',
-      onEnter: () => {
-        const color = slide.dataset.color;
-        if (color) {
-          gsap.to(document.documentElement, { '--accent-gusto': color, duration: 0.6, ease: 'power2.out' });
-          document.documentElement.style.setProperty('--accent-gusto', color);
-        }
-      },
-      onLeaveBack: () => {
-        document.documentElement.style.setProperty('--accent-gusto', '#E85320');
-      }
+      onEnter: () => switchGusto(i + 1),
+      onEnterBack: () => switchGusto(i + 1)
     });
   });
+  // Attiva il primo gusto di default
+  switchGusto(1);
 }
 
 /* ----- Effetto 6: LIQUID SPLASH CURSOR (canvas) ----- */
@@ -1630,7 +1638,27 @@ function initHeroParticles() {
     for (let i = 0; i < COUNT * 3; i++) pos[i] = (Math.random() - 0.5) * 6;
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
 
-    const mat = new THREE.PointsMaterial({ color: 0xE85320, size: 0.035, transparent: true, opacity: 0.65 });
+    // Texture cerchio per particelle tonde
+    function makeCircleTexture() {
+      const size = 64;
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const ctx = c.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(size/2, size/2, size/2 - 1, 0, Math.PI * 2);
+      ctx.fillStyle = '#E85320';
+      ctx.fill();
+      return new THREE.CanvasTexture(c);
+    }
+    const mat = new THREE.PointsMaterial({
+      map: makeCircleTexture(),
+      size: 0.08,
+      transparent: true,
+      opacity: 0.65,
+      alphaTest: 0.4,
+      depthWrite: false,
+      sizeAttenuation: true
+    });
     const points = new THREE.Points(geo, mat);
     scene.add(points);
 
