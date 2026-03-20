@@ -10,6 +10,7 @@
    1. CSS CUSTOM PROPERTIES
    ============================================================ */
 :root {
+  --gusto-accent:        #7B4B2A;
   --color-bg:            #FFFFFF;
   --color-bg-soft:       #F8F4EF;
   --color-bg-dark:       #1A1A1A;
@@ -3659,24 +3660,36 @@ body.cursor-circle #cursor.hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 400vh;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(13, 7, 2, 0.85) 0%,
-      rgba(10, 20, 5, 0.75) 40%,
-      rgba(13, 7, 2, 0.90) 100%
-    ),
-    url('IMMAGINI /foto bosco animazioni /foto bosco 3.png')
-    center center / cover no-repeat;
-  background-attachment: fixed;
+  background: #0D0702;
   color: #FFFFFF;
   position: relative;
+  overflow: hidden;
+  transition: background-color 0.8s ease;
 }
 
-/* Pseudo-elementi bosco rimossi — ora usa foto reale */
-.gusti-scroll::before,
+/* Sfondo cosmico dinamico */
+.gusti-scroll::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 60% at 20% 30%, rgba(180,60,10,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 80% at 80% 70%, rgba(200,134,10,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 10%, rgba(232,83,32,0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Linea verticale decorativa centrale */
 .gusti-scroll::after {
-  display: none !important;
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 5%;
+  bottom: 5%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(232,83,32,0.20) 20%, rgba(232,83,32,0.35) 50%, rgba(232,83,32,0.20) 80%, transparent 100%);
+  pointer-events: none;
   z-index: 0;
 }
 .gusti-scroll__sticky {
@@ -3690,8 +3703,9 @@ body.cursor-circle #cursor.hover {
 }
 .gusti-bottle-container {
   position: relative;
-  width: 320px;
-  height: 480px;
+  width: 280px;
+  height: 420px;
+  z-index: 1;
 }
 .gusto-bottle {
   position: absolute;
@@ -3699,10 +3713,20 @@ body.cursor-circle #cursor.hover {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: center;
   opacity: 0;
+  pointer-events: none;
   will-change: transform, opacity;
-  filter: drop-shadow(0 30px 50px rgba(0,0,0,0.45));
+  filter: drop-shadow(0 40px 60px rgba(0,0,0,0.6));
 }
+.gusto-bottle.is-scheda {
+  object-fit: cover;
+  object-position: 12% center;
+}
+/* Testi gusti */
+.gusto-slide h2 { color: #FFFFFF; }
+.gusto-slide p { color: rgba(255,255,255,0.72); }
+.gusto-slide__num { color: #E85320; }
 .gusti-scroll__slides {
   display: flex;
   flex-direction: column;
@@ -3989,7 +4013,7 @@ body.intro-playing .hero {
   transition: none;
 }
 body .hero {
-  transition: opacity 0.8s ease 0.3s;
+  transition: opacity 0.6s ease 0.2s;
   opacity: 1;
 }
 #forest-slides { position: absolute; inset: 0; z-index: 1; }

@@ -40,7 +40,7 @@ function initForestIntro() {
 
   var SLIDE_DURATION = 1200;  // ms per slide — LENTO
   var CROSSFADE      = 600;   // ms crossfade
-  var TOTAL_DURATION = 6500;  // 4 foto x 1200ms + 2000ms finale + buffer
+  var TOTAL_DURATION = 6000;  // 4 foto x 1200ms + 1500ms fade
   var currentSlide   = 0;
 
   // Precarica tutte le immagini
@@ -160,26 +160,28 @@ function initForestIntro() {
     gsap.to(logoEl, { opacity: 0, duration: 0.5 });
   }, 4000);
 
-  // A TOTAL_DURATION - 2000ms: fade dolce dell'ultima slide e particelle
+  // 1500ms prima della fine: sfuma tutto lentamente
   setTimeout(function() {
-    var lastSlide = document.querySelector('.forest-slide.active');
-    if (lastSlide) {
-      gsap.to(lastSlide, { opacity: 0, duration: 1.5, ease: 'power1.inOut' });
-    }
-    gsap.to('#forest-particles', { opacity: 0, duration: 1.5, ease: 'power1.inOut' });
-    gsap.to(logoEl, { opacity: 0, duration: 0.5, delay: 0.3 });
-  }, TOTAL_DURATION - 2000);
+    document.querySelectorAll('.forest-slide').forEach(function(s) {
+      gsap.to(s, { opacity: 0, duration: 1.2, ease: 'power1.inOut' });
+    });
+    var pc = document.getElementById('forest-particles');
+    if (pc) gsap.to(pc, { opacity: 0, duration: 1.0, ease: 'power1.inOut' });
+    gsap.to(logoEl, { opacity: 0, duration: 0.4 });
+    gsap.to(introEl, { backgroundColor: '#0D0702', duration: 0.8 });
+  }, TOTAL_DURATION - 1500);
 
-  // A TOTAL_DURATION: slide-up LENTO dell'overlay
+  // A TOTAL_DURATION: slide-up lento
   setTimeout(function() {
     document.body.style.overflow = '';
-    document.body.classList.remove('intro-playing');
-    document.dispatchEvent(new Event('intro-finished'));
     gsap.to(introEl, {
       yPercent: -100,
-      duration: 1.5,
-      ease: 'power1.inOut',
-      onComplete: function() { introEl.remove(); }
+      duration: 1.2,
+      ease: 'power2.inOut',
+      onComplete: function() {
+        introEl.remove();
+        document.body.classList.remove('intro-playing');
+      }
     });
   }, TOTAL_DURATION);
 }
@@ -1709,52 +1711,57 @@ function initMagneticButtons() {
 }
 
 /* ----- Effetto 5: SCROLL PINNING GUSTI con bounce ----- */
-let currentGustoIndex = 0;
+var activeBottle = null;
 
 function switchGusto(n) {
-  if (n === currentGustoIndex) return;
-
-  // Nascondi TUTTE le bottiglie immediatamente
-  document.querySelectorAll('.gusto-bottle').forEach(function(bottle) {
-    gsap.killTweensOf(bottle);
-    bottle.classList.remove('active');
-    gsap.set(bottle, { opacity: 0, y: 0, scale: 1, rotation: 0 });
-  });
-
-  // Mostra la bottiglia corretta con bounce
   var next = document.getElementById('gusto-img-' + n);
   if (!next) return;
+  if (next === activeBottle) return;
 
-  currentGustoIndex = n;
-  next.classList.add('active');
+  // Nascondi quella attuale
+  if (activeBottle) {
+    gsap.killTweensOf(activeBottle);
+    gsap.to(activeBottle, {
+      opacity: 0, y: 30, duration: 0.3, ease: 'power2.in',
+      onComplete: function() { gsap.set(activeBottle, { y: 0 }); }
+    });
+  }
 
+  // Mostra nuova bottiglia con caduta e bounce
+  activeBottle = next;
+  gsap.killTweensOf(next);
   gsap.fromTo(next,
-    { opacity: 0, y: -120 },
-    { opacity: 1, y: 0,
-      duration: 0.65, ease: 'bounce.out', delay: 0.1,
-      clearProps: 'none' }
+    { opacity: 0, y: -140, scale: 0.9 },
+    { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'bounce.out', delay: 0.05 }
   );
 
-  var slide = document.querySelector('.gusto-slide[data-img="' + n + '"]');
-  if (slide && slide.dataset.color) {
-    gsap.to(document.documentElement, {
-      '--accent-gusto': slide.dataset.color, duration: 0.4
-    });
+  // Cambia colore accent
+  var colors = { 1: '#7B4B2A', 2: '#3D3530', 3: '#C8281E', 4: '#2D5016' };
+  if (colors[n]) {
+    document.documentElement.style.setProperty('--gusto-accent', colors[n]);
   }
 }
 
 function initGustiScrollPin() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  document.querySelectorAll('.gusto-slide').forEach((slide, i) => {
+  document.querySelectorAll('.gusto-slide').forEach(function(slide, i) {
     ScrollTrigger.create({
       trigger: slide,
-      start: 'top 40%',
-      end: 'bottom 40%',
-      onEnter: () => switchGusto(i + 1),
-      onEnterBack: () => switchGusto(i + 1)
+      start: 'top 45%',
+      end: 'bottom 45%',
+      onEnter: function() { switchGusto(i + 1); },
+      onEnterBack: function() { switchGusto(i + 1); }
     });
   });
-  switchGusto(1);
+  // Mostra prima bottiglia subito
+  setTimeout(function() {
+    var first = document.getElementById('gusto-img-1');
+    if (first) {
+      gsap.set(first, { opacity: 0, y: -140, scale: 0.9 });
+      gsap.to(first, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'bounce.out', delay: 0.3 });
+      activeBottle = first;
+    }
+  }, 300);
 }
 
 /* ----- Effetto 6: LIQUID SPLASH CURSOR (canvas) ----- */
@@ -2259,6 +2266,71 @@ function initHeroWordReveal() {
   }
 }
 
+/* ----- Effetto V27: GUSTI PARTICLES ----- */
+function initGustiParticles() {
+  var canvas = document.getElementById('gusti-particles');
+  if (!canvas || typeof THREE === 'undefined') return;
+  if (window.innerWidth < 768) return;
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(canvas.offsetWidth || window.innerWidth, canvas.offsetHeight || window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(60, (canvas.offsetWidth || window.innerWidth) / (canvas.offsetHeight || window.innerHeight), 0.1, 50);
+  camera.position.z = 3;
+
+  var COUNT = 120;
+  var geo = new THREE.BufferGeometry();
+  var pos = new Float32Array(COUNT * 3);
+  for (var i = 0; i < COUNT * 3; i += 3) {
+    var angle = Math.random() * Math.PI * 2;
+    var radius = Math.random() * 2.8 + 0.3;
+    pos[i]   = Math.cos(angle) * radius;
+    pos[i+1] = Math.sin(angle) * radius;
+    pos[i+2] = (Math.random() - 0.5) * 10;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+
+  var colors = new Float32Array(COUNT * 3);
+  for (var j = 0; j < COUNT; j++) {
+    if (Math.random() > 0.5) {
+      colors[j*3]=0.91; colors[j*3+1]=0.33; colors[j*3+2]=0.13;
+    } else {
+      colors[j*3]=0.78; colors[j*3+1]=0.53; colors[j*3+2]=0.04;
+    }
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  var mat = new THREE.PointsMaterial({
+    size: 0.05, vertexColors: true,
+    transparent: true, opacity: 0.7,
+    alphaTest: 0.4, depthWrite: false,
+    sizeAttenuation: true
+  });
+  var pts = new THREE.Points(geo, mat);
+  scene.add(pts);
+
+  var positions = geo.attributes.position.array;
+  (function animate() {
+    requestAnimationFrame(animate);
+    for (var k = 0; k < COUNT; k++) {
+      positions[k*3+2] += 0.02;
+      if (positions[k*3+2] > 4) {
+        var a = Math.random() * Math.PI * 2;
+        var r = Math.random() * 2.8 + 0.3;
+        positions[k*3]   = Math.cos(a) * r;
+        positions[k*3+1] = Math.sin(a) * r;
+        positions[k*3+2] = -8;
+      }
+    }
+    geo.attributes.position.needsUpdate = true;
+    pts.rotation.z += 0.0008;
+    renderer.render(scene, camera);
+  })();
+}
+
 /* ----- Init all premium effects ----- */
 document.addEventListener('DOMContentLoaded', () => {
   // Lenis (se CDN caricato)
@@ -2291,6 +2363,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page2 === 'index' || page2 === '' || path2 === '/') {
     initHeroParticles();
     initGustiScrollPin();
+    initGustiParticles();
     initSpotlight();
     initParallax();
     initCounterAnimation();
