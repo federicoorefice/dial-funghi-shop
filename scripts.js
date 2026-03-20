@@ -1056,9 +1056,23 @@ function initProductPage() {
   // Aggiorna titolo e meta
   document.title = `${product.fullName} — Dial Funghi`;
 
-  // Immagine
+  // Immagine — con auto-crop se scheda tecnica (ratio > 1.4)
   const img = $('#productImage');
-  if (img) { img.src = product.image; img.alt = product.imageAlt; }
+  if (img) {
+    img.src = product.image;
+    img.alt = product.imageAlt;
+    img.addEventListener('load', function() {
+      var ratio = this.naturalWidth / this.naturalHeight;
+      if (ratio > 1.4) {
+        // Scheda tecnica fronte+retro: mostra solo il fronte (sinistra)
+        this.style.objectFit = 'cover';
+        this.style.objectPosition = '12% center';
+        this.style.width = '100%';
+        this.style.height = '100%';
+      }
+    });
+    if (img.complete && img.naturalWidth) img.dispatchEvent(new Event('load'));
+  }
 
   // Testi
   const fields = {

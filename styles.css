@@ -2187,8 +2187,10 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 .product-main-img {
   width: 75%;
   object-fit: contain;
-  filter: drop-shadow(0 20px 40px rgba(28,14,5,0.12));
+  filter: drop-shadow(0 20px 40px rgba(28,14,5,0.12)) !important;
+  image-rendering: -webkit-optimize-contrast;
   transition: transform 0.5s var(--spring);
+  display: block;
 }
 
 .product-gallery__main:hover img,
@@ -2199,9 +2201,10 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 /* Wrapper esplicito per la logica ratio JS */
 .product-main-img-wrapper {
   overflow: hidden;
-  background: var(--color-surface-warm);
-  border-radius: var(--radius-xl);
-  min-height: 320px;
+  background: #F5F0EA;
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 460px;
   display: flex;
   align-items: center;
   justify-content: center;
