@@ -40,7 +40,7 @@ function initForestIntro() {
 
   var SLIDE_DURATION = 1200;  // ms per slide — LENTO
   var CROSSFADE      = 600;   // ms crossfade
-  var TOTAL_DURATION = 6000;  // 6 secondi per 4 foto + fade fluido
+  var TOTAL_DURATION = 6500;  // 4 foto x 1200ms + 2000ms finale + buffer
   var currentSlide   = 0;
 
   // Precarica tutte le immagini
@@ -160,21 +160,25 @@ function initForestIntro() {
     gsap.to(logoEl, { opacity: 0, duration: 0.5 });
   }, 4000);
 
-  // A TOTAL_DURATION - 1500ms: fade slides+particles a nero graduale
+  // A TOTAL_DURATION - 2000ms: fade dolce dell'ultima slide e particelle
   setTimeout(function() {
-    gsap.to('#forest-slides', { opacity: 0, duration: 0.8 });
-    gsap.to('#forest-particles', { opacity: 0, duration: 0.8 });
-    gsap.to(introEl, { backgroundColor: '#0D0702', duration: 1.0 });
-  }, TOTAL_DURATION - 1500);
+    var lastSlide = document.querySelector('.forest-slide.active');
+    if (lastSlide) {
+      gsap.to(lastSlide, { opacity: 0, duration: 1.5, ease: 'power1.inOut' });
+    }
+    gsap.to('#forest-particles', { opacity: 0, duration: 1.5, ease: 'power1.inOut' });
+    gsap.to(logoEl, { opacity: 0, duration: 0.5, delay: 0.3 });
+  }, TOTAL_DURATION - 2000);
 
-  // A TOTAL_DURATION: slide-up fluido + mostra hero
+  // A TOTAL_DURATION: slide-up LENTO dell'overlay
   setTimeout(function() {
     document.body.style.overflow = '';
     document.body.classList.remove('intro-playing');
+    document.dispatchEvent(new Event('intro-finished'));
     gsap.to(introEl, {
       yPercent: -100,
-      duration: 1.2,
-      ease: 'power2.inOut',
+      duration: 1.5,
+      ease: 'power1.inOut',
       onComplete: function() { introEl.remove(); }
     });
   }, TOTAL_DURATION);
@@ -1725,9 +1729,10 @@ function switchGusto(n) {
   next.classList.add('active');
 
   gsap.fromTo(next,
-    { opacity: 0, y: -140, scale: 0.85, rotation: -4 },
-    { opacity: 1, y: 0, scale: 1, rotation: 0,
-      duration: 0.75, ease: 'bounce.out', delay: 0.1 }
+    { opacity: 0, y: -120 },
+    { opacity: 1, y: 0,
+      duration: 0.65, ease: 'bounce.out', delay: 0.1,
+      clearProps: 'none' }
   );
 
   var slide = document.querySelector('.gusto-slide[data-img="' + n + '"]');
@@ -1743,8 +1748,8 @@ function initGustiScrollPin() {
   document.querySelectorAll('.gusto-slide').forEach((slide, i) => {
     ScrollTrigger.create({
       trigger: slide,
-      start: 'top 55%',
-      end: 'bottom 45%',
+      start: 'top 40%',
+      end: 'bottom 40%',
       onEnter: () => switchGusto(i + 1),
       onEnterBack: () => switchGusto(i + 1)
     });
@@ -2138,24 +2143,24 @@ function initSpotlight() {
 
   function renderSpotlight() {
     currentOpacity += (targetOpacity - currentOpacity) * 0.08;
-    spotCanvas.style.opacity = currentOpacity;
+    spotCanvas.style.opacity = currentOpacity * 0.40;
     if (currentOpacity > 0.01) {
       ctx.clearRect(0, 0, spotCanvas.width, spotCanvas.height);
-      ctx.fillStyle = 'rgba(5, 3, 1, 0.72)';
+      ctx.fillStyle = 'rgba(5, 3, 1, 0.35)';
       ctx.fillRect(0, 0, spotCanvas.width, spotCanvas.height);
       ctx.globalCompositeOperation = 'destination-out';
-      var grad = ctx.createRadialGradient(mx, my, 0, mx, my, 260);
+      var grad = ctx.createRadialGradient(mx, my, 0, mx, my, 320);
       grad.addColorStop(0,   'rgba(0,0,0,0.95)');
       grad.addColorStop(0.3, 'rgba(0,0,0,0.80)');
       grad.addColorStop(0.7, 'rgba(0,0,0,0.40)');
       grad.addColorStop(1,   'rgba(0,0,0,0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(mx, my, 260, 0, Math.PI * 2);
+      ctx.arc(mx, my, 320, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalCompositeOperation = 'source-over';
       // Glow arancio caldo sopra lo spotlight
-      var glow = ctx.createRadialGradient(mx, my, 0, mx, my, 120);
+      var glow = ctx.createRadialGradient(mx, my, 0, mx, my, 150);
       glow.addColorStop(0,   'rgba(232, 83, 32, 0.08)');
       glow.addColorStop(0.5, 'rgba(200, 134, 10, 0.04)');
       glow.addColorStop(1,   'rgba(0,0,0,0)');
@@ -2167,6 +2172,91 @@ function initSpotlight() {
     requestAnimationFrame(renderSpotlight);
   }
   renderSpotlight();
+}
+
+/* ----- Effetto V26-A: TILT 3D CARD ----- */
+function initTilt3D() {
+  if (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches) return;
+  document.querySelectorAll('.product-card, .recipe-card').forEach(function(card) {
+    card.style.transformStyle = 'preserve-3d';
+    card.style.transition = 'transform 0.15s ease';
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dx = (e.clientX - cx) / (rect.width / 2);
+      var dy = (e.clientY - cy) / (rect.height / 2);
+      var rotY = dx * 8;
+      var rotX = -dy * 8;
+      card.style.transform = 'perspective(600px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) translateZ(8px)';
+    });
+    card.addEventListener('mouseleave', function() {
+      card.style.transition = 'transform 0.4s ease';
+      card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) translateZ(0)';
+    });
+    card.addEventListener('mouseenter', function() {
+      card.style.transition = 'transform 0.15s ease';
+    });
+  });
+}
+
+/* ----- Effetto V26-B: SCROLL REVEAL STAGGERED ----- */
+function initScrollReveal() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  // Stagger per gruppi di card
+  document.querySelectorAll('.products-grid, .recipes-grid').forEach(function(grid) {
+    gsap.fromTo(grid.children,
+      { opacity: 0, y: 60 },
+      { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.12,
+        scrollTrigger: { trigger: grid, start: 'top 85%', once: true }
+      }
+    );
+  });
+  // Singoli elementi
+  document.querySelectorAll('.cert-card, .stat-item, .feature-item').forEach(function(el) {
+    gsap.fromTo(el,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+      }
+    );
+  });
+}
+
+/* ----- Effetto V26-C: HERO WORD SPLIT REVEAL ----- */
+function initHeroWordReveal() {
+  if (typeof gsap === 'undefined') return;
+  var heroTitle = document.querySelector('.hero__headline');
+  if (!heroTitle) return;
+  var wordInners = heroTitle.querySelectorAll('.hero__word-inner');
+  if (!wordInners.length) return;
+
+  function revealWords() {
+    wordInners.forEach(function(w, i) {
+      setTimeout(function() {
+        w.style.transition = 'opacity 0.75s cubic-bezier(0.33,1,0.68,1), transform 0.75s cubic-bezier(0.33,1,0.68,1)';
+        w.style.opacity = '1';
+        w.style.transform = 'translateY(0)';
+      }, i * 80);
+    });
+  }
+
+  // Nascondi con CSS puro, non GSAP
+  wordInners.forEach(function(w) {
+    w.style.opacity = '0';
+    w.style.transform = 'translateY(110%)';
+  });
+  if (window.SHOW_INTRO) {
+    var pollIntro = setInterval(function() {
+      if (!document.getElementById('forest-intro') && !document.body.classList.contains('intro-playing')) {
+        clearInterval(pollIntro);
+        setTimeout(revealWords, 300);
+      }
+    }, 150);
+    setTimeout(function() { clearInterval(pollIntro); revealWords(); }, 10000);
+  } else {
+    setTimeout(revealWords, 300);
+  }
 }
 
 /* ----- Init all premium effects ----- */
@@ -2205,8 +2295,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initParallax();
     initCounterAnimation();
     initTextReveal();
+    initHeroWordReveal();
     setTimeout(initColorTheme, 800);
   }
+
+  // Effetti V26 (tutte le pagine)
+  initTilt3D();
+  initScrollReveal();
 
   // Sauce drip (su tutte le pagine)
   setTimeout(initSauceDrip, 800);

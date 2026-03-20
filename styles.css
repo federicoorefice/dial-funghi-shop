@@ -514,17 +514,15 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   font-style: italic;
   color: var(--color-accent);
 }
-
 .hero__word {
-  display: inline-block;
   overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
 }
-
 .hero__word-inner {
   display: inline-block;
-  transform: translateY(110%);
-  opacity: 0;
 }
+
 
 .hero__subline {
   font-size: 1.1rem;
@@ -3663,55 +3661,22 @@ body.cursor-circle #cursor.hover {
   min-height: 400vh;
   background:
     linear-gradient(
-      to top,
-      #0a1505 0%,
-      #0D0702 40%,
-      #0D0702 100%
-    );
+      to bottom,
+      rgba(13, 7, 2, 0.85) 0%,
+      rgba(10, 20, 5, 0.75) 40%,
+      rgba(13, 7, 2, 0.90) 100%
+    ),
+    url('IMMAGINI /foto bosco animazioni /foto bosco 3.png')
+    center center / cover no-repeat;
+  background-attachment: fixed;
   color: #FFFFFF;
   position: relative;
 }
 
-/* Silhouette alberi in basso */
-.gusti-scroll::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 180px;
-  background-image:
-    radial-gradient(ellipse 12px 60px at 8% 100%, #0d1a08 100%, transparent 100%),
-    radial-gradient(ellipse 18px 90px at 15% 100%, #0d1a08 100%, transparent 100%),
-    radial-gradient(ellipse 14px 70px at 25% 100%, #0d1a08 100%, transparent 100%),
-    radial-gradient(ellipse 20px 110px at 35% 100%, #0d1a08 100%, transparent 100%),
-    radial-gradient(ellipse 16px 80px at 48% 100%, #0d1a08 100%, transparent 100%),
-    radial-gradient(ellipse 22px 120px at 60% 100%, #0d1a08 100%, transparent 100%),
-    radial-gradient(ellipse 15px 75px at 72% 100%, #0d1a08 100%, transparent 100%),
-    radial-gradient(ellipse 19px 95px at 83% 100%, #0d1a08 100%, transparent 100%),
-    radial-gradient(ellipse 13px 65px at 92% 100%, #0d1a08 100%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.8;
-}
-
-/* Particelle verdi bosco */
+/* Pseudo-elementi bosco rimossi — ora usa foto reale */
+.gusti-scroll::before,
 .gusti-scroll::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle 1.5px at 10% 20%, rgba(100,180,60,0.25) 100%, transparent 100%),
-    radial-gradient(circle 1px at 25% 45%, rgba(80,160,40,0.20) 100%, transparent 100%),
-    radial-gradient(circle 2px at 40% 15%, rgba(120,200,70,0.18) 100%, transparent 100%),
-    radial-gradient(circle 1px at 55% 60%, rgba(100,180,60,0.22) 100%, transparent 100%),
-    radial-gradient(circle 1.5px at 70% 30%, rgba(90,170,50,0.20) 100%, transparent 100%),
-    radial-gradient(circle 1px at 85% 70%, rgba(110,190,65,0.18) 100%, transparent 100%),
-    radial-gradient(circle 2px at 18% 75%, rgba(100,180,60,0.15) 100%, transparent 100%),
-    radial-gradient(circle 1px at 92% 25%, rgba(80,160,40,0.20) 100%, transparent 100%),
-    radial-gradient(circle 1.5px at 62% 82%, rgba(120,200,70,0.17) 100%, transparent 100%),
-    radial-gradient(circle 1px at 33% 90%, rgba(100,180,60,0.22) 100%, transparent 100%);
-  pointer-events: none;
+  display: none !important;
   z-index: 0;
 }
 .gusti-scroll__sticky {
@@ -4021,9 +3986,11 @@ body.cursor-circle #cursor.hover {
 /* Hero nascosta durante intro, poi fade-in fluido */
 body.intro-playing .hero {
   opacity: 0;
+  transition: none;
 }
 body .hero {
-  transition: opacity 0.5s ease 0.15s;
+  transition: opacity 0.8s ease 0.3s;
+  opacity: 1;
 }
 #forest-slides { position: absolute; inset: 0; z-index: 1; }
 .forest-slide {
