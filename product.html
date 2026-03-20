@@ -375,33 +375,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Ratio detection: se l'immagine è una scheda tecnica orizzontale (fronte+retro)
 // mostra solo il lato sinistro (fronte) via object-position
-(function() {
-  const img = document.getElementById('productImage');
-  if (!img) return;
-  function applyRatioCrop() {
-    const ratio = img.naturalWidth / img.naturalHeight;
-    if (ratio > 1.4) {
-      // Scheda tecnica orizzontale: mostra solo il fronte (lato sinistro)
-      img.style.objectFit = 'cover';
-      img.style.objectPosition = '18% center';
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.maxHeight = '480px';
+function fixProductImage(imgEl) {
+  if (!imgEl) return;
+  var apply = function() {
+    var r = imgEl.naturalWidth / imgEl.naturalHeight;
+    if (r > 1.3) {
+      imgEl.style.objectFit      = 'cover';
+      imgEl.style.objectPosition = '14% center';
+      imgEl.style.width          = '100%';
+      imgEl.style.height         = '100%';
+      imgEl.style.filter         = 'none';
     } else {
-      img.style.objectFit = 'contain';
-      img.style.objectPosition = 'center';
+      imgEl.style.objectFit      = 'contain';
+      imgEl.style.objectPosition = 'center';
+      imgEl.style.filter         = 'none';
     }
-  }
-  if (img.complete && img.naturalWidth) {
-    applyRatioCrop();
-  } else {
-    img.addEventListener('load', applyRatioCrop);
-  }
+  };
+  if (imgEl.complete && imgEl.naturalWidth > 0) apply();
+  else imgEl.addEventListener('load', apply);
+}
+(function() {
+  var img = document.getElementById('productImage');
+  fixProductImage(img);
   // Re-applica quando il src cambia (prodotto caricato da JS)
-  const srcObserver = new MutationObserver(() => {
-    img.addEventListener('load', applyRatioCrop, { once: true });
-  });
-  srcObserver.observe(img, { attributes: true, attributeFilter: ['src'] });
+  if (img) {
+    var srcObserver = new MutationObserver(function() {
+      img.addEventListener('load', function() { fixProductImage(img); }, { once: true });
+    });
+    srcObserver.observe(img, { attributes: true, attributeFilter: ['src'] });
+  }
+  // Applica a tutte le immagini prodotto
+  document.querySelectorAll('.product-main-img, .product-img, .hero-bottle, .gusto-bottle').forEach(fixProductImage);
 })();
 </script>
 <script src="scripts.js"></script>
