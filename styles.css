@@ -1323,14 +1323,14 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   height: 52px;
   width: auto;
   object-fit: contain;
-  filter: brightness(0) invert(1) opacity(0.85);
+  filter: none;
   opacity: 1;
   mix-blend-mode: normal;
   transition: filter 0.3s ease, opacity 0.3s ease, transform 0.4s var(--spring);
 }
 
 .cert-logo:hover {
-  filter: brightness(0) invert(1) opacity(1);
+  filter: none;
   opacity: 1;
   transform: scale(1.08);
 }
@@ -2187,7 +2187,10 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 .product-main-img {
   width: 75%;
   object-fit: contain;
-  filter: drop-shadow(0 20px 40px rgba(28,14,5,0.12)) !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
   image-rendering: -webkit-optimize-contrast;
   transition: transform 0.5s var(--spring);
   display: block;
@@ -2200,9 +2203,14 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 
 /* Wrapper esplicito per la logica ratio JS */
 .product-main-img-wrapper {
-  overflow: hidden;
+  overflow: visible;
   background: #F5F0EA;
   border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 460px;
   padding: 24px;
   min-height: 460px;
   display: flex;
@@ -3438,8 +3446,15 @@ section[id] { scroll-margin-top: 84px; }
 /* --- Certificazioni sezione — dark V23 --- */
 .section-certificazioni {
   padding: var(--section-pad) 0;
-  background: var(--color-bg-dark);
+  background: #1A1008;
   color: var(--color-text-light);
+}
+.section-certificazioni h2 {
+  color: #FFFFFF;
+  opacity: 1;
+}
+.section-certificazioni p {
+  color: rgba(255,255,255,0.70);
 }
 .cert-grid {
   display: grid;
@@ -3478,17 +3493,21 @@ section[id] { scroll-margin-top: 84px; }
   text-align: center;
 }
 .cert-card-front {
-  background: rgba(245,236,215,0.06);
+  background: rgba(255, 255, 255, 0.92) !important;
   border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px !important;
+  padding: 20px !important;
 }
 .cert-card__name {
   color: var(--color-text-light);
 }
 .cert-card__logo {
   mix-blend-mode: normal !important;
-  filter: brightness(0) invert(1) opacity(0.85) !important;
+  filter: none !important;
   max-height: 72px;
-  max-width: 130px;
+  max-width: 140px;
+  object-fit: contain;
+  display: block;
 }
 .cert-card-back {
   background: var(--color-accent);
@@ -3642,21 +3661,56 @@ body.cursor-circle #cursor.hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 400vh;
-  background: #0D0702;
+  background:
+    linear-gradient(
+      to top,
+      #0a1505 0%,
+      #0D0702 40%,
+      #0D0702 100%
+    );
   color: #FFFFFF;
   position: relative;
 }
 
-/* Particelle statiche CSS sulla sezione gusti scura */
+/* Silhouette alberi in basso */
 .gusti-scroll::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  background-image:
+    radial-gradient(ellipse 12px 60px at 8% 100%, #0d1a08 100%, transparent 100%),
+    radial-gradient(ellipse 18px 90px at 15% 100%, #0d1a08 100%, transparent 100%),
+    radial-gradient(ellipse 14px 70px at 25% 100%, #0d1a08 100%, transparent 100%),
+    radial-gradient(ellipse 20px 110px at 35% 100%, #0d1a08 100%, transparent 100%),
+    radial-gradient(ellipse 16px 80px at 48% 100%, #0d1a08 100%, transparent 100%),
+    radial-gradient(ellipse 22px 120px at 60% 100%, #0d1a08 100%, transparent 100%),
+    radial-gradient(ellipse 15px 75px at 72% 100%, #0d1a08 100%, transparent 100%),
+    radial-gradient(ellipse 19px 95px at 83% 100%, #0d1a08 100%, transparent 100%),
+    radial-gradient(ellipse 13px 65px at 92% 100%, #0d1a08 100%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.8;
+}
+
+/* Particelle verdi bosco */
+.gusti-scroll::after {
   content: '';
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle, rgba(232,83,32,0.15) 1px, transparent 1px),
-    radial-gradient(circle, rgba(200,134,10,0.10) 1px, transparent 1px);
-  background-size: 60px 60px, 90px 90px;
-  background-position: 0 0, 30px 30px;
+    radial-gradient(circle 1.5px at 10% 20%, rgba(100,180,60,0.25) 100%, transparent 100%),
+    radial-gradient(circle 1px at 25% 45%, rgba(80,160,40,0.20) 100%, transparent 100%),
+    radial-gradient(circle 2px at 40% 15%, rgba(120,200,70,0.18) 100%, transparent 100%),
+    radial-gradient(circle 1px at 55% 60%, rgba(100,180,60,0.22) 100%, transparent 100%),
+    radial-gradient(circle 1.5px at 70% 30%, rgba(90,170,50,0.20) 100%, transparent 100%),
+    radial-gradient(circle 1px at 85% 70%, rgba(110,190,65,0.18) 100%, transparent 100%),
+    radial-gradient(circle 2px at 18% 75%, rgba(100,180,60,0.15) 100%, transparent 100%),
+    radial-gradient(circle 1px at 92% 25%, rgba(80,160,40,0.20) 100%, transparent 100%),
+    radial-gradient(circle 1.5px at 62% 82%, rgba(120,200,70,0.17) 100%, transparent 100%),
+    radial-gradient(circle 1px at 33% 90%, rgba(100,180,60,0.22) 100%, transparent 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -3667,6 +3721,7 @@ body.cursor-circle #cursor.hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 .gusti-bottle-container {
   position: relative;
@@ -3686,6 +3741,8 @@ body.cursor-circle #cursor.hover {
 .gusti-scroll__slides {
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 .gusto-slide {
   height: 100vh;
