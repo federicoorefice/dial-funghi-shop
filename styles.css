@@ -1323,13 +1323,14 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   height: 52px;
   width: auto;
   object-fit: contain;
-  filter: grayscale(30%);
-  opacity: 0.75;
+  filter: brightness(0) invert(1) opacity(0.85);
+  opacity: 1;
+  mix-blend-mode: normal;
   transition: filter 0.3s ease, opacity 0.3s ease, transform 0.4s var(--spring);
 }
 
 .cert-logo:hover {
-  filter: grayscale(0%);
+  filter: brightness(0) invert(1) opacity(1);
   opacity: 1;
   transform: scale(1.08);
 }
@@ -3481,8 +3482,10 @@ section[id] { scroll-margin-top: 84px; }
   color: var(--color-text-light);
 }
 .cert-card__logo {
-  mix-blend-mode: normal;
-  filter: brightness(0) invert(1) opacity(0.85);
+  mix-blend-mode: normal !important;
+  filter: brightness(0) invert(1) opacity(0.85) !important;
+  max-height: 72px;
+  max-width: 130px;
 }
 .cert-card-back {
   background: var(--color-accent);
