@@ -40,7 +40,7 @@ function initForestIntro() {
 
   var SLIDE_DURATION = 1200;  // ms per slide — LENTO
   var CROSSFADE      = 600;   // ms crossfade
-  var TOTAL_DURATION = 6000;  // 6 secondi per 5 foto
+  var TOTAL_DURATION = 5000;  // 5 secondi per 4 foto
   var currentSlide   = 0;
 
   // Precarica tutte le immagini
@@ -495,7 +495,7 @@ function initScrollReveal() {
 function initStatCounter() {
   const el = $('#statCounter');
   if (!el) return;
-  const target = parseInt(el.dataset.target) || 57;
+  const target = parseInt(el.dataset.target) || 180;
   let current = 0;
   const duration = 1800;
   const startTime = performance.now();
@@ -1681,32 +1681,32 @@ function initMagneticButtons() {
 }
 
 /* ----- Effetto 5: SCROLL PINNING GUSTI con bounce ----- */
-let currentBottle = null;
+let currentGustoIndex = 0;
 
 function switchGusto(n) {
-  const next = document.getElementById('gusto-img-' + n);
-  if (!next || next === currentBottle) return;
+  if (n === currentGustoIndex) return;
 
-  if (currentBottle) {
-    gsap.to(currentBottle, {
-      opacity: 0, y: 40, duration: 0.3, ease: 'power2.in',
-      onComplete: () => {
-        currentBottle.classList.remove('active');
-        gsap.set(currentBottle, { y: 0 });
-      }
-    });
-  }
+  // Nascondi TUTTE le bottiglie immediatamente
+  document.querySelectorAll('.gusto-bottle').forEach(function(bottle) {
+    gsap.killTweensOf(bottle);
+    bottle.classList.remove('active');
+    gsap.set(bottle, { opacity: 0, y: 0, scale: 1, rotation: 0 });
+  });
 
-  currentBottle = next;
-  currentBottle.classList.add('active');
+  // Mostra la bottiglia corretta con bounce
+  var next = document.getElementById('gusto-img-' + n);
+  if (!next) return;
 
-  gsap.fromTo(currentBottle,
+  currentGustoIndex = n;
+  next.classList.add('active');
+
+  gsap.fromTo(next,
     { opacity: 0, y: -140, scale: 0.85, rotation: -4 },
     { opacity: 1, y: 0, scale: 1, rotation: 0,
-      duration: 0.75, ease: 'bounce.out', delay: 0.15 }
+      duration: 0.75, ease: 'bounce.out', delay: 0.1 }
   );
 
-  const slide = document.querySelector('.gusto-slide[data-img="' + n + '"]');
+  var slide = document.querySelector('.gusto-slide[data-img="' + n + '"]');
   if (slide && slide.dataset.color) {
     gsap.to(document.documentElement, {
       '--accent-gusto': slide.dataset.color, duration: 0.4
@@ -2005,24 +2005,6 @@ function initScrollProgress() {
    V22 PREMIUM EFFECTS
    ============================================================ */
 
-/* ----- Effetto V22-1: SCROLL VELOCITY SKEW ----- */
-function initScrollSkew() {
-  if (!window.matchMedia('(pointer: fine)').matches) return;
-  if (typeof gsap === 'undefined') return;
-  var lastScrollY = 0;
-  var skewTween;
-  var updateSkew = function() {
-    var delta = window.scrollY - lastScrollY;
-    lastScrollY = window.scrollY;
-    var skewVal = Math.max(-5, Math.min(5, delta * 0.35));
-    if (skewTween) skewTween.kill();
-    skewTween = gsap.to('img, .product-card, .recipe-card, .ff-card', {
-      skewY: skewVal, duration: 0.5, ease: 'power3.out', overwrite: true
-    });
-  };
-  window.addEventListener('scroll', updateSkew, { passive: true });
-}
-
 /* ----- Effetto V22-2: COUNTER ANIMATI ----- */
 function initCounterAnimation() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
@@ -2093,71 +2075,54 @@ function initTextReveal() {
   });
 }
 
-/* ----- Effetto V22-5: SPOTLIGHT CURSOR HERO ----- */
+/* ----- Effetto V23: GLOBAL SPOTLIGHT CURSOR (fixed full-page canvas) ----- */
 function initSpotlight() {
-  var spotCanvas = document.getElementById('spotlight-canvas');
+  var spotCanvas = document.getElementById('global-spotlight');
   if (!spotCanvas || !window.matchMedia('(pointer: fine)').matches) return;
   var ctx = spotCanvas.getContext('2d');
   var mx = -999, my = -999;
   var targetOpacity = 0, currentOpacity = 0;
+
   function resizeSpot() {
-    spotCanvas.width = spotCanvas.offsetWidth;
-    spotCanvas.height = spotCanvas.offsetHeight;
+    spotCanvas.width = window.innerWidth;
+    spotCanvas.height = window.innerHeight;
   }
   resizeSpot();
   window.addEventListener('resize', resizeSpot, { passive: true });
-  var hero = document.querySelector('.hero');
-  if (!hero) return;
-  hero.addEventListener('mousemove', function(e) {
-    var rect = spotCanvas.getBoundingClientRect();
-    mx = e.clientX - rect.left;
-    my = e.clientY - rect.top;
-    targetOpacity = 1;
+
+  // Attivo solo sulle sezioni scure (hero, certificazioni, ricette)
+  var darkSections = '.hero, .section-certificazioni, .section-recipes-preview, .section--dark';
+
+  document.addEventListener('mousemove', function(e) {
+    mx = e.clientX;
+    my = e.clientY;
+    // Controlla se il mouse è sopra una sezione scura
+    var el = document.elementFromPoint(e.clientX, e.clientY);
+    var inDark = el && el.closest(darkSections);
+    targetOpacity = inDark ? 1 : 0;
   });
-  hero.addEventListener('mouseleave', function() { targetOpacity = 0; });
+
   function renderSpotlight() {
     currentOpacity += (targetOpacity - currentOpacity) * 0.08;
     spotCanvas.style.opacity = currentOpacity;
-    ctx.clearRect(0, 0, spotCanvas.width, spotCanvas.height);
-    ctx.fillStyle = 'rgba(13, 7, 2, 0.55)';
-    ctx.fillRect(0, 0, spotCanvas.width, spotCanvas.height);
-    ctx.globalCompositeOperation = 'destination-out';
-    var grad = ctx.createRadialGradient(mx, my, 0, mx, my, 220);
-    grad.addColorStop(0, 'rgba(0,0,0,1)');
-    grad.addColorStop(0.5, 'rgba(0,0,0,0.6)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(mx, my, 220, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalCompositeOperation = 'source-over';
+    if (currentOpacity > 0.01) {
+      ctx.clearRect(0, 0, spotCanvas.width, spotCanvas.height);
+      ctx.fillStyle = 'rgba(13, 7, 2, 0.4)';
+      ctx.fillRect(0, 0, spotCanvas.width, spotCanvas.height);
+      ctx.globalCompositeOperation = 'destination-out';
+      var grad = ctx.createRadialGradient(mx, my, 0, mx, my, 260);
+      grad.addColorStop(0, 'rgba(0,0,0,1)');
+      grad.addColorStop(0.45, 'rgba(0,0,0,0.7)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(mx, my, 260, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+    }
     requestAnimationFrame(renderSpotlight);
   }
   renderSpotlight();
-}
-
-/* ----- Effetto V22-6: FUNGO SVG GROW ON SCROLL ----- */
-function initMushroomGrow() {
-  if (typeof ScrollTrigger === 'undefined') return;
-  var mushPaths = document.querySelectorAll('#growing-mushroom path, #growing-mushroom circle');
-  if (!mushPaths.length) return;
-  mushPaths.forEach(function(path) {
-    var len = path.getTotalLength ? path.getTotalLength() : 60;
-    path.style.strokeDasharray = len;
-    path.style.strokeDashoffset = len;
-  });
-  ScrollTrigger.create({
-    trigger: '.mushroom-divider',
-    start: 'top 80%',
-    end: 'top 30%',
-    scrub: 1,
-    onUpdate: function(self) {
-      mushPaths.forEach(function(path) {
-        var len = parseFloat(path.style.strokeDasharray);
-        path.style.strokeDashoffset = len * (1 - self.progress);
-      });
-    }
-  });
 }
 
 /* ----- Init all premium effects ----- */
@@ -2193,15 +2158,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroParticles();
     initGustiScrollPin();
     initSpotlight();
-    initMushroomGrow();
     initParallax();
     initCounterAnimation();
     initTextReveal();
     setTimeout(initColorTheme, 800);
   }
-
-  // V22 effetti globali
-  initScrollSkew();
 
   // Sauce drip (su tutte le pagine)
   setTimeout(initSauceDrip, 800);

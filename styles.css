@@ -3257,14 +3257,32 @@ section[id] { scroll-margin-top: 84px; }
   border-radius: 2px;
 }
 
-/* --- Product card V2 --- */
+/* --- Product card V2 + 3D pop-out V23 --- */
 .product-card {
   border-radius: 16px !important;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+  transform-style: preserve-3d;
+  perspective: 800px;
 }
 .product-card:hover {
-  transform: translateY(-6px) !important;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+  transform: translateY(-8px) scale(1.03) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18) !important;
+}
+.ff-card {
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+.ff-card:hover {
+  transform: translateY(-10px) scale(1.03) !important;
+  box-shadow: 0 24px 56px rgba(0,0,0,0.18) !important;
+}
+.recipe-card {
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+.recipe-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15) !important;
 }
 .product-card__price { color: var(--color-accent-red) !important; font-weight: 700; }
 
@@ -3413,8 +3431,12 @@ section[id] { scroll-margin-top: 84px; }
   text-transform: uppercase;
 }
 
-/* --- Certificazioni sezione --- */
-.section-certificazioni { padding: var(--section-pad) 0; background: var(--color-bg-soft); }
+/* --- Certificazioni sezione — dark V23 --- */
+.section-certificazioni {
+  padding: var(--section-pad) 0;
+  background: var(--color-bg-dark);
+  color: var(--color-text-light);
+}
 .cert-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -3452,8 +3474,15 @@ section[id] { scroll-margin-top: 84px; }
   text-align: center;
 }
 .cert-card-front {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  background: rgba(245,236,215,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.cert-card__name {
+  color: var(--color-text-light);
+}
+.cert-card__logo {
+  mix-blend-mode: normal;
+  filter: brightness(0) invert(1) opacity(0.85);
 }
 .cert-card-back {
   background: var(--color-accent);
@@ -3476,13 +3505,12 @@ section[id] { scroll-margin-top: 84px; }
   width: auto;
   object-fit: contain;
   margin: 0 auto;
-  mix-blend-mode: multiply;
 }
 .cert-card__name {
   font-weight: 600;
   font-size: 12px;
   margin-top: 10px;
-  color: var(--color-text);
+  color: var(--color-text-light);
 }
 @media (max-width: 900px) { .cert-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 680px) { .cert-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -3815,13 +3843,16 @@ body.cursor-circle #cursor.hover {
   pointer-events: none;
 }
 
-/* ----- Effetto 13: Navbar Glassmorphism migliorato ----- */
+/* ----- Effetto 13: Liquid Glass Navbar V23 ----- */
 .navbar.scrolled {
-  background: rgba(13, 7, 2, 0.78) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.45) !important;
+  background: rgba(13, 7, 2, 0.55) !important;
+  backdrop-filter: blur(32px) saturate(200%) brightness(0.85) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(0.85) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow:
+    0 4px 32px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15) !important;
 }
 .navbar.scrolled .navbar__logo img {
   filter: brightness(1.15);
@@ -3981,7 +4012,4 @@ body.cursor-circle #cursor.hover {
   will-change: transform;
 }
 
-/* Mushroom divider */
-.mushroom-divider {
-  background: var(--color-bg);
-}
+/* Mushroom divider — rimosso V23 */

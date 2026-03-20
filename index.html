@@ -18,6 +18,9 @@
 </head>
 <body>
 
+<!-- Spotlight cursor globale — canvas fisso full-page -->
+<canvas id="global-spotlight" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9990;opacity:0;"></canvas>
+
 <!-- INTRO BOSCO ANIMAZIONE -->
 <div id="forest-intro" aria-hidden="true">
   <div id="forest-slides">
@@ -25,7 +28,6 @@
     <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 2.png"></div>
     <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 3.png"></div>
     <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 4.png"></div>
-    <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 5.png"></div>
   </div>
   <canvas id="forest-particles"></canvas>
   <div id="forest-vignette"></div>
@@ -155,8 +157,7 @@
            alt="Teriyaki e Zenzero">
     </div>
   </div>
-  <!-- Effetto spotlight cursor -->
-  <canvas id="spotlight-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0;" aria-hidden="true"></canvas>
+  <!-- Spotlight ora è globale, canvas #global-spotlight in body -->
 </section>
 
 <!-- Wave divider hero → ticker -->
@@ -313,9 +314,9 @@
 
     <!-- Stat counter -->
     <div class="why-stat reveal">
-      <span class="why-stat__number" id="statCounter" data-target="57">0</span>
-      <span style="font-family:var(--font-title); font-size:clamp(2rem,4vw,4rem); color:var(--color-accent); font-weight:900; font-style:italic;">%</span>
-      <span class="why-stat__label">degli chef italiani preferisce il formato squeeze per la praticità in cucina</span>
+      <span class="why-stat__number" id="statCounter" data-target="180">0</span>
+      <span style="font-family:var(--font-title); font-size:clamp(2rem,4vw,4rem); color:var(--color-accent); font-weight:900; font-style:italic;">g</span>
+      <span class="why-stat__label">di bontà nel formato squeeze — pratico, zero sprechi, sempre pronto all'uso</span>
     </div>
   </div>
 </section>
@@ -521,8 +522,8 @@
   <div class="container">
     <div class="reveal" style="text-align:center;">
       <span class="section-label">Qualità certificata</span>
-      <h2 style="margin-top:8px;">Ogni prodotto, ogni standard.</h2>
-      <p style="color:var(--color-text-muted);margin-top:12px;max-width:540px;margin-left:auto;margin-right:auto;">
+      <h2 style="margin-top:8px;color:#fff;">Ogni prodotto, ogni standard.</h2>
+      <p style="color:rgba(245,236,215,0.55);margin-top:12px;max-width:540px;margin-left:auto;margin-right:auto;">
         Ogni prodotto nasce in uno stabilimento certificato ai più alti standard internazionali.
       </p>
     </div>
@@ -596,17 +597,6 @@
     </div>
   </div>
 </section>
-
-<!-- Fungo SVG che cresce scrollando -->
-<div class="mushroom-divider" aria-hidden="true" style="padding:48px 0;text-align:center;">
-  <svg id="growing-mushroom" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" style="width:80px;display:block;margin:0 auto;">
-    <path class="mush-stem" d="M50,160 Q45,140 44,120 Q42,100 50,90 Q58,100 56,120 Q55,140 70,160" fill="none" stroke="#C8860A" stroke-width="3" stroke-linecap="round"/>
-    <path class="mush-cap" d="M10,95 Q15,55 60,45 Q105,55 110,95 Q90,88 60,86 Q30,88 10,95Z" fill="none" stroke="#E85320" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle class="mush-spot" cx="42" cy="68" r="5" fill="none" stroke="#F5ECD7" stroke-width="2"/>
-    <circle class="mush-spot" cx="65" cy="60" r="4" fill="none" stroke="#F5ECD7" stroke-width="2"/>
-    <circle class="mush-spot" cx="82" cy="70" r="3" fill="none" stroke="#F5ECD7" stroke-width="2"/>
-  </svg>
-</div>
 
 <!-- ============================================================
      PREVIEW RICETTE
