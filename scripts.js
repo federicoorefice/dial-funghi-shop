@@ -10,64 +10,68 @@ if (typeof gsap !== 'undefined') gsap.registerPlugin(ScrollTrigger);
    Compare una sola volta per sessione (sessionStorage)
    ============================================================ */
 
-function shouldSkipIntro() {
-  if (sessionStorage.getItem('dial-intro-seen')) return true;
-  if (window.innerWidth < 768) return true;
-  const nav = navigator.connection || navigator.mozConnection;
-  if (nav && (nav.saveData || nav.effectiveType === '2g')) return true;
-  return false;
-}
-
 function initForestIntro() {
-  if (shouldSkipIntro()) {
-    const el = document.getElementById('forest-intro');
+  // Solo su desktop — su mobile skip diretto
+  if (window.innerWidth < 768) {
+    var el = document.getElementById('forest-intro');
     if (el) el.remove();
     return;
   }
+  if (typeof THREE === 'undefined') {
+    var el2 = document.getElementById('forest-intro');
+    if (el2) el2.remove();
+    return;
+  }
 
-  const introEl   = document.getElementById('forest-intro');
-  const logoEl    = document.getElementById('forest-logo');
-  const slideEls  = document.querySelectorAll('.forest-slide');
-  const canvas    = document.getElementById('forest-particles');
+  var introEl   = document.getElementById('forest-intro');
+  var logoEl    = document.getElementById('forest-logo');
+  var slideEls  = Array.from(document.querySelectorAll('.forest-slide'));
+  var canvas    = document.getElementById('forest-particles');
   if (!introEl || !slideEls.length) return;
 
   // Blocca scroll durante intro
   document.body.style.overflow = 'hidden';
 
-  let currentSlide = 0;
-  const SLIDE_DURATION = 580;
-  const TOTAL_DURATION = 3500;
+  var SLIDE_DURATION = 1200;  // ms per slide — LENTO
+  var CROSSFADE      = 600;   // ms crossfade
+  var TOTAL_DURATION = 7000;  // 7 secondi totali
+  var currentSlide   = 0;
+
+  // Precarica tutte le immagini
+  var preloadPromises = slideEls.map(function(slide) {
+    return new Promise(function(res) {
+      var img = new Image();
+      img.onload = img.onerror = res;
+      img.src = slide.dataset.src;
+      slide.style.backgroundImage = "url('" + slide.dataset.src + "')";
+    });
+  });
+
+  Promise.all(preloadPromises).then(function() {
+    showSlide(0);
+    var slideInterval = setInterval(function() {
+      var prev = slideEls[currentSlide];
+      currentSlide++;
+      if (currentSlide < slideEls.length) {
+        prev.classList.add('leaving');
+        setTimeout(function() {
+          prev.classList.remove('active', 'leaving');
+        }, CROSSFADE);
+        showSlide(currentSlide);
+      } else {
+        clearInterval(slideInterval);
+      }
+    }, SLIDE_DURATION);
+  });
 
   function showSlide(n) {
-    slideEls.forEach(s => {
-      s.classList.remove('active');
-      s.style.opacity = '0';
-    });
-    const slide = slideEls[n];
+    var slide = slideEls[n];
     if (!slide) return;
-    if (!slide.style.backgroundImage || slide.style.backgroundImage === '') {
-      slide.style.backgroundImage = "url('" + slide.dataset.src + "')";
-    }
-    slide.style.opacity = '1';
     slide.classList.add('active');
   }
 
-  // Preload prima immagine, poi mostra
-  const firstImg = new Image();
-  firstImg.onload = function() { showSlide(0); };
-  firstImg.src = slideEls[0].dataset.src;
-
-  const slideInterval = setInterval(function() {
-    currentSlide++;
-    if (currentSlide < slideEls.length) {
-      showSlide(currentSlide);
-    } else {
-      clearInterval(slideInterval);
-    }
-  }, SLIDE_DURATION);
-
-  // Particelle Three.js sopra le foto
-  if (canvas && typeof THREE !== 'undefined') {
+  // --- Particelle Three.js sopra le foto ---
+  if (canvas) {
     var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -79,9 +83,8 @@ function initForestIntro() {
     );
     camera.position.z = 4;
 
-    var COUNT = 220;
-    var geo   = new THREE.BufferGeometry();
-    var pos   = new Float32Array(COUNT * 3);
+    var COUNT = 220, geo = new THREE.BufferGeometry();
+    var pos = new Float32Array(COUNT * 3);
     for (var i = 0; i < COUNT * 3; i += 3) {
       pos[i]   = (Math.random() - 0.5) * 8;
       pos[i+1] = (Math.random() - 0.5) * 8;
@@ -101,9 +104,9 @@ function initForestIntro() {
     }
 
     var mat = new THREE.PointsMaterial({
-      size: 0.07, transparent: true, opacity: 0.5,
+      size: 0.07, transparent: true, opacity: 0.55,
       alphaTest: 0.4, depthWrite: false,
-      map: makeCircleTex(0.25, 0.55, 0.15)
+      map: makeCircleTex(0.25, 0.55, 0.15)  // verde bosco all'inizio
     });
     var pts = new THREE.Points(geo, mat);
     scene.add(pts);
@@ -115,57 +118,49 @@ function initForestIntro() {
       var elapsed  = Date.now() - startTime;
       var progress = Math.min(elapsed / TOTAL_DURATION, 1);
 
-      camZ -= 0.012;
+      camZ -= 0.008;
       if (camZ < -6) camZ = 3;
       camera.position.z = camZ;
+      pts.rotation.y += 0.0004;
 
-      pts.rotation.y += 0.0005;
-
-      // Crossfade colore: verde -> arancio
+      // Crossfade LENTO verde → arancio (50%→90% della durata)
       if (progress > 0.5) {
-        var t = (progress - 0.5) * 2;
-        mat.color = new THREE.Color(
-          0.25 + t * (0.91 - 0.25),
-          0.55 - t * (0.55 - 0.33),
+        var t = Math.min((progress - 0.5) / 0.4, 1);
+        mat.color.setRGB(
+          0.25 + t * 0.66,
+          0.55 - t * 0.22,
           0.15 - t * 0.15
         );
+        mat.opacity = 0.55 + t * 0.15;
       }
 
       renderer.render(scene, camera);
-      if (elapsed < TOTAL_DURATION + 500)
+      if (elapsed < TOTAL_DURATION + 1000)
         requestAnimationFrame(animatePts);
-      else
-        renderer.dispose();
+      else renderer.dispose();
     })();
   }
 
-  // Logo appare a metà sequenza
+  // Logo appare a 3 secondi
   setTimeout(function() {
-    if (typeof gsap !== 'undefined') {
-      gsap.to(logoEl, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
-    } else {
-      logoEl.style.opacity = '1';
-    }
-  }, 1500);
+    gsap.to(logoEl, { opacity: 1, duration: 0.8, ease: 'power2.out' });
+  }, 3000);
 
-  // Fine: chiudi intro
+  // A 5.5s il logo esce, sfondo diventa nero hero
   setTimeout(function() {
-    sessionStorage.setItem('dial-intro-seen', '1');
-    clearInterval(slideInterval);
+    gsap.to(logoEl, { opacity: 0, duration: 0.5 });
+    gsap.to(introEl, { backgroundColor: '#0D0702', duration: 1.0 });
+  }, 5500);
+
+  // A 7s: slide l'overlay verso l'alto — hero sotto ha stesso sfondo
+  setTimeout(function() {
     document.body.style.overflow = '';
-
-    if (typeof gsap !== 'undefined') {
-      gsap.to(logoEl, { opacity: 0, duration: 0.3 });
-      gsap.to(introEl, {
-        yPercent: -100,
-        duration: 0.75,
-        ease: 'power3.inOut',
-        delay: 0.25,
-        onComplete: function() { introEl.remove(); }
-      });
-    } else {
-      introEl.remove();
-    }
+    gsap.to(introEl, {
+      yPercent: -100,
+      duration: 1.0,
+      ease: 'power2.inOut',
+      onComplete: function() { introEl.remove(); }
+    });
   }, TOTAL_DURATION);
 }
 
@@ -1679,17 +1674,36 @@ function initMagneticButtons() {
   });
 }
 
-/* ----- Effetto 5: SCROLL PINNING GUSTI ----- */
+/* ----- Effetto 5: SCROLL PINNING GUSTI con bounce ----- */
+let currentBottle = null;
+
 function switchGusto(n) {
-  document.querySelectorAll('.gusto-bottle')
-    .forEach(img => img.classList.remove('active'));
-  const target = document.getElementById('gusto-img-' + n);
-  if (target) target.classList.add('active');
-  const slide = document.querySelector('.gusto-slide:nth-child(' + n + ')');
+  const next = document.getElementById('gusto-img-' + n);
+  if (!next || next === currentBottle) return;
+
+  if (currentBottle) {
+    gsap.to(currentBottle, {
+      opacity: 0, y: 40, duration: 0.3, ease: 'power2.in',
+      onComplete: () => {
+        currentBottle.classList.remove('active');
+        gsap.set(currentBottle, { y: 0 });
+      }
+    });
+  }
+
+  currentBottle = next;
+  currentBottle.classList.add('active');
+
+  gsap.fromTo(currentBottle,
+    { opacity: 0, y: -140, scale: 0.85, rotation: -4 },
+    { opacity: 1, y: 0, scale: 1, rotation: 0,
+      duration: 0.75, ease: 'bounce.out', delay: 0.15 }
+  );
+
+  const slide = document.querySelector('.gusto-slide[data-img="' + n + '"]');
   if (slide && slide.dataset.color) {
     gsap.to(document.documentElement, {
-      '--accent-gusto': slide.dataset.color,
-      duration: 0.4
+      '--accent-gusto': slide.dataset.color, duration: 0.4
     });
   }
 }
@@ -1699,13 +1713,12 @@ function initGustiScrollPin() {
   document.querySelectorAll('.gusto-slide').forEach((slide, i) => {
     ScrollTrigger.create({
       trigger: slide,
-      start: 'top center',
-      end: 'bottom center',
+      start: 'top 55%',
+      end: 'bottom 45%',
       onEnter: () => switchGusto(i + 1),
       onEnterBack: () => switchGusto(i + 1)
     });
   });
-  // Attiva il primo gusto di default
   switchGusto(1);
 }
 
@@ -1801,27 +1814,30 @@ function initHeroParticles() {
     const camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 100);
     camera.position.z = 3;
 
-    const COUNT = 180;
+    const COUNT = 280;
     const geo   = new THREE.BufferGeometry();
     const pos   = new Float32Array(COUNT * 3);
-    for (let i = 0; i < COUNT * 3; i++) pos[i] = (Math.random() - 0.5) * 6;
+    for (let i = 0; i < COUNT * 3; i += 3) {
+      pos[i]   = (Math.random() - 0.5) * 8;
+      pos[i+1] = (Math.random() - 0.5) * 8;
+      pos[i+2] = (Math.random() - 0.5) * 12;
+    }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
 
-    // Texture cerchio per particelle tonde
     function makeCircleTexture() {
       const size = 64;
       const c = document.createElement('canvas');
       c.width = c.height = size;
       const ctx = c.getContext('2d');
       ctx.beginPath();
-      ctx.arc(size/2, size/2, size/2 - 1, 0, Math.PI * 2);
+      ctx.arc(size/2, size/2, size/2 - 2, 0, Math.PI * 2);
       ctx.fillStyle = '#E85320';
       ctx.fill();
       return new THREE.CanvasTexture(c);
     }
     const mat = new THREE.PointsMaterial({
       map: makeCircleTexture(),
-      size: 0.08,
+      size: 0.06,
       transparent: true,
       opacity: 0.65,
       alphaTest: 0.4,
@@ -1841,6 +1857,9 @@ function initHeroParticles() {
       requestAnimationFrame(animate);
       points.rotation.y += 0.0008;
       points.rotation.x += 0.0004;
+      // Camera avanza lentamente in avanti
+      camera.position.z -= 0.003;
+      if (camera.position.z < 0.5) camera.position.z = 4;
       camera.position.x += (mx - camera.position.x) * 0.03;
       camera.position.y += (-my - camera.position.y) * 0.03;
       renderer.render(scene, camera);

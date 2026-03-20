@@ -457,33 +457,14 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   overflow: hidden;
 }
 
-.hero__bg-blobs {
-  position: absolute;
-  inset: 0;
+/* Blob rimossi — pulizia hero */
+.hero__bg-blobs,
+.hero__blob,
+.hero-bg-blob,
+[class*="hero-bg-blob"],
+.hero-deco {
+  opacity: 0 !important;
   pointer-events: none;
-  overflow: hidden;
-}
-
-.hero__blob {
-  position: absolute;
-  border-radius: var(--radius-full);
-  background: var(--color-accent);
-  opacity: 0.07;
-  filter: blur(80px);
-}
-
-.hero__blob--1 {
-  width: 600px;
-  height: 600px;
-  top: -200px;
-  right: -100px;
-}
-
-.hero__blob--2 {
-  width: 400px;
-  height: 400px;
-  bottom: -100px;
-  left: 10%;
 }
 
 .hero__content {
@@ -492,7 +473,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 40px 0 clamp(24px, 5vw, 80px);
+  padding: 0 clamp(24px, 5vw, 80px);
 }
 
 .hero__label {
@@ -951,6 +932,19 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 .product-card__weight {
   font-size: 0.72rem;
   color: var(--color-text-muted);
+}
+
+/* Contrasto testi su sfondo chiaro — WCAG 4.5:1 */
+.product-card h3,
+.product-card .product-card__name,
+.ff-card__name {
+  color: #1C0E05;
+  font-weight: 700;
+}
+.product-card .gusto-badge,
+.product-card__price,
+.ff-card__price {
+  color: #B8411A;
 }
 
 /* Card hero Fior di Funghi (grande, sezione 4 gusti) */
@@ -3671,8 +3665,8 @@ body.cursor-circle #cursor.hover {
 /* ----- Effetto 4: Marquee XL ----- */
 .marquee-xl {
   overflow: hidden;
-  padding: 10px 0;
-  background: transparent;
+  padding: 18px 0;
+  background: #1C0E05;
   border-top: 1px solid rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255,255,255,0.05);
   margin: 0;
@@ -3680,16 +3674,16 @@ body.cursor-circle #cursor.hover {
 .marquee-xl__track {
   display: flex;
   white-space: nowrap;
-  animation: marqueeXL 38s linear infinite;
+  animation: marqueeXL 60s linear infinite;
 }
 .marquee-xl__track span {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: clamp(56px, 9vw, 130px);
+  font-size: clamp(72px, 11vw, 150px);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(245,200,66,0.20);
+  -webkit-text-stroke: 1.5px rgba(232, 83, 32, 0.50);
   padding-right: 2rem;
   flex-shrink: 0;
   line-height: 1;
@@ -3727,14 +3721,10 @@ body.cursor-circle #cursor.hover {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  mix-blend-mode: multiply;
   opacity: 0;
-  transform: translateY(30px) scale(0.95);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  will-change: transform, opacity;
   filter: drop-shadow(0 30px 50px rgba(0,0,0,0.45));
-}
-.gusto-bottle.active {
-  opacity: 1;
-  transform: translateY(0) scale(1);
 }
 .gusti-scroll__slides {
   display: flex;
@@ -4000,26 +3990,32 @@ body.cursor-circle #cursor.hover {
    ============================================================ */
 #forest-intro {
   position: fixed; inset: 0; z-index: 999999;
-  background: #050d05; overflow: hidden;
+  background: #0D0702;  /* stesso colore dell'hero per raccordo */
+  overflow: hidden;
 }
-#forest-slides {
-  position: absolute; inset: 0; z-index: 1;
-}
+#forest-slides { position: absolute; inset: 0; z-index: 1; }
 .forest-slide {
   position: absolute; inset: 0;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transform: scale(1);
+  background-size: cover; background-position: center;
+  opacity: 0; transform: scale(1);
+  transition: opacity 0.6s ease-in-out;
   will-change: transform, opacity;
 }
 .forest-slide.active {
   opacity: 1;
-  animation: forestZoom 0.9s ease-out forwards;
+  animation: forestZoomSlow 1.8s ease-out forwards;
 }
-@keyframes forestZoom {
+.forest-slide.leaving {
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+/* Ultima slide: fade a nero più lenta per raccordo hero */
+.forest-slide:last-child.leaving {
+  transition: opacity 1.2s ease-in-out;
+}
+@keyframes forestZoomSlow {
   from { transform: scale(1.0); }
-  to   { transform: scale(1.30); }
+  to   { transform: scale(1.20); }
 }
 #forest-particles {
   position: absolute; inset: 0;
@@ -4031,8 +4027,8 @@ body.cursor-circle #cursor.hover {
   pointer-events: none;
   background: radial-gradient(
     ellipse at center,
-    transparent 30%,
-    rgba(5, 13, 5, 0.65) 100%
+    transparent 25%,
+    rgba(13, 7, 2, 0.70) 100%
   );
 }
 #forest-logo {
