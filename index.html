@@ -6,6 +6,15 @@
   <title>Fior di Funghi — La prima salsa ai funghi in formato squeeze | Dial Funghi</title>
   <meta name="description" content="Scopri Fior di Funghi, la prima salsa ai funghi porcini in formato squeeze. 4 gusti irresistibili. Spedizione gratuita sopra €30. Dal 1992, Dial Funghi — Pergine Valsugana.">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    // Logica intro bosco: mostra su reload, nuova tab, o click Home
+    var nav = window.performance && window.performance.getEntriesByType ? window.performance.getEntriesByType('navigation')[0] : null;
+    var isReload = nav && nav.type === 'reload';
+    var isNewTab = nav && nav.type === 'navigate' && document.referrer === '';
+    var isFromHome = sessionStorage.getItem('came-from-home') === '1';
+    sessionStorage.removeItem('came-from-home');
+    window.SHOW_INTRO = isReload || isNewTab || isFromHome;
+  </script>
 </head>
 <body>
 
@@ -17,7 +26,6 @@
     <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 3.png"></div>
     <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 4.png"></div>
     <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 5.png"></div>
-    <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 6.png"></div>
   </div>
   <canvas id="forest-particles"></canvas>
   <div id="forest-vignette"></div>
@@ -51,7 +59,7 @@
     </a>
 
     <ul class="navbar__nav">
-      <li><a href="index.html" class="navbar__link">Home</a></li>
+      <li><a href="index.html" class="navbar__link" onclick="sessionStorage.setItem('came-from-home','1')">Home</a></li>
       <li><a href="shop.html" class="navbar__link">Shop</a></li>
       <li><a href="recipes.html" class="navbar__link">Ricette</a></li>
       <li><a href="#storia" class="navbar__link">Chi Siamo</a></li>
@@ -111,10 +119,6 @@
       <a href="shop.html" class="btn btn--outline btn--lg">Tutta la gamma</a>
     </div>
 
-    <div class="hero__scroll-hint">
-      <span class="hero__scroll-line"></span>
-      Scorri per scoprire
-    </div>
   </div>
 
   <!-- Visual -->

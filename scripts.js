@@ -7,19 +7,25 @@ if (typeof gsap !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
    FOREST INTRO — Animazione Bosco -> Spazio
-   Compare una sola volta per sessione (sessionStorage)
+   Si vede su: reload, nuova tab, click Home
    ============================================================ */
 
 function initForestIntro() {
-  // Solo su desktop — su mobile skip diretto
+  // Skip su mobile sempre
   if (window.innerWidth < 768) {
     var el = document.getElementById('forest-intro');
     if (el) el.remove();
     return;
   }
-  if (typeof THREE === 'undefined') {
+  // Skip se non dobbiamo mostrare l'intro
+  if (!window.SHOW_INTRO) {
     var el2 = document.getElementById('forest-intro');
     if (el2) el2.remove();
+    return;
+  }
+  if (typeof THREE === 'undefined') {
+    var el3 = document.getElementById('forest-intro');
+    if (el3) el3.remove();
     return;
   }
 
@@ -34,7 +40,7 @@ function initForestIntro() {
 
   var SLIDE_DURATION = 1200;  // ms per slide — LENTO
   var CROSSFADE      = 600;   // ms crossfade
-  var TOTAL_DURATION = 7000;  // 7 secondi totali
+  var TOTAL_DURATION = 6000;  // 6 secondi per 5 foto
   var currentSlide   = 0;
 
   // Precarica tutte le immagini
@@ -141,16 +147,16 @@ function initForestIntro() {
     })();
   }
 
-  // Logo appare a 3 secondi
+  // Logo appare a 2.5 secondi
   setTimeout(function() {
     gsap.to(logoEl, { opacity: 1, duration: 0.8, ease: 'power2.out' });
-  }, 3000);
+  }, 2500);
 
-  // A 5.5s il logo esce, sfondo diventa nero hero
+  // A 4.8s il logo esce, sfondo diventa nero hero
   setTimeout(function() {
     gsap.to(logoEl, { opacity: 0, duration: 0.5 });
     gsap.to(introEl, { backgroundColor: '#0D0702', duration: 1.0 });
-  }, 5500);
+  }, 4800);
 
   // A 7s: slide l'overlay verso l'alto — hero sotto ha stesso sfondo
   setTimeout(function() {
