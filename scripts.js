@@ -2001,6 +2001,165 @@ function initScrollProgress() {
   }, { passive: true });
 }
 
+/* ============================================================
+   V22 PREMIUM EFFECTS
+   ============================================================ */
+
+/* ----- Effetto V22-1: SCROLL VELOCITY SKEW ----- */
+function initScrollSkew() {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  if (typeof gsap === 'undefined') return;
+  var lastScrollY = 0;
+  var skewTween;
+  var updateSkew = function() {
+    var delta = window.scrollY - lastScrollY;
+    lastScrollY = window.scrollY;
+    var skewVal = Math.max(-5, Math.min(5, delta * 0.35));
+    if (skewTween) skewTween.kill();
+    skewTween = gsap.to('img, .product-card, .recipe-card, .ff-card', {
+      skewY: skewVal, duration: 0.5, ease: 'power3.out', overwrite: true
+    });
+  };
+  window.addEventListener('scroll', updateSkew, { passive: true });
+}
+
+/* ----- Effetto V22-2: COUNTER ANIMATI ----- */
+function initCounterAnimation() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  document.querySelectorAll('.storia-num-v2__value, .why-stat__number').forEach(function(el) {
+    var text = el.textContent.trim();
+    var num = parseInt(text);
+    if (isNaN(num)) return;
+    var suf = text.replace(num.toString(), '');
+    el.dataset.target = num;
+    el.dataset.suffix = suf;
+    el.textContent = '0' + suf;
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 80%',
+      once: true,
+      onEnter: function() {
+        gsap.fromTo({ val: 0 }, { val: num }, {
+          duration: 2, ease: 'power2.out',
+          onUpdate: function() {
+            el.textContent = Math.round(this.targets()[0].val) + suf;
+          }
+        });
+      }
+    });
+  });
+}
+
+/* ----- Effetto V22-3: PARALLAX MULTI-LAYER CHI SIAMO ----- */
+function initParallax() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  var storia = document.getElementById('storia');
+  if (!storia) return;
+  // Immagini si muovono più lentamente
+  gsap.utils.toArray('.storia-v2__img img').forEach(function(img) {
+    gsap.to(img, {
+      yPercent: -15, ease: 'none',
+      scrollTrigger: { trigger: storia, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
+    });
+  });
+  // Testo leggero movimento opposto
+  gsap.utils.toArray('.storia-v2__text').forEach(function(txt) {
+    gsap.to(txt, {
+      yPercent: 8, ease: 'none',
+      scrollTrigger: { trigger: storia, start: 'top bottom', end: 'bottom top', scrub: 1 }
+    });
+  });
+}
+
+/* ----- Effetto V22-4: CLIP-PATH TEXT REVEAL ----- */
+function initTextReveal() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  document.querySelectorAll('h2:not(.no-reveal):not(.hero__headline)').forEach(function(el) {
+    if (el.querySelector('.reveal-inner')) return; // già wrappato
+    var inner = document.createElement('span');
+    inner.className = 'reveal-inner';
+    inner.innerHTML = el.innerHTML;
+    el.innerHTML = '';
+    el.classList.add('reveal-text');
+    el.appendChild(inner);
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter: function() {
+        gsap.to(inner, { y: 0, duration: 0.8, ease: 'power3.out' });
+      }
+    });
+  });
+}
+
+/* ----- Effetto V22-5: SPOTLIGHT CURSOR HERO ----- */
+function initSpotlight() {
+  var spotCanvas = document.getElementById('spotlight-canvas');
+  if (!spotCanvas || !window.matchMedia('(pointer: fine)').matches) return;
+  var ctx = spotCanvas.getContext('2d');
+  var mx = -999, my = -999;
+  var targetOpacity = 0, currentOpacity = 0;
+  function resizeSpot() {
+    spotCanvas.width = spotCanvas.offsetWidth;
+    spotCanvas.height = spotCanvas.offsetHeight;
+  }
+  resizeSpot();
+  window.addEventListener('resize', resizeSpot, { passive: true });
+  var hero = document.querySelector('.hero');
+  if (!hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = spotCanvas.getBoundingClientRect();
+    mx = e.clientX - rect.left;
+    my = e.clientY - rect.top;
+    targetOpacity = 1;
+  });
+  hero.addEventListener('mouseleave', function() { targetOpacity = 0; });
+  function renderSpotlight() {
+    currentOpacity += (targetOpacity - currentOpacity) * 0.08;
+    spotCanvas.style.opacity = currentOpacity;
+    ctx.clearRect(0, 0, spotCanvas.width, spotCanvas.height);
+    ctx.fillStyle = 'rgba(13, 7, 2, 0.55)';
+    ctx.fillRect(0, 0, spotCanvas.width, spotCanvas.height);
+    ctx.globalCompositeOperation = 'destination-out';
+    var grad = ctx.createRadialGradient(mx, my, 0, mx, my, 220);
+    grad.addColorStop(0, 'rgba(0,0,0,1)');
+    grad.addColorStop(0.5, 'rgba(0,0,0,0.6)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(mx, my, 220, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    requestAnimationFrame(renderSpotlight);
+  }
+  renderSpotlight();
+}
+
+/* ----- Effetto V22-6: FUNGO SVG GROW ON SCROLL ----- */
+function initMushroomGrow() {
+  if (typeof ScrollTrigger === 'undefined') return;
+  var mushPaths = document.querySelectorAll('#growing-mushroom path, #growing-mushroom circle');
+  if (!mushPaths.length) return;
+  mushPaths.forEach(function(path) {
+    var len = path.getTotalLength ? path.getTotalLength() : 60;
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+  });
+  ScrollTrigger.create({
+    trigger: '.mushroom-divider',
+    start: 'top 80%',
+    end: 'top 30%',
+    scrub: 1,
+    onUpdate: function(self) {
+      mushPaths.forEach(function(path) {
+        var len = parseFloat(path.style.strokeDasharray);
+        path.style.strokeDashoffset = len * (1 - self.progress);
+      });
+    }
+  });
+}
+
 /* ----- Init all premium effects ----- */
 document.addEventListener('DOMContentLoaded', () => {
   // Lenis (se CDN caricato)
@@ -2033,9 +2192,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page2 === 'index' || page2 === '' || path2 === '/') {
     initHeroParticles();
     initGustiScrollPin();
-    // Color theme per gusto
+    initSpotlight();
+    initMushroomGrow();
+    initParallax();
+    initCounterAnimation();
+    initTextReveal();
     setTimeout(initColorTheme, 800);
   }
+
+  // V22 effetti globali
+  initScrollSkew();
+
   // Sauce drip (su tutte le pagine)
   setTimeout(initSauceDrip, 800);
 });

@@ -155,6 +155,8 @@
            alt="Teriyaki e Zenzero">
     </div>
   </div>
+  <!-- Effetto spotlight cursor -->
+  <canvas id="spotlight-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0;" aria-hidden="true"></canvas>
 </section>
 
 <!-- Wave divider hero → ticker -->
@@ -594,6 +596,17 @@
     </div>
   </div>
 </section>
+
+<!-- Fungo SVG che cresce scrollando -->
+<div class="mushroom-divider" aria-hidden="true" style="padding:48px 0;text-align:center;">
+  <svg id="growing-mushroom" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" style="width:80px;display:block;margin:0 auto;">
+    <path class="mush-stem" d="M50,160 Q45,140 44,120 Q42,100 50,90 Q58,100 56,120 Q55,140 70,160" fill="none" stroke="#C8860A" stroke-width="3" stroke-linecap="round"/>
+    <path class="mush-cap" d="M10,95 Q15,55 60,45 Q105,55 110,95 Q90,88 60,86 Q30,88 10,95Z" fill="none" stroke="#E85320" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle class="mush-spot" cx="42" cy="68" r="5" fill="none" stroke="#F5ECD7" stroke-width="2"/>
+    <circle class="mush-spot" cx="65" cy="60" r="4" fill="none" stroke="#F5ECD7" stroke-width="2"/>
+    <circle class="mush-spot" cx="82" cy="70" r="3" fill="none" stroke="#F5ECD7" stroke-width="2"/>
+  </svg>
+</div>
 
 <!-- ============================================================
      PREVIEW RICETTE

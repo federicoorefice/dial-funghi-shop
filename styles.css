@@ -3965,3 +3965,23 @@ body.cursor-circle #cursor.hover {
   #transition-overlay { display: none !important; }
   #forest-intro { display: none !important; }
 }
+
+/* ============================================================
+   V22 PREMIUM EFFECTS CSS
+   ============================================================ */
+
+/* Text reveal */
+.reveal-text {
+  overflow: hidden;
+  display: block;
+}
+.reveal-text .reveal-inner {
+  display: block;
+  transform: translateY(110%);
+  will-change: transform;
+}
+
+/* Mushroom divider */
+.mushroom-divider {
+  background: var(--color-bg);
+}
