@@ -1844,13 +1844,16 @@ function initHeroParticles() {
     const camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 100);
     camera.position.z = 3;
 
-    const COUNT = 280;
+    const COUNT = 350;
     const geo   = new THREE.BufferGeometry();
     const pos   = new Float32Array(COUNT * 3);
-    for (let i = 0; i < COUNT * 3; i += 3) {
-      pos[i]   = (Math.random() - 0.5) * 8;
-      pos[i+1] = (Math.random() - 0.5) * 8;
-      pos[i+2] = (Math.random() - 0.5) * 12;
+    for (let i = 0; i < COUNT; i++) {
+      var angle  = Math.random() * Math.PI * 2;
+      var radius = Math.random() * 3.5 + 0.2;
+      var depth  = (Math.random() - 0.5) * 20;
+      pos[i * 3]     = Math.cos(angle) * radius;
+      pos[i * 3 + 1] = Math.sin(angle) * radius;
+      pos[i * 3 + 2] = depth;
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
 
@@ -1867,7 +1870,7 @@ function initHeroParticles() {
     }
     const mat = new THREE.PointsMaterial({
       map: makeCircleTexture(),
-      size: 0.06,
+      size: 0.08,
       transparent: true,
       opacity: 0.65,
       alphaTest: 0.4,
@@ -1885,13 +1888,20 @@ function initHeroParticles() {
 
     (function animate() {
       requestAnimationFrame(animate);
-      points.rotation.y += 0.0008;
-      points.rotation.x += 0.0004;
-      // Camera avanza lentamente in avanti
-      camera.position.z -= 0.003;
-      if (camera.position.z < 0.5) camera.position.z = 4;
-      camera.position.x += (mx - camera.position.x) * 0.03;
-      camera.position.y += (-my - camera.position.y) * 0.03;
+      var positions = geo.attributes.position.array;
+      for (var i = 0; i < COUNT; i++) {
+        positions[i * 3 + 2] += 0.04;
+        if (positions[i * 3 + 2] > 5) {
+          var angle  = Math.random() * Math.PI * 2;
+          var radius = Math.random() * 3.5 + 0.2;
+          positions[i * 3]     = Math.cos(angle) * radius;
+          positions[i * 3 + 1] = Math.sin(angle) * radius;
+          positions[i * 3 + 2] = -12;
+        }
+      }
+      geo.attributes.position.needsUpdate = true;
+      camera.position.x += (mx - camera.position.x) * 0.02;
+      camera.position.y += (-my - camera.position.y) * 0.02;
       renderer.render(scene, camera);
     })();
 
@@ -2131,18 +2141,28 @@ function initSpotlight() {
     spotCanvas.style.opacity = currentOpacity;
     if (currentOpacity > 0.01) {
       ctx.clearRect(0, 0, spotCanvas.width, spotCanvas.height);
-      ctx.fillStyle = 'rgba(13, 7, 2, 0.4)';
+      ctx.fillStyle = 'rgba(5, 3, 1, 0.72)';
       ctx.fillRect(0, 0, spotCanvas.width, spotCanvas.height);
       ctx.globalCompositeOperation = 'destination-out';
       var grad = ctx.createRadialGradient(mx, my, 0, mx, my, 260);
-      grad.addColorStop(0, 'rgba(0,0,0,1)');
-      grad.addColorStop(0.45, 'rgba(0,0,0,0.7)');
-      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      grad.addColorStop(0,   'rgba(0,0,0,0.95)');
+      grad.addColorStop(0.3, 'rgba(0,0,0,0.80)');
+      grad.addColorStop(0.7, 'rgba(0,0,0,0.40)');
+      grad.addColorStop(1,   'rgba(0,0,0,0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(mx, my, 260, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalCompositeOperation = 'source-over';
+      // Glow arancio caldo sopra lo spotlight
+      var glow = ctx.createRadialGradient(mx, my, 0, mx, my, 120);
+      glow.addColorStop(0,   'rgba(232, 83, 32, 0.08)');
+      glow.addColorStop(0.5, 'rgba(200, 134, 10, 0.04)');
+      glow.addColorStop(1,   'rgba(0,0,0,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(mx, my, 120, 0, Math.PI * 2);
+      ctx.fill();
     }
     requestAnimationFrame(renderSpotlight);
   }
