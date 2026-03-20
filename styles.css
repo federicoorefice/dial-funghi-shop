@@ -3636,6 +3636,23 @@ body.cursor-circle #cursor.hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 400vh;
+  background: #0D0702;
+  color: #FFFFFF;
+  position: relative;
+}
+
+/* Particelle statiche CSS sulla sezione gusti scura */
+.gusti-scroll::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(232,83,32,0.15) 1px, transparent 1px),
+    radial-gradient(circle, rgba(200,134,10,0.10) 1px, transparent 1px);
+  background-size: 60px 60px, 90px 90px;
+  background-position: 0 0, 30px 30px;
+  pointer-events: none;
+  z-index: 0;
 }
 .gusti-scroll__sticky {
   position: sticky;
@@ -3682,17 +3699,25 @@ body.cursor-circle #cursor.hover {
 }
 .gusto-slide h2 {
   font-family: var(--font-title, 'Playfair Display', serif);
-  font-size: clamp(32px, 3.5vw, 56px);
+  font-size: clamp(40px, 5vw, 72px);
   font-weight: 900;
   margin-bottom: 16px;
   line-height: 1.1;
+  color: #FFFFFF;
 }
 .gusto-slide p {
   font-size: 1rem;
-  color: var(--color-text-muted, #b0a090);
+  color: rgba(255,255,255,0.75);
   margin-bottom: 28px;
   max-width: 380px;
   line-height: 1.65;
+}
+/* CTA su sfondo scuro gusti */
+.gusto-slide .btn--primary,
+.gusto-slide a[href*="product"] {
+  background: #E85320;
+  color: #fff;
+  border: none;
 }
 @media (max-width: 900px) {
   .gusti-scroll {
