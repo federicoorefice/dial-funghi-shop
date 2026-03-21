@@ -3703,24 +3703,22 @@ body.cursor-circle #cursor.hover {
 }
 .gusti-bottle-container {
   position: relative;
-  width: 300px;
+  width: 240px; /* stretto abbastanza da mostrare solo il fronte (no retro) */
   height: 440px;
-  z-index: 10; /* sopra canvas particles */
+  overflow: hidden; /* taglia il retro — non rompe sticky (è sul container, non sul parent) */
+  z-index: 10;
 }
 .gusto-bottle {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center;
+  /* Immagini fronte+retro affiancate — cover + left allinea sul fronte */
+  object-fit: cover;
+  object-position: 0% center;
   opacity: 0; /* GSAP gestisce opacity — NON aggiungere transition qui */
   pointer-events: none;
-  filter: drop-shadow(0 30px 50px rgba(0,0,0,0.55));
-}
-.gusto-bottle.is-scheda {
-  object-fit: cover;
-  object-position: 15% center;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
 }
 /* Testi gusti */
 .gusto-slide h2 { color: #FFFFFF; }
