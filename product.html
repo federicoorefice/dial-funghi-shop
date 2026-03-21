@@ -379,9 +379,10 @@ function fixProductImage(imgEl) {
   if (!imgEl) return;
   var apply = function() {
     var r = imgEl.naturalWidth / imgEl.naturalHeight;
-    if (r > 1.3) {
+    if (r > 1.0) {
+      /* immagine orizzontale (scheda tecnica o landscape) → mostra solo il fronte (lato sx) */
       imgEl.style.objectFit      = 'cover';
-      imgEl.style.objectPosition = '14% center';
+      imgEl.style.objectPosition = '15% center';
       imgEl.style.width          = '100%';
       imgEl.style.height         = '100%';
       imgEl.style.filter         = 'none';

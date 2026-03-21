@@ -3663,7 +3663,7 @@ body.cursor-circle #cursor.hover {
   background: #0D0702;
   color: #FFFFFF;
   position: relative;
-  overflow: hidden;
+  overflow: clip; /* NON overflow:hidden — romperebbe position:sticky */
   transition: background-color 0.8s ease;
 }
 
@@ -3703,9 +3703,9 @@ body.cursor-circle #cursor.hover {
 }
 .gusti-bottle-container {
   position: relative;
-  width: 280px;
-  height: 420px;
-  z-index: 1;
+  width: 300px;
+  height: 440px;
+  z-index: 10; /* sopra canvas particles */
 }
 .gusto-bottle {
   position: absolute;
@@ -3714,18 +3714,13 @@ body.cursor-circle #cursor.hover {
   height: 100%;
   object-fit: contain;
   object-position: center;
-  opacity: 0;
+  opacity: 0; /* GSAP gestisce opacity — NON aggiungere transition qui */
   pointer-events: none;
-  will-change: transform, opacity;
-  filter: drop-shadow(0 40px 60px rgba(0,0,0,0.6));
-  transition: opacity 0.4s ease;
-}
-.gusto-bottle.active {
-  opacity: 1;
+  filter: drop-shadow(0 30px 50px rgba(0,0,0,0.55));
 }
 .gusto-bottle.is-scheda {
   object-fit: cover;
-  object-position: 12% center;
+  object-position: 15% center;
 }
 /* Testi gusti */
 .gusto-slide h2 { color: #FFFFFF; }

@@ -1631,58 +1631,61 @@ function initMagneticButtons() {
 
 /* ----- Effetto 5: SCROLL PINNING GUSTI con bounce ----- */
 var activeBottle = null;
+var GUSTO_ACCENT_COLORS = { 1: '#7B4B2A', 2: '#3D3530', 3: '#C8281E', 4: '#2D5016' };
 
 function switchGusto(n) {
   var next = document.getElementById('gusto-img-' + n);
-  if (!next) return;
-  if (next === activeBottle) return;
+  if (!next || next === activeBottle) return;
 
-  // Nascondi quella attuale
+  // Nasconde bottiglia uscente
   if (activeBottle) {
     var prev = activeBottle;
-    prev.classList.remove('active');
     gsap.killTweensOf(prev);
     gsap.to(prev, {
-      opacity: 0, y: 30, duration: 0.3, ease: 'power2.in',
-      onComplete: function() { gsap.set(prev, { y: 0 }); }
+      opacity: 0, y: 20, scale: 0.95, duration: 0.25, ease: 'power2.in',
+      onComplete: function() { gsap.set(prev, { y: 0, scale: 1 }); }
     });
   }
 
-  // Mostra nuova bottiglia con caduta e bounce
+  // Mostra nuova bottiglia — cade dall'alto con bounce
   activeBottle = next;
-  next.classList.add('active');
   gsap.killTweensOf(next);
   gsap.fromTo(next,
-    { opacity: 0, y: -140, scale: 0.9 },
-    { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'bounce.out', delay: 0.05 }
+    { opacity: 0, y: -120, scale: 0.88 },
+    { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'bounce.out', delay: 0.05 }
   );
 
-  // Cambia colore accent
-  var colors = { 1: '#7B4B2A', 2: '#3D3530', 3: '#C8281E', 4: '#2D5016' };
-  if (colors[n]) {
-    document.documentElement.style.setProperty('--gusto-accent', colors[n]);
-  }
+  // Aggiorna accent color
+  var col = GUSTO_ACCENT_COLORS[n];
+  if (col) document.documentElement.style.setProperty('--gusto-accent', col);
 }
 
 function initGustiScrollPin() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  var slides = document.querySelectorAll('.gusto-slide');
+  if (!slides.length) return;
 
-  // Prima bottiglia visibile subito (CSS .active la mostra)
+  // Mostra la prima bottiglia via GSAP (non solo via CSS class)
   var first = document.getElementById('gusto-img-1');
   if (first) {
-    first.classList.add('active');
     activeBottle = first;
+    gsap.set(first, { opacity: 0, y: -80, scale: 0.9 });
+    gsap.to(first, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'bounce.out', delay: 0.4 });
+    document.documentElement.style.setProperty('--gusto-accent', GUSTO_ACCENT_COLORS[1]);
   }
 
-  document.querySelectorAll('.gusto-slide').forEach(function(slide, i) {
+  slides.forEach(function(slide, i) {
     ScrollTrigger.create({
       trigger: slide,
-      start: 'top 50%',
-      end: 'bottom 50%',
+      start: 'top 55%',
+      end: 'bottom 45%',
       onEnter: function() { switchGusto(i + 1); },
       onEnterBack: function() { switchGusto(i + 1); }
     });
   });
+
+  // Ricalcola posizioni dopo layout completo
+  ScrollTrigger.refresh();
 }
 
 /* ----- Effetto 6: LIQUID SPLASH CURSOR (canvas) ----- */
@@ -1820,16 +1823,10 @@ function initHeroParticles() {
       my = (e.clientY / window.innerHeight - 0.5) * 0.5;
     }, { passive: true });
 
-    // Pause animation when hero is off-screen
-    var heroVisible = true;
-    var heroObserver = new IntersectionObserver(function(entries) {
-      heroVisible = entries[0].isIntersecting;
-    }, { threshold: 0 });
-    heroObserver.observe(canvas.closest('.hero') || canvas);
-
-    (function animate() {
-      requestAnimationFrame(animate);
-      if (!heroVisible) return;
+    // Avvia/ferma RAF in base a visibilità hero
+    var heroRafId = null;
+    function heroAnimate() {
+      heroRafId = requestAnimationFrame(heroAnimate);
       var positions = geo.attributes.position.array;
       for (var i = 0; i < COUNT; i++) {
         positions[i * 3 + 2] += 0.04;
@@ -1845,7 +1842,15 @@ function initHeroParticles() {
       camera.position.x += (mx - camera.position.x) * 0.02;
       camera.position.y += (-my - camera.position.y) * 0.02;
       renderer.render(scene, camera);
-    })();
+    }
+    heroAnimate(); // parte subito — hero è sempre visibile all'inizio
+    new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) {
+        if (!heroRafId) heroAnimate();
+      } else {
+        if (heroRafId) { cancelAnimationFrame(heroRafId); heroRafId = null; }
+      }
+    }, { threshold: 0 }).observe(canvas.closest('.hero') || canvas);
 
     window.addEventListener('resize', () => {
       renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
@@ -2211,7 +2216,7 @@ function initGustiParticles() {
   var camera = new THREE.PerspectiveCamera(60, (canvas.offsetWidth || window.innerWidth) / (canvas.offsetHeight || window.innerHeight), 0.1, 50);
   camera.position.z = 3;
 
-  var COUNT = 120;
+  var COUNT = 60; /* ridotto per performance */
   var geo = new THREE.BufferGeometry();
   var pos = new Float32Array(COUNT * 3);
   for (var i = 0; i < COUNT * 3; i += 3) {
@@ -2244,16 +2249,10 @@ function initGustiParticles() {
 
   var positions = geo.attributes.position.array;
 
-  // Pause when gusti section is off-screen
-  var gustiVisible = false;
-  var gustiObs = new IntersectionObserver(function(entries) {
-    gustiVisible = entries[0].isIntersecting;
-  }, { threshold: 0 });
-  gustiObs.observe(canvas.parentElement || canvas);
-
-  (function animate() {
-    requestAnimationFrame(animate);
-    if (!gustiVisible) return;
+  // Avvia/ferma RAF in base a visibilità — risparmia CPU
+  var gustiRafId = null;
+  function gustiAnimate() {
+    gustiRafId = requestAnimationFrame(gustiAnimate);
     for (var k = 0; k < COUNT; k++) {
       positions[k*3+2] += 0.02;
       if (positions[k*3+2] > 4) {
@@ -2267,7 +2266,14 @@ function initGustiParticles() {
     geo.attributes.position.needsUpdate = true;
     pts.rotation.z += 0.0008;
     renderer.render(scene, camera);
-  })();
+  }
+  new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      if (!gustiRafId) gustiAnimate();
+    } else {
+      if (gustiRafId) { cancelAnimationFrame(gustiRafId); gustiRafId = null; }
+    }
+  }, { threshold: 0 }).observe(canvas.parentElement || canvas);
 }
 
 /* ----- UNICO DOMContentLoaded — tutto inizializzato qui ----- */
