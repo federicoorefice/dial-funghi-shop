@@ -489,7 +489,7 @@ function initTickers() {
    SCROLL REVEAL (Intersection Observer)
    ============================================================ */
 
-function initScrollReveal() {
+function initRevealObserver() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -505,50 +505,12 @@ function initScrollReveal() {
 }
 
 /* ============================================================
-   STAT COUNTER ANIMATION
+   STAT COUNTER ANIMATION (unused — replaced by initCounterAnimation)
    ============================================================ */
-
-function initStatCounter() {
-  const el = $('#statCounter');
-  if (!el) return;
-  const target = parseInt(el.dataset.target) || 180;
-  let current = 0;
-  const duration = 1800;
-  const startTime = performance.now();
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      observer.unobserve(entry.target);
-
-      function tick(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-        current = Math.round(eased * target);
-        el.textContent = '+' + current;
-        if (progress < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    });
-  }, { threshold: 0.5 });
-
-  observer.observe(el);
-}
 
 /* ============================================================
-   PARALLAX OCCASIONI
+   PARALLAX OCCASIONI (unused — replaced by GSAP initParallax below)
    ============================================================ */
-
-function initParallax() {
-  const el = $('#occasionsParallax');
-  if (!el) return;
-  window.addEventListener('scroll', () => {
-    const rect = el.parentElement.getBoundingClientRect();
-    const offset = rect.top * 0.3;
-    el.style.transform = `translateY(${offset}px)`;
-  }, { passive: true });
-}
 
 /* ============================================================
    REVIEWS CAROUSEL (auto-play)
@@ -721,7 +683,7 @@ function renderRecipesPreview() {
     </div>`).join('');
 
   // Re-observe new elements
-  initScrollReveal();
+  initRevealObserver();
 }
 
 /* ============================================================
@@ -924,7 +886,7 @@ function initPromoSection() {
   }).join('');
 
   // Osserva i nuovi elementi con reveal
-  initScrollReveal();
+  initRevealObserver();
 
   // Dots
   const dotsEl = $('#promoDots');
@@ -1474,51 +1436,8 @@ function badgeClass(badge) {
 }
 
 /* ============================================================
-   INIT — eseguito al DOM ready
+   INIT — eseguito al DOM ready (UNICO blocco)
    ============================================================ */
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Globali sempre attivi
-  initNavbar();
-  initCartUI();
-  initScrollReveal();
-  initHamburger();
-
-  // Pagina specifica — supporta sia /page.html che /page (server senza estensione)
-  const path = window.location.pathname;
-  const page = path.split('/').pop().replace('.html', '') || 'index';
-
-  if (page === 'index' || page === '' || path === '/') {
-    initHeroAnimation();
-    initTickers();
-    renderFFGrid();
-    renderGammaGrid();
-    initGammaTabs();
-    renderRecipesPreview();
-    initStatCounter();
-    initParallax();
-    initCarousel();
-    initReviewsSlider();
-    initStoriaCounters();
-  }
-
-  if (page === 'shop') {
-    initShopPage();
-  }
-
-  if (page === 'product') {
-    initProductPage();
-  }
-
-  if (page === 'recipes') {
-    initRecipesPage();
-    initRecipeModalListeners();
-  }
-
-  if (page === 'cart') {
-    initCartPage();
-  }
-});
 
 function initCartUI() {
   updateCartUI();
@@ -1720,15 +1639,18 @@ function switchGusto(n) {
 
   // Nascondi quella attuale
   if (activeBottle) {
-    gsap.killTweensOf(activeBottle);
-    gsap.to(activeBottle, {
+    var prev = activeBottle;
+    prev.classList.remove('active');
+    gsap.killTweensOf(prev);
+    gsap.to(prev, {
       opacity: 0, y: 30, duration: 0.3, ease: 'power2.in',
-      onComplete: function() { gsap.set(activeBottle, { y: 0 }); }
+      onComplete: function() { gsap.set(prev, { y: 0 }); }
     });
   }
 
   // Mostra nuova bottiglia con caduta e bounce
   activeBottle = next;
+  next.classList.add('active');
   gsap.killTweensOf(next);
   gsap.fromTo(next,
     { opacity: 0, y: -140, scale: 0.9 },
@@ -1744,24 +1666,23 @@ function switchGusto(n) {
 
 function initGustiScrollPin() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+  // Prima bottiglia visibile subito (CSS .active la mostra)
+  var first = document.getElementById('gusto-img-1');
+  if (first) {
+    first.classList.add('active');
+    activeBottle = first;
+  }
+
   document.querySelectorAll('.gusto-slide').forEach(function(slide, i) {
     ScrollTrigger.create({
       trigger: slide,
-      start: 'top 45%',
-      end: 'bottom 45%',
+      start: 'top 50%',
+      end: 'bottom 50%',
       onEnter: function() { switchGusto(i + 1); },
       onEnterBack: function() { switchGusto(i + 1); }
     });
   });
-  // Mostra prima bottiglia subito
-  setTimeout(function() {
-    var first = document.getElementById('gusto-img-1');
-    if (first) {
-      gsap.set(first, { opacity: 0, y: -140, scale: 0.9 });
-      gsap.to(first, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'bounce.out', delay: 0.3 });
-      activeBottle = first;
-    }
-  }, 300);
 }
 
 /* ----- Effetto 6: LIQUID SPLASH CURSOR (canvas) ----- */
@@ -1802,6 +1723,8 @@ function initSplashCanvas() {
     });
 
     function renderSplash() {
+      requestAnimationFrame(renderSplash);
+      if (particles.length === 0) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
@@ -1816,7 +1739,6 @@ function initSplashCanvas() {
         ctx.fill();
       }
       ctx.globalAlpha = 1;
-      requestAnimationFrame(renderSplash);
     }
     renderSplash();
   } catch(e) { console.warn('Splash canvas error:', e); }
@@ -1898,8 +1820,16 @@ function initHeroParticles() {
       my = (e.clientY / window.innerHeight - 0.5) * 0.5;
     }, { passive: true });
 
+    // Pause animation when hero is off-screen
+    var heroVisible = true;
+    var heroObserver = new IntersectionObserver(function(entries) {
+      heroVisible = entries[0].isIntersecting;
+    }, { threshold: 0 });
+    heroObserver.observe(canvas.closest('.hero') || canvas);
+
     (function animate() {
       requestAnimationFrame(animate);
+      if (!heroVisible) return;
       var positions = geo.attributes.position.array;
       for (var i = 0; i < COUNT; i++) {
         positions[i * 3 + 2] += 0.04;
@@ -2208,7 +2138,7 @@ function initTilt3D() {
 }
 
 /* ----- Effetto V26-B: SCROLL REVEAL STAGGERED ----- */
-function initScrollReveal() {
+function initScrollRevealGSAP() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   // Stagger per gruppi di card
   document.querySelectorAll('.products-grid, .recipes-grid').forEach(function(grid) {
@@ -2313,8 +2243,17 @@ function initGustiParticles() {
   scene.add(pts);
 
   var positions = geo.attributes.position.array;
+
+  // Pause when gusti section is off-screen
+  var gustiVisible = false;
+  var gustiObs = new IntersectionObserver(function(entries) {
+    gustiVisible = entries[0].isIntersecting;
+  }, { threshold: 0 });
+  gustiObs.observe(canvas.parentElement || canvas);
+
   (function animate() {
     requestAnimationFrame(animate);
+    if (!gustiVisible) return;
     for (var k = 0; k < COUNT; k++) {
       positions[k*3+2] += 0.02;
       if (positions[k*3+2] > 4) {
@@ -2331,51 +2270,70 @@ function initGustiParticles() {
   })();
 }
 
-/* ----- Init all premium effects ----- */
+/* ----- UNICO DOMContentLoaded — tutto inizializzato qui ----- */
 document.addEventListener('DOMContentLoaded', () => {
-  // Lenis (se CDN caricato)
+  // ---- Globali sempre attivi ----
+  initNavbar();
+  initCartUI();
+  initRevealObserver();
+  initHamburger();
   initLenis();
-
-  // Cursor
   initCustomCursor();
-
-  // Magnetic buttons
   initMagneticButtons();
-
-  // Scroll progress bar
   initScrollProgress();
-
-  // Text scramble
   initScramble();
-
-  // Page loader
   initPageLoader();
-
-  // Page transitions
   initPageTransitions();
+  initTilt3D();
 
-  // Splash canvas
-  initSplashCanvas();
+  // Pagina specifica
+  const path = window.location.pathname;
+  const page = path.split('/').pop().replace('.html', '') || 'index';
+  const isIndex = (page === 'index' || page === '' || path === '/');
 
-  // Hero Three.js particles (solo index)
-  const path2 = window.location.pathname;
-  const page2 = path2.split('/').pop().replace('.html', '') || 'index';
-  if (page2 === 'index' || page2 === '' || path2 === '/') {
+  if (isIndex) {
+    initHeroAnimation();
+    initTickers();
+    renderFFGrid();
+    renderGammaGrid();
+    initGammaTabs();
+    renderRecipesPreview();
+    initCarousel();
+    initReviewsSlider();
+    initStoriaCounters();
+
+    // Effetti premium (solo index)
     initHeroParticles();
     initGustiScrollPin();
     initGustiParticles();
     initSpotlight();
+    initSplashCanvas();
     initParallax();
     initCounterAnimation();
     initTextReveal();
     initHeroWordReveal();
+    initScrollRevealGSAP();
     setTimeout(initColorTheme, 800);
+    setTimeout(initSauceDrip, 800);
   }
 
-  // Effetti V26 (tutte le pagine)
-  initTilt3D();
-  initScrollReveal();
+  if (page === 'shop') {
+    initShopPage();
+    initScrollRevealGSAP();
+    setTimeout(initSauceDrip, 800);
+  }
 
-  // Sauce drip (su tutte le pagine)
-  setTimeout(initSauceDrip, 800);
+  if (page === 'product') {
+    initProductPage();
+  }
+
+  if (page === 'recipes') {
+    initRecipesPage();
+    initRecipeModalListeners();
+    initScrollRevealGSAP();
+  }
+
+  if (page === 'cart') {
+    initCartPage();
+  }
 });

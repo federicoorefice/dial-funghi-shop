@@ -3718,6 +3718,10 @@ body.cursor-circle #cursor.hover {
   pointer-events: none;
   will-change: transform, opacity;
   filter: drop-shadow(0 40px 60px rgba(0,0,0,0.6));
+  transition: opacity 0.4s ease;
+}
+.gusto-bottle.active {
+  opacity: 1;
 }
 .gusto-bottle.is-scheda {
   object-fit: cover;
@@ -3779,7 +3783,12 @@ body.cursor-circle #cursor.hover {
   .gusti-scroll__sticky {
     position: relative;
     height: 50vw;
-    min-height: 200px;
+    min-height: 240px;
+    order: -1; /* bottiglia sopra i testi */
+  }
+  .gusti-bottle-container {
+    width: 200px;
+    height: 300px;
   }
   .gusti-scroll__slides { display: block; }
   .gusto-slide {
