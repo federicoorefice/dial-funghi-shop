@@ -11,10 +11,22 @@ if (typeof gsap !== 'undefined') gsap.registerPlugin(ScrollTrigger);
    ============================================================ */
 
 function initForestIntro() {
-  // Skip su mobile sempre
+  // Mobile: show image fallback briefly, then fade out
   if (window.innerWidth < 768) {
     var el = document.getElementById('forest-intro');
-    if (el) el.remove();
+    if (el) {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('intro-playing');
+      var logoMobile = document.getElementById('forest-logo');
+      if (logoMobile) logoMobile.style.opacity = '1';
+      setTimeout(function() {
+        el.style.transition = 'opacity 1s ease';
+        el.style.opacity = '0';
+        document.body.style.overflow = '';
+        document.body.classList.remove('intro-playing');
+        setTimeout(function() { el.remove(); }, 1000);
+      }, 2000);
+    }
     return;
   }
   // Skip se non dobbiamo mostrare l'intro
@@ -2126,23 +2138,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = path.split('/').pop().replace('.html', '') || 'index';
   const isIndex = (page === 'index' || page === '' || path === '/');
 
+  // Funzioni che NON dipendono dai dati prodotto — esegui subito
   if (isIndex) {
     initHeroAnimation();
     initTickers();
-    renderFFGrid();
-    renderGammaGrid();
-    initGammaTabs();
-    renderRecipesPreview();
     initCarousel();
     initReviewsSlider();
     initStoriaCounters();
-
-    // Effetti premium (solo index)
     initHeroParticles();
     initGustiScrollPin();
-    /* initGustiParticles — rimosso Sprint 1 */
-    /* initSpotlight — rimosso Sprint 1 */
-    /* initSplashCanvas — rimosso Sprint 1 */
     initParallax();
     initCounterAnimation();
     initTextReveal();
@@ -2153,22 +2157,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (page === 'shop') {
-    initShopPage();
     initScrollRevealGSAP();
     setTimeout(initSauceDrip, 800);
   }
 
-  if (page === 'product') {
-    initProductPage();
-  }
-
   if (page === 'recipes') {
-    initRecipesPage();
     initRecipeModalListeners();
     initScrollRevealGSAP();
   }
 
-  if (page === 'cart') {
-    initCartPage();
-  }
+  // Funzioni che DIPENDONO dai dati prodotto — attendi caricamento JSON
+  const waitData = window.dataReady || Promise.resolve();
+  waitData.then(() => {
+    if (isIndex) {
+      renderFFGrid();
+      renderGammaGrid();
+      initGammaTabs();
+      renderRecipesPreview();
+    }
+    if (page === 'shop') {
+      initShopPage();
+    }
+    if (page === 'product') {
+      initProductPage();
+    }
+    if (page === 'recipes') {
+      initRecipesPage();
+    }
+    if (page === 'cart') {
+      initCartPage();
+    }
+  });
 });

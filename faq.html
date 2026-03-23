@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — Dial Funghi | Domande Frequenti</title>
+  <meta name="description" content="Risposte alle domande più frequenti su ordini, spedizioni, prodotti e resi Dial Funghi. Tutto quello che devi sapere.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* FAQ Section */
+    .faq-section {
+      background: var(--color-bg);
+      padding: 60px 0;
+    }
+    .faq-category {
+      margin-bottom: 40px;
+    }
+    .faq-category h2 {
+      font-family: var(--font-title);
+      font-size: 1.4rem;
+      color: var(--color-text);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 16px 0;
+      background: none;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-question::after {
+      content: '+';
+      font-size: 1.2rem;
+      color: var(--color-accent);
+      transition: transform 0.3s;
+    }
+    .faq-question.active::after {
+      content: '\2212';
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 0 0 0;
+    }
+    .faq-answer p {
+      padding: 0 0 16px;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+    /* CTA Section */
+    .faq-cta {
+      background: var(--color-bg-dark);
+      padding: 80px 0;
+    }
+    .faq-cta .btn-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Effetto 15: Scroll progress bar -->
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<!-- Effetto 11: Page Loader -->
+<div id="page-loader" aria-hidden="true">
+  <div class="loader-logo">
+    <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" style="height:48px;width:auto;">
+  </div>
+  <div class="loader-bar"><span class="loader-bar__fill"></span></div>
+</div>
+
+<!-- Effetto 12: Transition Overlay -->
+<div id="transition-overlay" aria-hidden="true"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" style="height:44px;width:auto;">
+    </a>
+    <ul class="navbar__nav">
+      <li><a href="index.html" class="navbar__link" onclick="sessionStorage.setItem('came-from-home','1')">Home</a></li>
+      <li><a href="shop.html" class="navbar__link">Shop</a></li>
+      <li><a href="recipes.html" class="navbar__link">Ricette</a></li>
+      <li><a href="about.html" class="navbar__link">Chi Siamo</a></li>
+    </ul>
+    <div class="navbar__actions">
+      <button class="navbar__cart-btn" id="cartToggle" aria-label="Apri carrello">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrello
+        <span class="navbar__cart-count" id="cartCount">0</span>
+      </button>
+      <button class="navbar__hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-label">Hai domande?</span>
+    <h1>Domande<br><em style="font-style:italic; color:var(--color-accent);">frequenti.</em></h1>
+    <p>Tutto quello che devi sapere su ordini, spedizioni e prodotti Dial Funghi.</p>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave-divider" style="background:#1C0E05; margin-top:-1px;">
+  <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C480,48 960,0 1440,48 L1440,0 L0,0 Z" fill="#1C0E05"/>
+  </svg>
+</div>
+
+<!-- FAQ SECTION -->
+<section class="faq-section">
+  <div class="container">
+
+    <!-- Ordini e Pagamenti -->
+    <div class="faq-category">
+      <h2>Ordini e Pagamenti</h2>
+
+      <div class="faq-item">
+        <button class="faq-question">Come posso ordinare?</button>
+        <div class="faq-answer">
+          <p>Scegli i prodotti, aggiungili al carrello e completa l'acquisto con pagamento sicuro tramite Stripe.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Quali metodi di pagamento accettate?</button>
+        <div class="faq-answer">
+          <p>Accettiamo tutte le principali carte di credito e debito (Visa, Mastercard, American Express) tramite Stripe.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Come faccio a sapere se il mio ordine e stato confermato?</button>
+        <div class="faq-answer">
+          <p>Riceverai un'email di conferma all'indirizzo fornito in fase di checkout.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spedizioni -->
+    <div class="faq-category">
+      <h2>Spedizioni</h2>
+
+      <div class="faq-item">
+        <button class="faq-question">Quanto costa la spedizione?</button>
+        <div class="faq-answer">
+          <p>La spedizione e gratuita per ordini superiori a 35 euro. Sotto soglia, il costo e 4,90 euro.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">In quanti giorni ricevo l'ordine?</button>
+        <div class="faq-answer">
+          <p>Consegna in 2-4 giorni lavorativi in tutta Italia.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Spedite anche all'estero?</button>
+        <div class="faq-answer">
+          <p>Al momento spediamo solo in Italia. Stiamo lavorando per attivare le spedizioni internazionali.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prodotti -->
+    <div class="faq-category">
+      <h2>Prodotti</h2>
+
+      <div class="faq-item">
+        <button class="faq-question">I prodotti Fior di Funghi sono senza glutine?</button>
+        <div class="faq-answer">
+          <p>Si, le salse Fior di Funghi sono certificate Gluten Free.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Come si conservano le salse squeeze?</button>
+        <div class="faq-answer">
+          <p>Prima dell'apertura: a temperatura ambiente, lontano da fonti di calore. Dopo apertura: in frigorifero, consumare entro 7 giorni.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">I prodotti sono adatti a diete vegane?</button>
+        <div class="faq-answer">
+          <p>Si, Paprika e BBQ e Teriyaki e Zenzero sono 100% vegane. Tartufo e Pecorino contiene latticini.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resi e Rimborsi -->
+    <div class="faq-category">
+      <h2>Resi e Rimborsi</h2>
+
+      <div class="faq-item">
+        <button class="faq-question">Posso restituire un prodotto?</button>
+        <div class="faq-answer">
+          <p>Accettiamo resi entro 14 giorni dalla consegna per prodotti non aperti. Contattaci a info@dialfunghi.it.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">Come richiedo un rimborso?</button>
+        <div class="faq-answer">
+          <p>Scrivi a info@dialfunghi.it con il numero d'ordine. Processiamo il rimborso entro 5 giorni lavorativi.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="faq-cta">
+  <div class="container text-center">
+    <span class="section-label">Non hai trovato la risposta?</span>
+    <h2 style="color:var(--color-text-light); margin-bottom:16px;">Contattaci<br><em style="font-style:italic; color:var(--color-accent);">direttamente.</em></h2>
+    <p style="color:rgba(245,236,215,0.5); margin-bottom:36px; max-width:440px; margin-inline:auto; font-size:0.95rem; line-height:1.7;">Siamo sempre felici di aiutarti.</p>
+    <div class="btn-group">
+      <a href="mailto:info@dialfunghi.it" class="btn btn--secondary btn--lg">
+        Scrivi un'email
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+      <a href="shop.html" class="btn btn--primary btn--lg">
+        Vai allo Shop
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo"><img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" loading="lazy" decoding="async"></div>
+        <p class="footer__tagline">Leader italiano nei funghi secchi premium dal 1992.</p>
+      </div>
+      <div>
+        <p class="footer__col-title">Shop</p>
+        <ul class="footer__links">
+          <li><a href="shop.html" class="footer__link">Tutti i prodotti</a></li>
+          <li><a href="shop.html?cat=fior-di-funghi" class="footer__link">Fior di Funghi</a></li>
+          <li><a href="shop.html?cat=box" class="footer__link">Box Regalo</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Naviga</p>
+        <ul class="footer__links">
+          <li><a href="index.html" class="footer__link">Home</a></li>
+          <li><a href="recipes.html" class="footer__link">Ricette</a></li>
+          <li><a href="faq.html" class="footer__link">FAQ</a></li>
+          <li><a href="cart.html" class="footer__link">Carrello</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Contatti</p>
+        <div class="footer__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          info@dialfunghi.it
+        </div>
+        <div class="footer__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Pergine Valsugana (TN)
+        </div>
+        <div style="margin-top:12px;">
+          <a href="https://www.dialfunghi.it" target="_blank" rel="noopener noreferrer" class="footer__link" style="color:var(--color-accent); font-weight:600;">
+            Sito ufficiale dialfunghi.it
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p class="footer__copy">&copy; 2025 Dial S.r.l. — P.IVA 02439500220</p>
+      <div class="footer__legal"><a href="#">Privacy</a><a href="#">Cookie</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-label="Carrello">
+  <div class="cart-sidebar__header">
+    <h2 class="cart-sidebar__title">Il tuo carrello</h2>
+    <button class="cart-sidebar__close" id="cartClose" aria-label="Chiudi">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-sidebar__shipping-bar">
+    <p class="shipping-text" id="shippingText">Aggiungi prodotti al carrello</p>
+    <div class="shipping-progress"><div class="shipping-progress__fill" id="shippingFill" style="width:0%"></div></div>
+  </div>
+  <div class="cart-sidebar__items" id="cartItems"></div>
+  <div class="cart-sidebar__footer" id="cartFooter" style="display:none;">
+    <div class="cart-sidebar__subtotal"><span>Subtotale</span><span id="cartSubtotal">€0,00</span></div>
+    <div class="cart-sidebar__shipping-line"><span>Spedizione</span><span id="cartShipping">€4,90</span></div>
+    <div class="cart-sidebar__total"><span>Totale</span><span id="cartTotal">€0,00</span></div>
+    <a href="cart.html" class="btn btn--primary cart-sidebar__checkout-btn">Vai al checkout <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+</aside>
+
+<div id="cursor" aria-hidden="true"><svg class="cursor-mushroom" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:28px;"><path d="M12 2 C6 2 2 7 2 11 C2 13 4 14 6 14 L18 14 C20 14 22 13 22 11 C22 7 18 2 12 2Z" fill="#E85320"/><rect x="9" y="14" width="6" height="10" rx="3" fill="#F5ECD7"/><circle cx="9" cy="9" r="1.5" fill="white" opacity="0.8"/><circle cx="15" cy="8" r="1" fill="white" opacity="0.8"/><circle cx="13" cy="12" r="1" fill="white" opacity="0.6"/></svg></div>
+<div id="cursor-dot" aria-hidden="true"></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- FAQ Accordion Script -->
+<script>
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const answer = btn.nextElementSibling;
+    const isOpen = answer.style.maxHeight;
+    document.querySelectorAll('.faq-answer').forEach(a => a.style.maxHeight = null);
+    document.querySelectorAll('.faq-question').forEach(b => b.classList.remove('active'));
+    if (!isOpen) {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      btn.classList.add('active');
+    }
+  });
+});
+</script>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis Smooth Scroll -->
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+<script src="products-logic.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>

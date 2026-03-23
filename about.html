@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Siamo — Dial Funghi | Dal Bosco alla Tua Tavola dal 1992</title>
+  <meta name="description" content="Scopri la storia di Dial Funghi: dal 1992 a Pergine Valsugana portiamo i sapori autentici del Trentino sulle tavole italiane.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ============================================================
+       ABOUT PAGE STYLES
+       ============================================================ */
+
+    /* Timeline Section */
+    .about-timeline {
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+      padding-left: 40px;
+    }
+
+    .about-timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--color-accent), var(--color-gold));
+      border-radius: 1px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 48px;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      border: 3px solid var(--color-bg);
+      box-shadow: 0 0 0 2px var(--color-accent);
+    }
+
+    .timeline-item__year {
+      font-family: var(--font-title);
+      font-size: 2rem;
+      color: var(--color-accent);
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .timeline-item__text {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--color-text);
+      max-width: 500px;
+    }
+
+    /* Values Section */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    @media (max-width: 900px) {
+      .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .value-card {
+      background: rgba(255, 248, 240, 0.03);
+      border: 1px solid rgba(200, 165, 90, 0.15);
+      border-radius: 16px;
+      padding: 32px 28px;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .value-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200, 165, 90, 0.35);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .value-card__icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .value-card__icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: #fff;
+    }
+
+    .value-card__title {
+      font-family: var(--font-title);
+      font-size: 1.25rem;
+      color: var(--color-text-light);
+      margin-bottom: 12px;
+    }
+
+    .value-card__text {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(245, 236, 215, 0.6);
+    }
+
+    /* Certifications Section */
+    .cert-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .cert-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 24px 32px;
+      background: rgba(255, 248, 240, 0.02);
+      border: 1px solid rgba(200, 165, 90, 0.12);
+      border-radius: 12px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .cert-badge:hover {
+      transform: translateY(-2px);
+      border-color: rgba(200, 165, 90, 0.3);
+    }
+
+    .cert-badge__icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, rgba(232, 114, 42, 0.1), rgba(197, 165, 90, 0.1));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cert-badge__icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--color-gold);
+    }
+
+    .cert-badge__name {
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text);
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .cert-badges {
+        gap: 16px;
+      }
+      .cert-badge {
+        padding: 20px 24px;
+        flex: 1 1 calc(50% - 16px);
+        min-width: 140px;
+      }
+    }
+
+    /* CTA Section */
+    .about-cta__buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 36px;
+    }
+
+    /* Section spacing adjustments */
+    .about-section {
+      padding: 80px 0;
+    }
+
+    @media (max-width: 768px) {
+      .about-section {
+        padding: 60px 0;
+      }
+      .about-timeline {
+        padding-left: 32px;
+      }
+      .about-timeline::before {
+        left: 6px;
+      }
+      .timeline-item::before {
+        left: -28px;
+        width: 12px;
+        height: 12px;
+      }
+      .timeline-item__year {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Effetto 15: Scroll progress bar -->
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<!-- Effetto 11: Page Loader -->
+<div id="page-loader" aria-hidden="true">
+  <div class="loader-logo">
+    <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" style="height:48px;width:auto;">
+  </div>
+  <div class="loader-bar"><span class="loader-bar__fill"></span></div>
+</div>
+
+<!-- Effetto 12: Transition Overlay -->
+<div id="transition-overlay" aria-hidden="true"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" style="height:44px;width:auto;">
+    </a>
+    <ul class="navbar__nav">
+      <li><a href="index.html" class="navbar__link" onclick="sessionStorage.setItem('came-from-home','1')">Home</a></li>
+      <li><a href="shop.html" class="navbar__link">Shop</a></li>
+      <li><a href="recipes.html" class="navbar__link">Ricette</a></li>
+      <li><a href="about.html" class="navbar__link" style="color:var(--color-text-light);">Chi Siamo</a></li>
+    </ul>
+    <div class="navbar__actions">
+      <button class="navbar__cart-btn" id="cartToggle" aria-label="Apri carrello">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrello
+        <span class="navbar__cart-count" id="cartCount">0</span>
+      </button>
+      <button class="navbar__hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-label">La nostra storia</span>
+    <h1>Dal bosco alla<br><em style="font-style:italic; color:var(--color-accent);">tua tavola.</em></h1>
+    <p>La storia di Dial Funghi inizia nel 1992 a Pergine Valsugana, nel cuore del Trentino.</p>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave-divider" style="background:#1C0E05; margin-top:-1px;">
+  <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 C480,48 960,0 1440,48 L1440,0 L0,0 Z" fill="#1C0E05"/>
+  </svg>
+</div>
+
+<!-- TIMELINE SECTION -->
+<section class="about-section" style="background:var(--color-bg);">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:48px;">
+      <span class="section-label">Dal 1992 ad oggi</span>
+      <h2 style="font-family:var(--font-title); font-size:2.5rem; color:var(--color-text); margin-top:12px;">La Nostra Storia</h2>
+    </div>
+
+    <div class="about-timeline">
+      <div class="timeline-item">
+        <div class="timeline-item__year">1992</div>
+        <p class="timeline-item__text">Dial Funghi nasce a Pergine Valsugana. La missione: portare i sapori autentici del Trentino sulle tavole italiane.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-item__year">2000</div>
+        <p class="timeline-item__text">Lancio del marchio Oro della Montagna per il mercato italiano. Funghi secchi e condimenti di alta qualita.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-item__year">2010</div>
+        <p class="timeline-item__text">Lancio del marchio Bosco's per i mercati internazionali. L'export porta il gusto trentino in Europa.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-item__year">2024</div>
+        <p class="timeline-item__text">Nasce Fior di Funghi: la prima linea di salse ai funghi in formato squeeze. Un'innovazione nel settore food italiano.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES SECTION -->
+<section class="about-section" style="background:var(--color-bg-dark);">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">I nostri valori</span>
+      <h2 style="font-family:var(--font-title); font-size:2.5rem; color:var(--color-text-light); margin-top:12px;">Qualita, Territorio, Innovazione</h2>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <h3 class="value-card__title">Qualita Artigianale</h3>
+        <p class="value-card__text">Selezioniamo personalmente i funghi. Solo le migliori qualita italiane entrano nei nostri prodotti.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <h3 class="value-card__title">Territorio</h3>
+        <p class="value-card__text">Il Trentino e la nostra casa. I boschi di Pergine Valsugana sono la nostra ispirazione costante.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <h3 class="value-card__title">Innovazione</h3>
+        <p class="value-card__text">Fior di Funghi e la prova che tradizione e innovazione non sono opposti. Sono la stessa cosa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS SECTION -->
+<section class="about-section" style="background:var(--color-bg);">
+  <div class="container text-center">
+    <span class="section-label">Standard elevati</span>
+    <h2 style="font-family:var(--font-title); font-size:2.5rem; color:var(--color-text); margin-top:12px;">Certificazioni e Qualita</h2>
+    <p style="color:var(--color-text-muted); max-width:500px; margin:20px auto 0; font-size:1rem; line-height:1.7;">Ogni prodotto Dial Funghi rispetta gli standard piu elevati del settore alimentare.</p>
+
+    <div class="cert-badges">
+      <div class="cert-badge">
+        <div class="cert-badge__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <span class="cert-badge__name">BRC Certified</span>
+      </div>
+
+      <div class="cert-badge">
+        <div class="cert-badge__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <span class="cert-badge__name">IFS Food</span>
+      </div>
+
+      <div class="cert-badge">
+        <div class="cert-badge__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+          </svg>
+        </div>
+        <span class="cert-badge__name">Gluten Free</span>
+      </div>
+
+      <div class="cert-badge">
+        <div class="cert-badge__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+            <line x1="4" y1="22" x2="4" y2="15"/>
+          </svg>
+        </div>
+        <span class="cert-badge__name">Made in Italy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="about-section" style="background:var(--color-bg-dark);">
+  <div class="container text-center">
+    <span class="section-label">Pronto a scoprire?</span>
+    <h2 style="font-family:var(--font-title); font-size:2.5rem; color:var(--color-text-light); margin-top:12px;">Scopri i Nostri<br><em style="font-style:italic; color:var(--color-accent);">Prodotti.</em></h2>
+
+    <div class="about-cta__buttons">
+      <a href="shop.html" class="btn btn--primary btn--lg">
+        Vai allo Shop
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="contact.html" class="btn btn--outline btn--lg">Contattaci</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo"><img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" loading="lazy" decoding="async"></div>
+        <p class="footer__tagline">Leader italiano nei funghi secchi premium dal 1992.</p>
+      </div>
+      <div>
+        <p class="footer__col-title">Shop</p>
+        <ul class="footer__links">
+          <li><a href="shop.html" class="footer__link">Tutti i prodotti</a></li>
+          <li><a href="shop.html?cat=fior-di-funghi" class="footer__link">Fior di Funghi</a></li>
+          <li><a href="shop.html?cat=box" class="footer__link">Box Regalo</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Naviga</p>
+        <ul class="footer__links">
+          <li><a href="index.html" class="footer__link">Home</a></li>
+          <li><a href="recipes.html" class="footer__link">Ricette</a></li>
+          <li><a href="about.html" class="footer__link">Chi Siamo</a></li>
+          <li><a href="cart.html" class="footer__link">Carrello</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Contatti</p>
+        <div class="footer__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          info@dialfunghi.it
+        </div>
+        <div class="footer__contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="footer__contact-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Pergine Valsugana (TN)
+        </div>
+        <div style="margin-top:12px;">
+          <a href="https://www.dialfunghi.it" target="_blank" rel="noopener noreferrer" class="footer__link" style="color:var(--color-accent); font-weight:600;">
+            Sito ufficiale dialfunghi.it ↗
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p class="footer__copy">&copy; 2025 Dial S.r.l. — P.IVA 02439500220</p>
+      <div class="footer__legal"><a href="#">Privacy</a><a href="#">Cookie</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-label="Carrello">
+  <div class="cart-sidebar__header">
+    <h2 class="cart-sidebar__title">Il tuo carrello</h2>
+    <button class="cart-sidebar__close" id="cartClose" aria-label="Chiudi">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-sidebar__shipping-bar">
+    <p class="shipping-text" id="shippingText">Aggiungi prodotti al carrello</p>
+    <div class="shipping-progress"><div class="shipping-progress__fill" id="shippingFill" style="width:0%"></div></div>
+  </div>
+  <div class="cart-sidebar__items" id="cartItems"></div>
+  <div class="cart-sidebar__footer" id="cartFooter" style="display:none;">
+    <div class="cart-sidebar__subtotal"><span>Subtotale</span><span id="cartSubtotal">€0,00</span></div>
+    <div class="cart-sidebar__shipping-line"><span>Spedizione</span><span id="cartShipping">€4,90</span></div>
+    <div class="cart-sidebar__total"><span>Totale</span><span id="cartTotal">€0,00</span></div>
+    <a href="cart.html" class="btn btn--primary cart-sidebar__checkout-btn">Vai al checkout <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+</aside>
+
+<div id="cursor" aria-hidden="true"><svg class="cursor-mushroom" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:28px;"><path d="M12 2 C6 2 2 7 2 11 C2 13 4 14 6 14 L18 14 C20 14 22 13 22 11 C22 7 18 2 12 2Z" fill="#E85320"/><rect x="9" y="14" width="6" height="10" rx="3" fill="#F5ECD7"/><circle cx="9" cy="9" r="1.5" fill="white" opacity="0.8"/><circle cx="15" cy="8" r="1" fill="white" opacity="0.8"/><circle cx="13" cy="12" r="1" fill="white" opacity="0.6"/></svg></div>
+<div id="cursor-dot" aria-hidden="true"></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis Smooth Scroll -->
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+<script src="products-logic.js"></script>
+<script src="scripts.js"></script>
+</body>
+</html>

@@ -4139,3 +4139,84 @@ body .hero {
 }
 
 /* Mushroom divider — rimosso V23 */
+
+/* ============================================================
+   MOBILE FIXES — Sprint 3
+   ============================================================ */
+
+/* Forest intro: image fallback on mobile (no Three.js canvas) */
+@media (max-width: 767px) {
+  #forest-intro {
+    background: url('IMMAGINI /foto bosco animazioni /foto bosco 4.png') center/cover no-repeat;
+  }
+  #forest-intro canvas,
+  #forest-particles {
+    display: none !important;
+  }
+  #forest-intro::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(13, 7, 2, 0.5);
+    z-index: 1;
+  }
+  #forest-logo { z-index: 5; }
+}
+
+/* Custom cursor: hide on touch devices */
+@media (hover: none), (pointer: coarse) {
+  #cursor,
+  #cursor-dot {
+    display: none !important;
+  }
+  * { cursor: auto !important; }
+}
+
+/* Mobile: ensure minimum 44px tap targets for buttons/links */
+@media (max-width: 767px) {
+  .btn,
+  .navbar__link,
+  .filter-btn,
+  .gamma-tab {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Hero text: prevent overflow */
+  .hero__headline {
+    font-size: clamp(36px, 9vw, 56px);
+    word-break: break-word;
+  }
+
+  .hero__subline {
+    font-size: 0.95rem;
+    padding: 0 8px;
+  }
+
+  .hero__ctas {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .hero__ctas .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Gamma grid: 2 columns on mobile */
+  .gamma__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+
+  /* Product cards compact on mobile */
+  .gamma__card {
+    padding: 12px;
+  }
+
+  .gamma__card img {
+    height: 120px;
+  }
+}
