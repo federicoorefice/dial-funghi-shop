@@ -18,9 +18,6 @@
 </head>
 <body>
 
-<!-- Spotlight cursor globale — canvas fisso full-page -->
-<canvas id="global-spotlight" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9990;opacity:0;"></canvas>
-
 <!-- INTRO BOSCO ANIMAZIONE -->
 <div id="forest-intro" aria-hidden="true">
   <div id="forest-slides">
@@ -208,22 +205,21 @@
      4 GUSTI FIOR DI FUNGHI — Scroll Pinning
      ============================================================ -->
 <section class="gusti-scroll" id="gusti">
-  <canvas id="gusti-particles" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;" aria-hidden="true"></canvas>
   <!-- Lato sinistro: bottiglia sticky -->
   <div class="gusti-scroll__sticky">
     <div class="gusti-bottle-container">
       <img id="gusto-img-1" class="gusto-bottle active"
            src="IMMAGINI /fior di funghi prodotti /flaconi shop /porcini e speck render .png"
-           alt="Porcini e Speck">
+           alt="Porcini e Speck" loading="lazy" decoding="async">
       <img id="gusto-img-2" class="gusto-bottle"
            src="IMMAGINI /fior di funghi prodotti /flaconi shop /tartufo e pecorino render.png"
-           alt="Tartufo e Pecorino">
+           alt="Tartufo e Pecorino" loading="lazy" decoding="async">
       <img id="gusto-img-3" class="gusto-bottle"
            src="IMMAGINI /fior di funghi prodotti /flaconi shop /bbq e paprika.png"
-           alt="Paprika e BBQ">
+           alt="Paprika e BBQ" loading="lazy" decoding="async">
       <img id="gusto-img-4" class="gusto-bottle"
            src="IMMAGINI /fior di funghi prodotti /flaconi shop /teriaky e zenzero render.png"
-           alt="Teriyaki e Zenzero">
+           alt="Teriyaki e Zenzero" loading="lazy" decoding="async">
     </div>
   </div>
   <!-- Lato destro: 4 gusti che scorrono -->
@@ -464,7 +460,7 @@
         <img
           src="IMMAGINI /foto aziende dial /stabilimento/stabilimento 1.jpg"
           alt="Stabilimento Dial Funghi — Pergine Valsugana"
-          loading="lazy"
+          loading="lazy" decoding="async"
         >
       </div>
     </div>
@@ -482,7 +478,7 @@
         <img
           src="IMMAGINI /foto aziende dial /lab/lab 1.png"
           alt="Laboratorio Dial Funghi"
-          loading="lazy"
+          loading="lazy" decoding="async"
         >
       </div>
     </div>
@@ -533,7 +529,7 @@
       <div class="cert-card">
         <div class="cert-card-inner">
           <div class="cert-card-front">
-            <img src="IMMAGINI /certificazioni /brc render.png" alt="BRC Food Safety" class="cert-card__logo" loading="lazy">
+            <img src="IMMAGINI /certificazioni /brc render.png" alt="BRC Food Safety" class="cert-card__logo" loading="lazy" decoding="async">
             <span class="cert-card__name">BRC Food Safety</span>
           </div>
           <div class="cert-card-back">
@@ -546,7 +542,7 @@
       <div class="cert-card">
         <div class="cert-card-inner">
           <div class="cert-card-front">
-            <img src="IMMAGINI /certificazioni /ifs render.png" alt="IFS Food" class="cert-card__logo" loading="lazy">
+            <img src="IMMAGINI /certificazioni /ifs render.png" alt="IFS Food" class="cert-card__logo" loading="lazy" decoding="async">
             <span class="cert-card__name">IFS Food</span>
           </div>
           <div class="cert-card-back">
@@ -559,7 +555,7 @@
       <div class="cert-card">
         <div class="cert-card-inner">
           <div class="cert-card-front">
-            <img src="IMMAGINI /certificazioni /CERTIFICAZIONE BIO RENDER.png" alt="ICEA Biologico" class="cert-card__logo" loading="lazy">
+            <img src="IMMAGINI /certificazioni /CERTIFICAZIONE BIO RENDER.png" alt="ICEA Biologico" class="cert-card__logo" loading="lazy" decoding="async">
             <span class="cert-card__name">ICEA Biologico</span>
           </div>
           <div class="cert-card-back">
@@ -572,7 +568,7 @@
       <div class="cert-card">
         <div class="cert-card-inner">
           <div class="cert-card-front">
-            <img src="IMMAGINI /certificazioni /vegan certificazione.png" alt="Qualità Vegan" class="cert-card__logo" loading="lazy">
+            <img src="IMMAGINI /certificazioni /vegan certificazione.png" alt="Qualità Vegan" class="cert-card__logo" loading="lazy" decoding="async">
             <span class="cert-card__name">Qualità Vegan</span>
           </div>
           <div class="cert-card-back">
@@ -585,7 +581,7 @@
       <div class="cert-card">
         <div class="cert-card-inner">
           <div class="cert-card-front">
-            <img src="IMMAGINI /certificazioni /euk.png" alt="EUK" class="cert-card__logo" loading="lazy">
+            <img src="IMMAGINI /certificazioni /euk.png" alt="EUK" class="cert-card__logo" loading="lazy" decoding="async">
             <span class="cert-card__name">EUK</span>
           </div>
           <div class="cert-card-back">
@@ -839,7 +835,7 @@
       <!-- Col 1: Brand -->
       <div>
         <div class="footer__logo">
-          <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" style="height:44px;width:auto;">
+          <img src="IMMAGINI /logo dial /logo dial funghi .png" alt="Dial Funghi" style="height:44px;width:auto;" loading="lazy" decoding="async">
         </div>
         <p class="footer__dial-tagline">Fior di Funghi è un marchio Dial S.r.l.</p>
         <p class="footer__tagline" style="margin-top:8px;">
@@ -983,9 +979,6 @@
   </svg>
 </div>
 <div id="cursor-dot" aria-hidden="true"></div>
-
-<!-- Effetto 6: Liquid Splash Canvas -->
-<canvas id="splashCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:0.75;" aria-hidden="true"></canvas>
 
 <!-- Scripts -->
   <!-- GSAP -->

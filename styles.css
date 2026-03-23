@@ -20,8 +20,8 @@
   --color-text:          #1A1A1A;
   --color-text-light:    #FFFFFF;
   --color-text-muted:    #666666;
-  --color-accent:        #C8281E;
-  --color-accent-red:    #C8281E;
+  --color-accent:        #E8722A;
+  --color-accent-red:    #E8722A;
   --color-accent-orange: #E85320;
   --color-accent-blue:   #2D6FA3;
   --color-gold:          #C8860A;
@@ -46,7 +46,7 @@
   --shadow-sm:    0 2px 12px rgba(0,0,0,0.06);
   --shadow-md:    0 8px 32px rgba(0,0,0,0.10);
   --shadow-lg:    0 20px 60px rgba(0,0,0,0.15);
-  --shadow-glow:  0 0 40px rgba(200,40,30,0.25);
+  --shadow-glow:  0 0 40px rgba(232,114,42,0.25);
 
   --nav-h:        72px;
   --section-pad:  clamp(64px, 8vw, 120px);
@@ -449,6 +449,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   position: relative;
   min-height: 100vh;
   background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,114,42,0.06) 0%, transparent 70%),
     radial-gradient(ellipse 70% 55% at 50% 45%, rgba(180,50,15,0.16) 0%, transparent 65%),
     radial-gradient(ellipse 45% 35% at 50% 75%, rgba(200,134,10,0.09) 0%, transparent 60%),
     #0D0702;
@@ -3250,7 +3251,7 @@ section[id] { scroll-margin-top: 84px; }
 .btn-primary:hover::after { transform: translateX(0); }
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(200,40,30,0.35);
+  box-shadow: 0 12px 32px rgba(232,114,42,0.35);
 }
 
 /* --- Tab Btn V2 --- */
@@ -3673,6 +3674,8 @@ body.cursor-circle #cursor.hover {
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(circle at 20% 30%, rgba(232,114,42,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(197,165,90,0.06) 0%, transparent 50%),
     radial-gradient(ellipse 120% 60% at 20% 30%, rgba(180,60,10,0.12) 0%, transparent 60%),
     radial-gradient(ellipse 80% 80% at 80% 70%, rgba(200,134,10,0.08) 0%, transparent 60%),
     radial-gradient(ellipse 60% 40% at 50% 10%, rgba(232,83,32,0.06) 0%, transparent 50%);
@@ -3806,7 +3809,7 @@ body.cursor-circle #cursor.hover {
 .card-drip__svg { width: 100%; }
 [data-gusto="porcini-speck"]    .card-drip { color: #7B4B2A; }
 [data-gusto="tartufo-pecorino"] .card-drip { color: #5a4a3a; }
-[data-gusto="paprika-bbq"]      .card-drip { color: #C8281E; }
+[data-gusto="paprika-bbq"]      .card-drip { color: #E8722A; }
 [data-gusto="teriyaki-zenzero"] .card-drip { color: #2D5016; }
 
 /* ----- Effetto 8: Hero Canvas particles ----- */
