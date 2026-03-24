@@ -1001,45 +1001,40 @@ function initProductPage() {
 
 /* ============================================================
    PRODUCT RECIPES — ricette correlate al prodotto selezionato
+   Legge direttamente da RECIPES (recipes-data.json) per
+   immagini, titoli e ID sempre coerenti.
    ============================================================ */
-const PRODUCT_RECIPES = {
-  'ffps-180-01': [
-    { id: 'porcini-speck-risotto',  img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png',         name: 'Risotto cremoso al fungo',          alt: 'Risotto ai porcini' },
-    { id: 'porcini-speck-bruschette', img: 'IMMAGINI/fior di funghi prodotti/ricette/teriaky zenzero e salmone .png', name: 'Bruschette autunnali',              alt: 'Bruschette porcini e speck' }
-  ],
-  'fftap-180-01': [
-    { id: 'tartufo-pecorino-tagliolini', img: 'IMMAGINI/fior di funghi prodotti/ricette/tartufo e pecorino .png', name: 'Tagliolini al tartufo',               alt: 'Tagliolini tartufo' },
-    { id: 'tartufo-pecorino-toast',     img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png',     name: 'Toast gourmet al tartufo',            alt: 'Toast tartufo e pecorino' }
-  ],
-  'ffpab-180-01': [
-    { id: 'paprika-bbq-hotdog',    img: 'IMMAGINI/fior di funghi prodotti/ricette/panino bbq.png',                name: 'Hot dog gourmet ai funghi',          alt: 'Panino BBQ funghi' },
-    { id: 'paprika-bbq-patatine',  img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png',          name: 'Patatine al forno BBQ',              alt: 'Patatine BBQ' }
-  ],
-  'fft-180-01': [
-    { id: 'teriyaki-salmone',      img: 'IMMAGINI/fior di funghi prodotti/ricette/teriaky zenzero e salmone .png', name: 'Salmone alla brace teriyaki',        alt: 'Salmone teriyaki' },
-    { id: 'teriyaki-pollo-bowl',   img: 'IMMAGINI/fior di funghi prodotti/ricette/panino bbq.png',                name: 'Bowl di pollo teriyaki',             alt: 'Bowl teriyaki' }
-  ]
+const PRODUCT_GUSTO_MAP = {
+  'ffps-180-01':  'porcini-speck',
+  'fftap-180-01': 'tartufo-pecorino',
+  'ffpab-180-01': 'paprika-bbq',
+  'fft-180-01':   'teriyaki-zenzero'
 };
 
 function renderProductRecipes(product) {
   const wrap = document.getElementById('productRecipesWrap');
   const grid = document.getElementById('productRecipesGrid');
   if (!wrap || !grid) return;
+  if (typeof RECIPES === 'undefined') return;
 
-  const recipes = PRODUCT_RECIPES[product.id];
-  if (!recipes || recipes.length === 0) return;
+  const gusto = PRODUCT_GUSTO_MAP[product.id];
+  if (!gusto) return;
 
-  grid.innerHTML = recipes.map(r => `
-    <a href="recipes.html?recipe=${r.id}" class="product-recipe-card">
-      <div class="product-recipe-card__img" style="background:var(--color-surface-warm);border-radius:var(--radius-md);aspect-ratio:16/9;overflow:hidden;margin-bottom:12px;">
-        <img src="${r.img}" alt="${r.alt}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">
-      </div>
-      <span class="product-recipe-card__label">Ricetta</span>
-      <p class="product-recipe-card__name">${r.name}</p>
-      <span class="product-recipe-card__link">Apri ricetta →</span>
-    </a>`).join('');
+  // Filtra ricette per gusto del prodotto, prendi le prime 2
+  const matched = RECIPES.filter(function(r) { return r.gusto === gusto; }).slice(0, 2);
+  if (matched.length === 0) return;
 
-  // Bottone "Tutte le ricette" già nel HTML — aggiorna il testo del primo link
+  grid.innerHTML = matched.map(function(r) {
+    return '<a href="recipes.html?recipe=' + r.id + '" class="product-recipe-card">' +
+      '<div class="product-recipe-card__img" style="background:var(--color-surface-warm);border-radius:var(--radius-md);aspect-ratio:16/9;overflow:hidden;margin-bottom:12px;">' +
+        '<img src="' + r.image + '" alt="' + r.title + '" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">' +
+      '</div>' +
+      '<span class="product-recipe-card__label">Ricetta</span>' +
+      '<p class="product-recipe-card__name">' + r.title + '</p>' +
+      '<span class="product-recipe-card__link">Apri ricetta →</span>' +
+    '</a>';
+  }).join('');
+
   wrap.style.display = '';
 }
 
