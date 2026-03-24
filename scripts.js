@@ -1569,63 +1569,104 @@ function initMagneticButtons() {
   });
 }
 
-/* ----- Effetto 5: SCROLL PINNING GUSTI con bounce ----- */
-var activeBottle = null;
-var GUSTO_ACCENT_COLORS = { 1: '#7B4B2A', 2: '#3D3530', 3: '#E8722A', 4: '#2D5016' };
-
-function switchGusto(n) {
-  var next = document.getElementById('gusto-img-' + n);
-  if (!next || next === activeBottle) return;
-
-  // Nasconde bottiglia uscente
-  if (activeBottle) {
-    var prev = activeBottle;
-    gsap.killTweensOf(prev);
-    gsap.to(prev, {
-      opacity: 0, y: 20, scale: 0.95, duration: 0.25, ease: 'power2.in',
-      onComplete: function() { gsap.set(prev, { y: 0, scale: 1 }); }
-    });
-  }
-
-  // Mostra nuova bottiglia — cade dall'alto con bounce
-  activeBottle = next;
-  gsap.killTweensOf(next);
-  gsap.fromTo(next,
-    { opacity: 0, y: -120, scale: 0.88 },
-    { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'bounce.out', delay: 0.05 }
-  );
-
-  // Aggiorna accent color
-  var col = GUSTO_ACCENT_COLORS[n];
-  if (col) document.documentElement.style.setProperty('--gusto-accent', col);
-}
-
-function initGustiScrollPin() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  var slides = document.querySelectorAll('.gusto-slide');
+/* ----- Effetto 5: BLUR SLIDER GUSTI ----- */
+function initGustiSlider() {
+  var slides = document.querySelectorAll('.gusti-slide-item');
+  var textSlides = document.querySelectorAll('.gusto-slide');
+  var dots = document.querySelectorAll('.gusto-dot');
   if (!slides.length) return;
+  var current = 0;
+  var total = slides.length;
 
-  // Mostra la prima bottiglia via GSAP (non solo via CSS class)
-  var first = document.getElementById('gusto-img-1');
-  if (first) {
-    activeBottle = first;
-    gsap.set(first, { opacity: 0, y: -80, scale: 0.9 });
-    gsap.to(first, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'bounce.out', delay: 0.4 });
-    document.documentElement.style.setProperty('--gusto-accent', GUSTO_ACCENT_COLORS[1]);
+  function getState(index, cur) {
+    var diff = (index - cur + total) % total;
+    if (diff === 0) return 'active';
+    if (diff === 1) return 'next';
+    if (diff === total - 1) return 'prev';
+    return 'far';
   }
 
-  slides.forEach(function(slide, i) {
-    ScrollTrigger.create({
-      trigger: slide,
-      start: 'top 55%',
-      end: 'bottom 45%',
-      onEnter: function() { switchGusto(i + 1); },
-      onEnterBack: function() { switchGusto(i + 1); }
+  function updateSlider(newIndex) {
+    current = ((newIndex % total) + total) % total;
+    slides.forEach(function(slide, i) {
+      slide.dataset.state = getState(i, current);
     });
+    textSlides.forEach(function(text, i) {
+      text.classList.toggle('active', i === current);
+    });
+    dots.forEach(function(dot, i) {
+      dot.classList.toggle('active', i === current);
+    });
+  }
+
+  // Click su bottiglia
+  slides.forEach(function(slide, i) {
+    slide.addEventListener('click', function() { updateSlider(i); });
   });
 
-  // Ricalcola posizioni dopo layout completo
-  ScrollTrigger.refresh();
+  // Click su dot
+  dots.forEach(function(dot, i) {
+    dot.addEventListener('click', function() { updateSlider(i); });
+  });
+
+  // Swipe touch (mobile)
+  var touchStartX = 0;
+  var wrapper = document.querySelector('.gusti-slider-wrapper');
+  if (wrapper) {
+    wrapper.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; });
+    wrapper.addEventListener('touchend', function(e) {
+      var diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) updateSlider(current + (diff > 0 ? 1 : -1));
+    });
+  }
+
+  // Inizializza
+  updateSlider(0);
+}
+
+/* ----- B2: Decorative Particles per sezioni secondarie ----- */
+function addDecorativeParticles(sectionSelector) {
+  var section = document.querySelector(sectionSelector);
+  if (!section) return;
+  section.classList.add('particles-bg');
+  for (var i = 0; i < 8; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'decorative-dot';
+    dot.style.cssText =
+      'position:absolute;' +
+      'width:' + (Math.random() * 6 + 4) + 'px;' +
+      'height:' + (Math.random() * 6 + 4) + 'px;' +
+      'border-radius:50%;' +
+      'background:#E8722A;' +
+      'opacity:' + (Math.random() * 0.3 + 0.05) + ';' +
+      'top:' + (Math.random() * 100) + '%;' +
+      'left:' + (Math.random() * 100) + '%;' +
+      'pointer-events:none;' +
+      'animation:floatDot ' + (Math.random() * 4 + 6) + 's ease-in-out infinite;' +
+      'animation-delay:-' + (Math.random() * 8) + 's;';
+    section.appendChild(dot);
+  }
+}
+
+/* ----- B3: Parallax Bottiglie Hero ----- */
+function initHeroBottleParallax() {
+  if (window.innerWidth < 768) return;
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  var bottles = document.querySelectorAll('.hero-bottle');
+  if (!bottles.length) return;
+  var speeds = [40, -30, 35, -25];
+  bottles.forEach(function(bottle, i) {
+    gsap.to(bottle, {
+      y: speeds[i % speeds.length],
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.5
+      }
+    });
+  });
 }
 
 /* ----- Effetto 6: LIQUID SPLASH CURSOR — RIMOSSO (Sprint 1 performance) ----- */
@@ -2046,7 +2087,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initReviewsSlider();
     initStoriaCounters();
     initHeroParticles();
-    initGustiScrollPin();
+    initGustiSlider();
+    initHeroBottleParallax();
+    addDecorativeParticles('#storia');
+    addDecorativeParticles('.section-certificazioni');
     initParallax();
     initCounterAnimation();
     initTextReveal();

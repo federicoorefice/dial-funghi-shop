@@ -624,7 +624,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 /* scroll-hint rimosso */
 
 .hero__visual {
-  display: none;  /* flaconi mostrati nella sezione gusti-scroll */
+  display: none;  /* flaconi mostrati nella hero-bottles-scene */
 }
 
 /* ----- Hero Bottles Scene: 4 bottiglie animate a ventaglio ----- */
@@ -3738,142 +3738,245 @@ body.cursor-circle #cursor.hover {
   animation-play-state: paused;
 }
 
-/* ----- Effetto 5: Gusti Scroll Pinning ----- */
-.gusti-scroll {
+/* ----- Effetto 5: Blur Slider Gusti ----- */
+.gusti-section {
+  background: #0D0702;
+  padding: 100px 0;
+  overflow: hidden;
+}
+
+.gusti-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 400vh;
-  background: #0D0702;
-  color: #FFFFFF;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  align-items: center;
+}
+
+/* --- Pannello testi --- */
+.gusti-text-panel {
   position: relative;
-  overflow: clip; /* NON overflow:hidden — romperebbe position:sticky */
-  transition: background-color 0.8s ease;
+  height: 280px;
 }
 
-/* Sfondo cosmico dinamico */
-.gusti-scroll::before {
-  content: '';
+.gusto-slide {
   position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(232,114,42,0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(197,165,90,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 120% 60% at 20% 30%, rgba(180,60,10,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 80% at 80% 70%, rgba(200,134,10,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 50% 10%, rgba(232,83,32,0.06) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Linea verticale decorativa centrale */
-.gusti-scroll::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 5%;
-  bottom: 5%;
-  width: 1px;
-  background: linear-gradient(to bottom, transparent 0%, rgba(232,83,32,0.20) 20%, rgba(232,83,32,0.35) 50%, rgba(232,83,32,0.20) 80%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-.gusti-scroll__sticky {
-  position: sticky;
   top: 0;
-  height: 100vh;
+  left: 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
+.gusto-slide.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.gusto-number {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--color-accent, #E8722A);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.gusto-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  color: #FFF8F0;
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+
+.gusto-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  color: rgba(255,248,240,0.7);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.gusto-cta {
+  display: inline-block;
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-accent, #E8722A);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-accent, #E8722A);
+  padding-bottom: 4px;
+}
+
+/* --- Slider bottiglie --- */
+.gusti-slider-wrapper {
+  position: relative;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gusti-slider {
+  position: relative;
+  width: 100%;
+  height: 450px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
 }
-.gusti-bottle-container {
-  position: relative;
-  width: 240px; /* stretto abbastanza da mostrare solo il fronte (no retro) */
-  height: 440px;
-  overflow: hidden; /* taglia il retro — non rompe sticky (è sul container, non sul parent) */
-  z-index: 10;
-}
-.gusto-bottle {
+
+.gusti-slide-item {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  /* Immagini fronte+retro affiancate — cover + left allinea sul fronte */
-  object-fit: cover;
-  object-position: 0% center;
-  opacity: 0; /* GSAP gestisce opacity — NON aggiungere transition qui */
-  pointer-events: none;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  width: 200px;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
 }
-/* Testi gusti */
-.gusto-slide h2 { color: #FFFFFF; }
-.gusto-slide p { color: rgba(255,255,255,0.72); }
-.gusto-slide__num { color: #E85320; }
-.gusti-scroll__slides {
-  display: flex;
-  flex-direction: column;
-  position: relative;
+
+.gusti-slide-item img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+  transition: filter 0.6s ease;
+}
+
+/* Stato ATTIVO: grande e nitido */
+.gusti-slide-item[data-state="active"] {
+  transform: scale(1) translateY(0) translateZ(0);
+  z-index: 3;
+  filter: none;
+}
+.gusti-slide-item[data-state="active"] img {
+  filter: drop-shadow(0 30px 60px rgba(232,114,42,0.3));
+}
+
+/* Stato PREV/NEXT: piccolo e sfocato */
+.gusti-slide-item[data-state="prev"] {
+  transform: scale(0.7) translateX(-60px) translateY(30px);
+  z-index: 2;
+}
+.gusti-slide-item[data-state="next"] {
+  transform: scale(0.7) translateX(60px) translateY(30px);
+  z-index: 2;
+}
+.gusti-slide-item[data-state="prev"] img,
+.gusti-slide-item[data-state="next"] img {
+  filter: blur(4px) brightness(0.5) drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+
+/* Stato FAR (2 posizioni di distanza): quasi invisibile */
+.gusti-slide-item[data-state="far"] {
+  transform: scale(0.5) translateY(60px);
+  opacity: 0.3;
   z-index: 1;
 }
-.gusto-slide {
-  height: 100vh;
+.gusti-slide-item[data-state="far"] img {
+  filter: blur(8px) brightness(0.3);
+}
+
+/* Dots */
+.gusti-dots {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 60px;
+  gap: 12px;
+  margin-top: 24px;
 }
-.gusto-slide__num {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  color: #E85320;
-  margin-bottom: 16px;
-  font-family: var(--font-label, 'Montserrat', sans-serif);
-  text-transform: uppercase;
-}
-.gusto-slide h2 {
-  font-family: var(--font-title, 'Playfair Display', serif);
-  font-size: clamp(40px, 5vw, 72px);
-  font-weight: 900;
-  margin-bottom: 16px;
-  line-height: 1.1;
-  color: #FFFFFF;
-}
-.gusto-slide p {
-  font-size: 1rem;
-  color: rgba(255,255,255,0.75);
-  margin-bottom: 28px;
-  max-width: 380px;
-  line-height: 1.65;
-}
-/* CTA su sfondo scuro gusti */
-.gusto-slide .btn--primary,
-.gusto-slide a[href*="product"] {
-  background: #E85320;
-  color: #fff;
+
+.gusto-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,248,240,0.3);
   border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
 }
-@media (max-width: 900px) {
-  .gusti-scroll {
+
+.gusto-dot.active {
+  background: var(--color-accent, #E8722A);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Mobile: stack verticale */
+@media (max-width: 768px) {
+  .gusti-layout {
     grid-template-columns: 1fr;
-    min-height: auto;
+    gap: 40px;
   }
-  .gusti-scroll__sticky {
-    position: relative;
-    height: 50vw;
-    min-height: 240px;
-    order: -1; /* bottiglia sopra i testi */
-  }
-  .gusti-bottle-container {
-    width: 200px;
-    height: 300px;
-  }
-  .gusti-scroll__slides { display: block; }
-  .gusto-slide {
+
+  .gusti-text-panel {
+    order: 2;
     height: auto;
-    padding: 40px 24px;
-    min-height: 50vh;
+    position: static;
   }
+
+  .gusto-slide {
+    position: static;
+    display: none;
+  }
+
+  .gusto-slide.active {
+    display: block;
+  }
+
+  .gusti-slider-wrapper {
+    order: 1;
+    height: 350px;
+  }
+}
+
+/* --- B2: Particelle CSS per sezioni secondarie --- */
+.particles-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.particles-bg::before,
+.particles-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color-accent, #E8722A);
+  opacity: 0.08;
+  pointer-events: none;
+  animation: floatParticle 8s ease-in-out infinite;
+}
+
+.particles-bg::before {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  right: -100px;
+  animation-delay: -2s;
+}
+
+.particles-bg::after {
+  width: 200px;
+  height: 200px;
+  bottom: -80px;
+  left: -60px;
+  animation-delay: -5s;
+}
+
+@keyframes floatParticle {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -15px) scale(1.05); }
+  66% { transform: translate(-10px, 10px) scale(0.95); }
+}
+
+@keyframes floatDot {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
 /* ----- Effetto 7: Sauce Drip ----- */
@@ -4061,7 +4164,7 @@ body.cursor-circle #cursor.hover {
 /* Arancio/rosso su sfondo bianco: usa #B8411A (5.1:1) invece di #E85320 (3.2:1) */
 .product-card__brand,
 .section-label,
-.gusto-slide__num {
+.gusto-number {
   color: #B8411A;
 }
 
@@ -4168,7 +4271,7 @@ body .hero {
 @media (prefers-reduced-motion: reduce) {
   .marquee-xl__track { animation: none !important; }
   #cursor, #cursor-dot { display: none !important; }
-  .gusti-bottle img { transition: none !important; }
+  .gusti-slide-item { transition: none !important; }
   .card-drip { display: none !important; }
   #page-loader { display: none !important; }
   #transition-overlay { display: none !important; }
