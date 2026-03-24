@@ -3935,6 +3935,49 @@ body.cursor-circle #cursor.hover {
   }
 }
 
+/* --- USP Section --- */
+.usp-section {
+  background: var(--color-cream, #FFF8F0);
+  padding: 80px 40px;
+}
+
+.usp-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px;
+  text-align: center;
+}
+
+.usp-icon {
+  margin-bottom: 20px;
+}
+
+.usp-item h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: var(--color-dark, #2D2926);
+  margin-bottom: 12px;
+}
+
+.usp-item p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .usp-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .usp-section {
+    padding: 60px 24px;
+  }
+}
+
 /* --- B2: Particelle CSS per sezioni secondarie --- */
 .particles-bg {
   position: relative;
