@@ -370,16 +370,6 @@ function initHeroAnimation() {
    TICKER — popola con JS per garantire il loop
    ============================================================ */
 
-function initTickers() {
-  const tracks = $$('.ticker__track');
-  tracks.forEach(track => {
-    const tpl = track.querySelector('template');
-    if (!tpl) return;
-    const content = tpl.innerHTML;
-    // 4 copie per loop fluido
-    track.innerHTML = content + content + content + content;
-  });
-}
 
 /* ============================================================
    SCROLL REVEAL (Intersection Observer)
@@ -689,7 +679,6 @@ function initShopPage() {
       btn.setAttribute('aria-selected', 'true');
       const filter = btn.dataset.filter;
       if (filter === 'promo') {
-        // Mostra tutti i prodotti nella griglia e porta l'utente alla sezione promo
         renderShop('tutti');
         setBannerVisibility('tutti');
         setTimeout(() => {
@@ -700,16 +689,14 @@ function initShopPage() {
       renderShop(filter);
       setBannerVisibility(filter);
       window.history.replaceState(null, '', filter === 'tutti' ? 'shop.html' : `shop.html?cat=${filter}`);
-      
-      // Auto-scroll per portare i risultati in primo piano
+
+      // Scroll alla griglia prodotti dopo il filtro
       setTimeout(() => {
-        const filtersEl = document.getElementById('shopFilters');
-        if (filtersEl) {
-          // Calcoliamo la posizione tenendo conto della navbar (circa 80px)
-          const y = filtersEl.getBoundingClientRect().top + window.scrollY - 80;
-          window.scrollTo({ top: y, behavior: 'smooth' });
+        const gridEl = document.querySelector('#shopGrid, .products-grid, [class*="product-grid"]');
+        if (gridEl) {
+          gridEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }, 50);
+      }, 100);
     });
   });
 
@@ -2082,7 +2069,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Funzioni che NON dipendono dai dati prodotto — esegui subito
   if (isIndex) {
     initHeroAnimation();
-    initTickers();
     initCarousel();
     initReviewsSlider();
     initStoriaCounters();
@@ -2133,3 +2119,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+function initSporeCursor() {
+  if (window.matchMedia('(hover: none)').matches) return;
+  let lastSporeTime = 0;
+  document.addEventListener('mousemove', (e) => {
+    const now = Date.now();
+    if (now - lastSporeTime < 60) return;
+    lastSporeTime = now;
+    const spore = document.createElement('div');
+    spore.style.cssText = `
+      position:fixed; border-radius:50%; background:#E8722A;
+      opacity:0.75; pointer-events:none; z-index:9999;
+      width:${Math.random()*5+4}px; height:${Math.random()*5+4}px;
+      left:${e.clientX}px; top:${e.clientY}px;
+      transform:translate(-50%,-50%);
+      transition:opacity 0.7s ease, transform 0.7s ease;
+    `;
+    document.body.appendChild(spore);
+    requestAnimationFrame(() => {
+      spore.style.opacity = '0';
+      spore.style.transform = `translate(
+        calc(-50% + ${(Math.random()-0.5)*20}px),
+        calc(-50% + ${-Math.random()*18-5}px)
+      ) scale(0.2)`;
+    });
+    setTimeout(() => spore.remove(), 750);
+  });
+}
+document.addEventListener('DOMContentLoaded', initSporeCursor);

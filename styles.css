@@ -10,21 +10,33 @@
    1. CSS CUSTOM PROPERTIES
    ============================================================ */
 :root {
+  /* === PALETTE BOSCO === */
+  --color-bosco-notte:   #0D0F0A;
+  --color-terra:         #1A1F14;
+  --color-cream:         #FFF8F0;
+  --color-beige:         #F5EFE6;
+  --color-muschio:       #3D5A2E;
+  --color-dark:          #2D2926;
+  --bg-dark:             #0D0F0A;
+  --bg-dark-alt:         #1A1F14;
+  --bg-light:            #FFF8F0;
+  --bg-light-alt:        #F5EFE6;
+
   --gusto-accent:        #7B4B2A;
-  --color-bg:            #FFFFFF;
-  --color-bg-soft:       #F8F4EF;
-  --color-bg-dark:       #1A1A1A;
-  --color-bg-mid:        #2D2D2D;
+  --color-bg:            #FFF8F0;
+  --color-bg-soft:       #F5EFE6;
+  --color-bg-dark:       #0D0F0A;
+  --color-bg-mid:        #1A1F14;
   --color-surface:       #FFFFFF;
   --color-surface-warm:  #F8F4EF;
-  --color-text:          #1A1A1A;
-  --color-text-light:    #FFFFFF;
+  --color-text:          #2D2926;
+  --color-text-light:    #F0EDE8;
   --color-text-muted:    #666666;
   --color-accent:        #E8722A;
   --color-accent-red:    #E8722A;
   --color-accent-orange: #E85320;
   --color-accent-blue:   #2D6FA3;
-  --color-gold:          #C8860A;
+  --color-gold:          #C5A55A;
   --color-gold-light:    #F5C842;
   --color-green:         #2D5016;
   --color-border:        #E5DDD4;
@@ -533,7 +545,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
     radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,114,42,0.06) 0%, transparent 70%),
     radial-gradient(ellipse 70% 55% at 50% 45%, rgba(180,50,15,0.16) 0%, transparent 65%),
     radial-gradient(ellipse 45% 35% at 50% 75%, rgba(200,134,10,0.09) 0%, transparent 60%),
-    #0D0702;
+    var(--bg-dark);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -729,87 +741,9 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 /* ============================================================
    8. WAVE DIVIDER
    ============================================================ */
-.wave-divider {
-  display: block;
-  line-height: 0;
-  overflow: hidden;
-}
+.wave-divider { display:block; width:100%; height:60px; margin:-2px 0; overflow:hidden; }
+.wave-divider svg { width:100%; height:100%; display:block; }
 
-.wave-divider svg {
-  display: block;
-  width: 100%;
-}
-
-/* ============================================================
-   9. TICKER
-   ============================================================ */
-.ticker {
-  background: var(--color-accent);
-  overflow: hidden;
-  padding: 0;
-  position: relative;
-  z-index: 10;
-}
-
-.ticker__track {
-  display: flex;
-  width: max-content;
-  padding: 14px 0;
-}
-
-.ticker__track--fwd {
-  animation: tickerFwd 55s linear infinite;
-}
-
-.ticker__track--rev {
-  animation: tickerRev 65s linear infinite;
-}
-
-/* Pausa al hover */
-.ticker:hover .ticker__track--fwd,
-.ticker:hover .ticker__track--rev {
-  animation-play-state: paused;
-}
-
-.ticker__item {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding-inline: 32px;
-  font-family: var(--font-label);
-  font-size: 0.78rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #fff;
-  white-space: nowrap;
-}
-
-.ticker__separator {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.5);
-  flex-shrink: 0;
-}
-
-.ticker__line-2 {
-  background: var(--color-bg-mid);
-  margin-top: 1px;
-}
-
-.ticker__line-2 .ticker__item {
-  color: rgba(245,236,215,0.7);
-}
-
-@keyframes tickerFwd {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-@keyframes tickerRev {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
-}
 
 /* ============================================================
    10. PRODUCT CARDS
@@ -981,7 +915,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 .product-card h3,
 .product-card .product-card__name,
 .ff-card__name {
-  color: #1C0E05;
+  color: var(--bg-dark);
   font-weight: 700;
 }
 .product-card .gusto-badge,
@@ -2269,7 +2203,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   width: 75%;
   object-fit: contain;
   filter: none !important;
-  background: #FFF8F0;
+  background: var(--bg-light);
   -webkit-filter: none !important;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
@@ -2909,8 +2843,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   }
 
   .hero__bottle-img { animation: none; }
-  .ticker__track { animation: none; }
-  .hero__drip { animation: none; display: none; }
+.hero__drip { animation: none; display: none; }
   .hero__scroll-line::after { animation: none; }
 }
 
@@ -3708,7 +3641,7 @@ body.cursor-circle #cursor.hover {
 .marquee-xl {
   overflow: hidden;
   padding: 18px 0;
-  background: #1C0E05;
+  background: var(--bg-dark);
   border-top: 1px solid rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255,255,255,0.05);
   margin: 0;
@@ -3740,7 +3673,7 @@ body.cursor-circle #cursor.hover {
 
 /* ----- Effetto 5: Blur Slider Gusti ----- */
 .gusti-section {
-  background: #0D0702;
+  background: var(--bg-dark);
   padding: 100px 0;
   overflow: hidden;
 }
@@ -3782,7 +3715,7 @@ body.cursor-circle #cursor.hover {
   font-family: 'Oswald', sans-serif;
   font-size: 13px;
   letter-spacing: 3px;
-  color: var(--color-accent, #E8722A);
+  color: var(--color-accent, var(--color-accent));
   margin-bottom: 16px;
   text-transform: uppercase;
 }
@@ -3790,7 +3723,7 @@ body.cursor-circle #cursor.hover {
 .gusto-name {
   font-family: 'Playfair Display', serif;
   font-size: clamp(32px, 4vw, 52px);
-  color: #FFF8F0;
+  color: var(--bg-light);
   margin-bottom: 20px;
   line-height: 1.1;
 }
@@ -3809,9 +3742,9 @@ body.cursor-circle #cursor.hover {
   font-size: 14px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--color-accent, #E8722A);
+  color: var(--color-accent, var(--color-accent));
   text-decoration: none;
-  border-bottom: 1px solid var(--color-accent, #E8722A);
+  border-bottom: 1px solid var(--color-accent, var(--color-accent));
   padding-bottom: 4px;
 }
 
@@ -3902,7 +3835,7 @@ body.cursor-circle #cursor.hover {
 }
 
 .gusto-dot.active {
-  background: var(--color-accent, #E8722A);
+  background: var(--color-accent, var(--color-accent));
   width: 24px;
   border-radius: 4px;
 }
@@ -3937,7 +3870,7 @@ body.cursor-circle #cursor.hover {
 
 /* --- USP Section --- */
 .usp-section {
-  background: var(--color-cream, #FFF8F0);
+  background: var(--color-cream, var(--bg-light));
   padding: 80px 40px;
 }
 
@@ -3957,7 +3890,7 @@ body.cursor-circle #cursor.hover {
 .usp-item h3 {
   font-family: 'Playfair Display', serif;
   font-size: 24px;
-  color: var(--color-dark, #2D2926);
+  color: var(--color-dark, var(--color-dark));
   margin-bottom: 12px;
 }
 
@@ -3989,7 +3922,7 @@ body.cursor-circle #cursor.hover {
   content: '';
   position: absolute;
   border-radius: 50%;
-  background: var(--color-accent, #E8722A);
+  background: var(--color-accent, var(--color-accent));
   opacity: 0.08;
   pointer-events: none;
   animation: floatParticle 8s ease-in-out infinite;
@@ -4037,7 +3970,7 @@ body.cursor-circle #cursor.hover {
 .card-drip__svg { width: 100%; }
 [data-gusto="porcini-speck"]    .card-drip { color: #7B4B2A; }
 [data-gusto="tartufo-pecorino"] .card-drip { color: #5a4a3a; }
-[data-gusto="paprika-bbq"]      .card-drip { color: #E8722A; }
+[data-gusto="paprika-bbq"]      .card-drip { color: var(--color-accent); }
 [data-gusto="teriyaki-zenzero"] .card-drip { color: #2D5016; }
 
 /* ----- Effetto 8: Hero Canvas particles ----- */
@@ -4090,7 +4023,7 @@ body.cursor-circle #cursor.hover {
 .video-placeholder {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #1a0d05 0%, #2a1008 50%, #0D0702 100%);
+  background: linear-gradient(135deg, #1a0d05 0%, #2a1008 50%, var(--bg-dark) 100%);
   z-index: 0;
   overflow: hidden;
 }
@@ -4110,7 +4043,7 @@ body.cursor-circle #cursor.hover {
 #page-loader {
   position: fixed;
   inset: 0;
-  background: #0D0702;
+  background: var(--bg-dark);
   z-index: 199999;
   display: flex;
   flex-direction: column;
@@ -4147,7 +4080,7 @@ body.cursor-circle #cursor.hover {
 #transition-overlay {
   position: fixed;
   inset: 0;
-  background: #0D0702;
+  background: var(--bg-dark);
   z-index: 99998;
   transform: translateY(-100%);
   pointer-events: none;
@@ -4214,7 +4147,7 @@ body.cursor-circle #cursor.hover {
 /* Nomi prodotto su card chiare: marrone scuro leggibile */
 .product-card .product-card__name,
 .product-card h3 {
-  color: #1C0E05;
+  color: var(--bg-dark);
   font-weight: 700;
 }
 
@@ -4228,7 +4161,7 @@ body.cursor-circle #cursor.hover {
 /* Titoli sezione su sfondo chiaro */
 .section--warm h2,
 .section-ff h2 {
-  color: #1C0E05;
+  color: var(--bg-dark);
   font-weight: 800;
 }
 
@@ -4237,7 +4170,7 @@ body.cursor-circle #cursor.hover {
    ============================================================ */
 #forest-intro {
   position: fixed; inset: 0; z-index: 999999;
-  background: #0D0702;  /* stesso colore dell'hero per raccordo */
+  background: var(--bg-dark);  /* stesso colore dell'hero per raccordo */
   overflow: hidden;
 }
 
@@ -4345,7 +4278,7 @@ body .hero {
 /* Forest intro: image fallback on mobile (no Three.js canvas) */
 @media (max-width: 767px) {
   #forest-intro {
-    background: url('IMMAGINI /foto bosco animazioni /foto bosco 4.png') center/cover no-repeat;
+    background: url('IMMAGINI/foto bosco animazioni/foto bosco 4.png') center/cover no-repeat;
   }
   #forest-intro canvas,
   #forest-particles {
@@ -4417,4 +4350,23 @@ body .hero {
   .gamma__card img {
     height: 120px;
   }
+}
+
+/* === DARK PARTICLES === */
+.dark-particles { position:relative; overflow:hidden; }
+.dark-particles::before {
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    radial-gradient(circle 3px at 12% 22%, rgba(232,114,42,0.14) 0%, transparent 100%),
+    radial-gradient(circle 2px at 78% 58%, rgba(232,114,42,0.10) 0%, transparent 100%),
+    radial-gradient(circle 4px at 44% 78%, rgba(197,165,90,0.08) 0%, transparent 100%),
+    radial-gradient(circle 2px at 90% 18%, rgba(232,114,42,0.12) 0%, transparent 100%),
+    radial-gradient(circle 3px at 32% 68%, rgba(197,165,90,0.09) 0%, transparent 100%);
+  animation: darkPFloat 14s ease-in-out infinite alternate;
+}
+.dark-particles > * { position:relative; z-index:1; }
+@keyframes darkPFloat {
+  0%   { transform:translate(0,0) scale(1); }
+  50%  { transform:translate(6px,-8px) scale(1.02); }
+  100% { transform:translate(-4px,5px) scale(0.98); }
 }
