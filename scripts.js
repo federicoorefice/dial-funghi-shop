@@ -219,16 +219,31 @@ function $$(sel, ctx) { return [...(ctx || document).querySelectorAll(sel)]; }
    ============================================================ */
 
 const CART_KEY = 'dial_cart';
+const CART_EXPIRY_DAYS = 7;
 const FREE_SHIPPING = 30;
 const SHIPPING_COST = 4.90;
 
 function getCart() {
-  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
-  catch { return []; }
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    if (!raw) return [];
+    const data = JSON.parse(raw);
+    // Support both old format (array) and new format (object with expiry)
+    if (Array.isArray(data)) return data;
+    if (data.expires && Date.now() > data.expires) {
+      localStorage.removeItem(CART_KEY);
+      return [];
+    }
+    return data.items || [];
+  } catch { return []; }
 }
 
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  const data = {
+    items: cart,
+    expires: Date.now() + (CART_EXPIRY_DAYS * 24 * 60 * 60 * 1000)
+  };
+  localStorage.setItem(CART_KEY, JSON.stringify(data));
 }
 
 function addToCart(productId, qty = 1) {
@@ -1020,6 +1035,30 @@ function addPromoToCart(promoId) {
    PRODUCT PAGE
    ============================================================ */
 
+function injectProductSchema(product) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.fullName || product.name,
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand === 'fior-di-funghi' ? 'Fior di Funghi' : 'Dial Funghi'
+    },
+    "description": product.description,
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "EUR",
+      "price": product.price,
+      "availability": "https://schema.org/InStock",
+      "seller": { "@type": "Organization", "name": "Dial Funghi" }
+    }
+  };
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(schema);
+  document.head.appendChild(script);
+}
+
 function initProductPage() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -1035,6 +1074,9 @@ function initProductPage() {
 
   // Aggiorna titolo e meta
   document.title = `${product.fullName} — Dial Funghi`;
+
+  // Inject schema.org Product structured data
+  injectProductSchema(product);
 
   // Immagine — con auto-crop se scheda tecnica (ratio > 1.4)
   const img = $('#productImage');
