@@ -2237,3 +2237,10 @@ function initStickyGusti() {
 }
 
 document.addEventListener('DOMContentLoaded', initStickyGusti);
+
+/* ----- Flip card click support (mobile) ----- */
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.cert-card').forEach(function(card) {
+    card.addEventListener('click', function() { card.classList.toggle('flipped'); });
+  });
+});

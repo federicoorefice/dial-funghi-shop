@@ -4370,3 +4370,31 @@ body .hero {
   50%  { transform:translate(6px,-8px) scale(1.02); }
   100% { transform:translate(-4px,5px) scale(0.98); }
 }
+
+/* === PRODUCT RECIPES SECTION === */
+.product-recipes { padding: 40px 0; border-top: 1px solid var(--color-border, #E5DDD4); margin-top: 12px; }
+.product-recipes h3 { font-family: var(--font-title, 'Playfair Display', serif); font-size: 24px; margin-bottom: 24px; color: var(--color-text, #2D2926); }
+.product-recipes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+@media (max-width: 768px) { .product-recipes-grid { grid-template-columns: 1fr; } }
+.product-recipe-card { display: block; text-decoration: none; color: inherit; transition: transform 0.2s ease; }
+.product-recipe-card:hover { transform: translateY(-4px); }
+.product-recipe-card__label { font-family: var(--font-label); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); }
+.product-recipe-card__name { font-family: var(--font-title); font-size: 1.1rem; color: var(--color-text); margin: 6px 0; }
+.product-recipe-card__link { font-size: 0.85rem; color: var(--color-accent); font-weight: 600; }
+
+/* === FLIP CARD — click support (mobile) === */
+.cert-card.flipped .cert-card-inner { transform: rotateY(180deg); }
+
+/* === PRODUCT RECIPES SECTION === */
+.product-recipes { padding: 40px 0; border-top: 1px solid var(--color-border, #E5DDD4); margin-top: 12px; }
+.product-recipes h3 { font-family: var(--font-title, 'Playfair Display', serif); font-size: 24px; margin-bottom: 24px; color: var(--color-text, #2D2926); }
+.product-recipes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+@media (max-width: 768px) { .product-recipes-grid { grid-template-columns: 1fr; } }
+.product-recipe-card { display: block; text-decoration: none; color: inherit; transition: transform 0.2s ease; }
+.product-recipe-card:hover { transform: translateY(-4px); }
+.product-recipe-card__label { font-family: var(--font-label); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); }
+.product-recipe-card__name { font-family: var(--font-title); font-size: 1.1rem; color: var(--color-text); margin: 6px 0; }
+.product-recipe-card__link { font-size: 0.85rem; color: var(--color-accent); font-weight: 600; }
+
+/* === FLIP CARD — click support (mobile) === */
+.cert-card.flipped .cert-card-inner { transform: rotateY(180deg); }
