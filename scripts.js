@@ -2148,3 +2148,92 @@ function initSporeCursor() {
   });
 }
 document.addEventListener('DOMContentLoaded', initSporeCursor);
+
+/* ----- Task 10: Sticky Scroll Gusti (scroll-jacking) ----- */
+function initStickyGusti() {
+  var section = document.getElementById('gusti') ||
+                document.querySelector('.gusti-section, [class*="gusti"]');
+  if (!section) { console.warn('Sezione gusti non trovata'); return; }
+
+  var current = 0;
+  var total = 4;
+  var locked = false;
+  var transitioning = false;
+
+  function lockScroll() {
+    locked = true;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+  }
+
+  function unlockScroll() {
+    locked = false;
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }
+
+  function goToGusto(index) {
+    if (transitioning) return;
+    transitioning = true;
+    current = Math.max(0, Math.min(total - 1, index));
+
+    document.querySelectorAll('.gusto-slide')
+      .forEach(function(el, i) { el.classList.toggle('active', i === current); });
+
+    document.querySelectorAll('.gusti-slide-item')
+      .forEach(function(el, i) {
+        var diff = (i - current + total) % total;
+        el.dataset.state = diff === 0 ? 'active'
+          : diff === 1 ? 'next'
+          : diff === total - 1 ? 'prev'
+          : 'far';
+      });
+
+    document.querySelectorAll('.gusto-dot')
+      .forEach(function(d, i) { d.classList.toggle('active', i === current); });
+
+    setTimeout(function() { transitioning = false; }, 550);
+  }
+
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.75 && !locked) {
+        lockScroll();
+      }
+    });
+  }, { threshold: [0, 0.75, 1] });
+
+  io.observe(section);
+
+  window.addEventListener('wheel', function(e) {
+    if (!locked) return;
+    e.preventDefault();
+    if (transitioning) return;
+
+    if (e.deltaY > 30) {
+      if (current < total - 1) { goToGusto(current + 1); }
+      else { unlockScroll(); window.scrollBy({ top: 200, behavior: 'smooth' }); }
+    } else if (e.deltaY < -30) {
+      if (current > 0) { goToGusto(current - 1); }
+      else { unlockScroll(); window.scrollBy({ top: -200, behavior: 'smooth' }); }
+    }
+  }, { passive: false });
+
+  // Touch support for mobile
+  var ty = 0;
+  section.addEventListener('touchstart', function(e) { ty = e.touches[0].clientY; }, { passive: true });
+  section.addEventListener('touchend', function(e) {
+    if (!locked) return;
+    var dy = ty - e.changedTouches[0].clientY;
+    if (Math.abs(dy) < 40) return;
+    if (dy > 0) {
+      if (current < total - 1) goToGusto(current + 1); else unlockScroll();
+    } else {
+      if (current > 0) goToGusto(current - 1); else unlockScroll();
+    }
+  }, { passive: true });
+
+  goToGusto(0);
+}
+
+document.addEventListener('DOMContentLoaded', initStickyGusti);
