@@ -994,6 +994,52 @@ function initProductPage() {
 
   // Related products
   renderRelated(product);
+
+  // Recipe suggestions based on product
+  renderProductRecipes(product);
+}
+
+/* ============================================================
+   PRODUCT RECIPES — ricette correlate al prodotto selezionato
+   ============================================================ */
+const PRODUCT_RECIPES = {
+  'ffps-180-01': [
+    { img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png', name: 'Risotto cremoso ai funghi porcini', alt: 'Risotto ai porcini' },
+    { img: 'IMMAGINI/fior di funghi prodotti/ricette/teriaky zenzero e salmone .png', name: 'Crostino con porcini e speck croccante', alt: 'Crostino porcini e speck' }
+  ],
+  'fftap-180-01': [
+    { img: 'IMMAGINI/fior di funghi prodotti/ricette/tartufo e pecorino .png', name: 'Tagliatelle al tartufo e pecorino', alt: 'Tagliatelle tartufo' },
+    { img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png', name: 'Bruschetta con crema di tartufo', alt: 'Bruschetta tartufo' }
+  ],
+  'ffpab-180-01': [
+    { img: 'IMMAGINI/fior di funghi prodotti/ricette/panino bbq.png', name: 'Panino gourmet BBQ ai funghi', alt: 'Panino BBQ funghi' },
+    { img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png', name: 'Patate al forno con salsa BBQ', alt: 'Patate BBQ' }
+  ],
+  'fft-180-01': [
+    { img: 'IMMAGINI/fior di funghi prodotti/ricette/teriaky zenzero e salmone .png', name: 'Salmone teriyaki con zenzero', alt: 'Salmone teriyaki' },
+    { img: 'IMMAGINI/fior di funghi prodotti/ricette/panino bbq.png', name: 'Bowl di riso con funghi teriyaki', alt: 'Bowl teriyaki' }
+  ]
+};
+
+function renderProductRecipes(product) {
+  const wrap = document.getElementById('productRecipesWrap');
+  const grid = document.getElementById('productRecipesGrid');
+  if (!wrap || !grid) return;
+
+  const recipes = PRODUCT_RECIPES[product.id];
+  if (!recipes || recipes.length === 0) return;
+
+  grid.innerHTML = recipes.map(r => `
+    <a href="recipes.html" class="product-recipe-card">
+      <div class="product-recipe-card__img" style="background:var(--color-surface-warm);border-radius:var(--radius-md);aspect-ratio:16/9;overflow:hidden;margin-bottom:12px;">
+        <img src="${r.img}" alt="${r.alt}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">
+      </div>
+      <span class="product-recipe-card__label">Ricetta</span>
+      <p class="product-recipe-card__name">${r.name}</p>
+      <span class="product-recipe-card__link">Vedi ricetta →</span>
+    </a>`).join('');
+
+  wrap.style.display = '';
 }
 
 function renderRelated(currentProduct) {
