@@ -937,9 +937,11 @@ function initProductPage() {
   // Immagine — con auto-crop se scheda tecnica (ratio > 1.4)
   const img = $('#productImage');
   if (img) {
+    img.style.opacity = '1';
     img.src = product.image;
     img.alt = product.imageAlt;
     img.addEventListener('load', function() {
+      this.style.opacity = '1';
       var ratio = this.naturalWidth / this.naturalHeight;
       if (ratio > 1.4) {
         // Scheda tecnica fronte+retro: mostra solo il fronte (sinistra)
@@ -948,6 +950,9 @@ function initProductPage() {
         this.style.width = '100%';
         this.style.height = '100%';
       }
+    });
+    img.addEventListener('error', function() {
+      this.style.opacity = '0.2';
     });
     if (img.complete && img.naturalWidth) img.dispatchEvent(new Event('load'));
   }
