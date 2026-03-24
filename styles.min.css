@@ -19,8 +19,8 @@
   --color-text:          #1A1A1A;
   --color-text-light:    #FFFFFF;
   --color-text-muted:    #666666;
-  --color-accent:        #C8281E;
-  --color-accent-red:    #C8281E;
+  --color-accent:        #E8722A;
+  --color-accent-red:    #E8722A;
   --color-accent-orange: #E85320;
   --color-accent-blue:   #2D6FA3;
   --color-gold:          #C8860A;
@@ -45,7 +45,7 @@
   --shadow-sm:    0 2px 12px rgba(0,0,0,0.06);
   --shadow-md:    0 8px 32px rgba(0,0,0,0.10);
   --shadow-lg:    0 20px 60px rgba(0,0,0,0.15);
-  --shadow-glow:  0 0 40px rgba(200,40,30,0.25);
+  --shadow-glow:  0 0 40px rgba(232,114,42,0.25);
 
   --nav-h:        72px;
   --section-pad:  clamp(64px, 8vw, 120px);
@@ -3311,7 +3311,7 @@ section[id] { scroll-margin-top: 84px; }
 }
 .hero-bg-blob--circle {
   width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(200,40,30,0.08), transparent 70%);
+  background: radial-gradient(circle, rgba(232,114,42,0.08), transparent 70%);
   top: -100px; right: -100px;
   animation: blobPulse 6s ease-in-out infinite alternate;
 }
@@ -3345,7 +3345,7 @@ section[id] { scroll-margin-top: 84px; }
 .btn-primary:hover::after { transform: translateX(0); }
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(200,40,30,0.35);
+  box-shadow: 0 12px 32px rgba(232,114,42,0.35);
 }
 
 /* --- Tab Btn V2 --- */
@@ -3785,7 +3785,7 @@ section[id] { scroll-margin-top: 84px; }
 .card-drip__svg { width: 100%; }
 [data-gusto="porcini-speck"]    .card-drip { color: #7B4B2A; }
 [data-gusto="tartufo-pecorino"] .card-drip { color: #5a4a3a; }
-[data-gusto="paprika-bbq"]      .card-drip { color: #C8281E; }
+[data-gusto="paprika-bbq"]      .card-drip { color: #E8722A; }
 [data-gusto="teriyaki-zenzero"] .card-drip { color: #2D5016; }
 
 /* ----- Effetto 8: Hero Canvas particles ----- */

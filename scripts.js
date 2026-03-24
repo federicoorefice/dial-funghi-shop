@@ -11,10 +11,22 @@ if (typeof gsap !== 'undefined') gsap.registerPlugin(ScrollTrigger);
    ============================================================ */
 
 function initForestIntro() {
-  // Skip su mobile sempre
+  // Mobile: show image fallback briefly, then fade out
   if (window.innerWidth < 768) {
     var el = document.getElementById('forest-intro');
-    if (el) el.remove();
+    if (el) {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('intro-playing');
+      var logoMobile = document.getElementById('forest-logo');
+      if (logoMobile) logoMobile.style.opacity = '1';
+      setTimeout(function() {
+        el.style.transition = 'opacity 1s ease';
+        el.style.opacity = '0';
+        document.body.style.overflow = '';
+        document.body.classList.remove('intro-playing');
+        setTimeout(function() { el.remove(); }, 1000);
+      }, 2000);
+    }
     return;
   }
   // Skip se non dobbiamo mostrare l'intro
@@ -89,7 +101,7 @@ function initForestIntro() {
     );
     camera.position.z = 4;
 
-    var COUNT = 220, geo = new THREE.BufferGeometry();
+    var COUNT = 150, geo = new THREE.BufferGeometry();
     var pos = new Float32Array(COUNT * 3);
     for (var i = 0; i < COUNT * 3; i += 3) {
       pos[i]   = (Math.random() - 0.5) * 8;
@@ -207,16 +219,31 @@ function $$(sel, ctx) { return [...(ctx || document).querySelectorAll(sel)]; }
    ============================================================ */
 
 const CART_KEY = 'dial_cart';
+const CART_EXPIRY_DAYS = 7;
 const FREE_SHIPPING = 30;
 const SHIPPING_COST = 4.90;
 
 function getCart() {
-  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
-  catch { return []; }
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    if (!raw) return [];
+    const data = JSON.parse(raw);
+    // Support both old format (array) and new format (object with expiry)
+    if (Array.isArray(data)) return data;
+    if (data.expires && Date.now() > data.expires) {
+      localStorage.removeItem(CART_KEY);
+      return [];
+    }
+    return data.items || [];
+  } catch { return []; }
 }
 
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  const data = {
+    items: cart,
+    expires: Date.now() + (CART_EXPIRY_DAYS * 24 * 60 * 60 * 1000)
+  };
+  localStorage.setItem(CART_KEY, JSON.stringify(data));
 }
 
 function addToCart(productId, qty = 1) {
@@ -290,13 +317,13 @@ function updateCartUI() {
   if (fill) fill.style.width = progress + '%';
   if (shippingText) {
     if (total === 0) {
-      shippingText.innerHTML = 'Aggiungi prodotti al carrello';
+      shippingText.innerHTML = `Spedizione gratuita sopra €${FREE_SHIPPING}`;
     } else if (total >= FREE_SHIPPING) {
-      shippingText.innerHTML = '<strong style="color:var(--color-green)">Spedizione gratuita!</strong>';
+      shippingText.innerHTML = '🎉 <strong style="color:var(--color-green)">Spedizione gratuita!</strong>';
       if (fill) fill.style.background = 'var(--color-green)';
     } else {
       const remaining = (FREE_SHIPPING - total).toFixed(2).replace('.', ',');
-      shippingText.innerHTML = `Ti mancano <strong>€${remaining}</strong> per la spedizione gratuita`;
+      shippingText.innerHTML = `Ti mancano <strong>€${remaining}</strong> per la spedizione gratuita (soglia €${FREE_SHIPPING})`;
     }
   }
 
@@ -553,7 +580,7 @@ function initCarousel() {
 const GUSTO_COLORS = {
   'porcini-speck':    '#7B4B2A',
   'tartufo-pecorino': '#4a3828',
-  'paprika-bbq':      '#C8281E',
+  'paprika-bbq':      '#E8722A',
   'teriyaki-zenzero': '#2D5016'
 };
 
@@ -1008,6 +1035,30 @@ function addPromoToCart(promoId) {
    PRODUCT PAGE
    ============================================================ */
 
+function injectProductSchema(product) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.fullName || product.name,
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand === 'fior-di-funghi' ? 'Fior di Funghi' : 'Dial Funghi'
+    },
+    "description": product.description,
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "EUR",
+      "price": product.price,
+      "availability": "https://schema.org/InStock",
+      "seller": { "@type": "Organization", "name": "Dial Funghi" }
+    }
+  };
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(schema);
+  document.head.appendChild(script);
+}
+
 function initProductPage() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -1023,6 +1074,9 @@ function initProductPage() {
 
   // Aggiorna titolo e meta
   document.title = `${product.fullName} — Dial Funghi`;
+
+  // Inject schema.org Product structured data
+  injectProductSchema(product);
 
   // Immagine — con auto-crop se scheda tecnica (ratio > 1.4)
   const img = $('#productImage');
@@ -1335,6 +1389,23 @@ function initCartPage() {
           </button>
         </div>`).join('')}`;
 
+    // Shipping bar (cart page)
+    const fillPage = $('#shippingFillPage');
+    const textPage = $('#shippingTextPage');
+    const progressPage = Math.min((total / FREE_SHIPPING) * 100, 100);
+    if (fillPage) fillPage.style.width = progressPage + '%';
+    if (textPage) {
+      if (total === 0) {
+        textPage.innerHTML = `Spedizione gratuita sopra €${FREE_SHIPPING} — aggiungi prodotti al carrello`;
+      } else if (total >= FREE_SHIPPING) {
+        textPage.innerHTML = '🎉 Spedizione gratuita!';
+        if (fillPage) fillPage.style.background = 'var(--color-green)';
+      } else {
+        const rem = (FREE_SHIPPING - total).toFixed(2).replace('.', ',');
+        textPage.innerHTML = `Ti mancano <strong>€${rem}</strong> per la spedizione gratuita (soglia €${FREE_SHIPPING})`;
+      }
+    }
+
     // Summary
     const summarySubEl = $('#summarySubtotal');
     const summaryShipEl = $('#summaryShipping');
@@ -1399,18 +1470,18 @@ function initHamburger() {
   if (!btn || !nav) return;
 
   btn.addEventListener('click', () => {
-    const open = nav.style.display === 'flex';
-    nav.style.display = open ? '' : 'flex';
-    nav.style.flexDirection = open ? '' : 'column';
-    nav.style.position = open ? '' : 'absolute';
-    nav.style.top = open ? '' : '100%';
-    nav.style.left = open ? '' : '0';
-    nav.style.right = open ? '' : '0';
-    nav.style.background = open ? '' : 'rgba(28,14,5,0.98)';
-    nav.style.padding = open ? '' : '24px 24px';
-    nav.style.gap = open ? '' : '20px';
-    nav.style.backdropFilter = open ? '' : 'blur(20px)';
-    nav.style.zIndex = open ? '' : '999';
+    nav.classList.toggle('open');
+    btn.classList.toggle('active');
+    btn.setAttribute('aria-expanded', nav.classList.contains('open'));
+  });
+
+  // Close menu when a link is clicked
+  nav.querySelectorAll('.navbar__link').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      btn.classList.remove('active');
+      btn.setAttribute('aria-expanded', 'false');
+    });
   });
 }
 
@@ -1631,7 +1702,7 @@ function initMagneticButtons() {
 
 /* ----- Effetto 5: SCROLL PINNING GUSTI con bounce ----- */
 var activeBottle = null;
-var GUSTO_ACCENT_COLORS = { 1: '#7B4B2A', 2: '#3D3530', 3: '#C8281E', 4: '#2D5016' };
+var GUSTO_ACCENT_COLORS = { 1: '#7B4B2A', 2: '#3D3530', 3: '#E8722A', 4: '#2D5016' };
 
 function switchGusto(n) {
   var next = document.getElementById('gusto-img-' + n);
@@ -1688,64 +1759,7 @@ function initGustiScrollPin() {
   ScrollTrigger.refresh();
 }
 
-/* ----- Effetto 6: LIQUID SPLASH CURSOR (canvas) ----- */
-function initSplashCanvas() {
-  const isMobile = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
-  if (isMobile) return;
-  const canvas = document.getElementById('splashCanvas');
-  if (!canvas) return;
-  try {
-    const ctx = canvas.getContext('2d');
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    window.addEventListener('resize', () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }, { passive: true });
-
-    const particles = [];
-    let mx = 0, my = 0, pmx = 0, pmy = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mx = e.clientX; my = e.clientY;
-      const speed = Math.hypot(mx - pmx, my - pmy);
-      if (speed > 8) {
-        for (let i = 0; i < 3; i++) {
-          particles.push({
-            x: mx + (Math.random() - 0.5) * 10,
-            y: my + (Math.random() - 0.5) * 10,
-            vx: (Math.random() - 0.5) * 3,
-            vy: (Math.random() - 0.5) * 3 - 1,
-            life: 1,
-            size: Math.random() * 5 + 2,
-            hue: Math.random() > 0.5 ? '#E85320' : '#C8860A'
-          });
-        }
-      }
-      pmx = mx; pmy = my;
-    });
-
-    function renderSplash() {
-      requestAnimationFrame(renderSplash);
-      if (particles.length === 0) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx; p.y += p.vy;
-        p.vy += 0.08;
-        p.life -= 0.04;
-        if (p.life <= 0) { particles.splice(i, 1); continue; }
-        ctx.globalAlpha = p.life * 0.55;
-        ctx.fillStyle   = p.hue;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-    }
-    renderSplash();
-  } catch(e) { console.warn('Splash canvas error:', e); }
-}
+/* ----- Effetto 6: LIQUID SPLASH CURSOR — RIMOSSO (Sprint 1 performance) ----- */
 
 /* ----- Effetto 7: SAUCE DRIP ----- */
 function initSauceDrip() {
@@ -2056,65 +2070,7 @@ function initTextReveal() {
   });
 }
 
-/* ----- Effetto V23: GLOBAL SPOTLIGHT CURSOR (fixed full-page canvas) ----- */
-function initSpotlight() {
-  var spotCanvas = document.getElementById('global-spotlight');
-  if (!spotCanvas || !window.matchMedia('(pointer: fine)').matches) return;
-  var ctx = spotCanvas.getContext('2d');
-  var mx = -999, my = -999;
-  var targetOpacity = 0, currentOpacity = 0;
-
-  function resizeSpot() {
-    spotCanvas.width = window.innerWidth;
-    spotCanvas.height = window.innerHeight;
-  }
-  resizeSpot();
-  window.addEventListener('resize', resizeSpot, { passive: true });
-
-  // Attivo solo sulle sezioni scure (hero, certificazioni, ricette)
-  var darkSections = '.hero, .section-certificazioni, .section-recipes-preview, .section--dark';
-
-  document.addEventListener('mousemove', function(e) {
-    mx = e.clientX;
-    my = e.clientY;
-    // Controlla se il mouse è sopra una sezione scura
-    var el = document.elementFromPoint(e.clientX, e.clientY);
-    var inDark = el && el.closest(darkSections);
-    targetOpacity = inDark ? 1 : 0;
-  });
-
-  function renderSpotlight() {
-    currentOpacity += (targetOpacity - currentOpacity) * 0.08;
-    spotCanvas.style.opacity = currentOpacity * 0.40;
-    if (currentOpacity > 0.01) {
-      ctx.clearRect(0, 0, spotCanvas.width, spotCanvas.height);
-      ctx.fillStyle = 'rgba(5, 3, 1, 0.35)';
-      ctx.fillRect(0, 0, spotCanvas.width, spotCanvas.height);
-      ctx.globalCompositeOperation = 'destination-out';
-      var grad = ctx.createRadialGradient(mx, my, 0, mx, my, 320);
-      grad.addColorStop(0,   'rgba(0,0,0,0.95)');
-      grad.addColorStop(0.3, 'rgba(0,0,0,0.80)');
-      grad.addColorStop(0.7, 'rgba(0,0,0,0.40)');
-      grad.addColorStop(1,   'rgba(0,0,0,0)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(mx, my, 320, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.globalCompositeOperation = 'source-over';
-      // Glow arancio caldo sopra lo spotlight
-      var glow = ctx.createRadialGradient(mx, my, 0, mx, my, 150);
-      glow.addColorStop(0,   'rgba(232, 83, 32, 0.08)');
-      glow.addColorStop(0.5, 'rgba(200, 134, 10, 0.04)');
-      glow.addColorStop(1,   'rgba(0,0,0,0)');
-      ctx.fillStyle = glow;
-      ctx.beginPath();
-      ctx.arc(mx, my, 120, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    requestAnimationFrame(renderSpotlight);
-  }
-  renderSpotlight();
-}
+/* ----- Effetto V23: GLOBAL SPOTLIGHT — RIMOSSO (Sprint 1 performance) ----- */
 
 /* ----- Effetto V26-A: TILT 3D CARD ----- */
 function initTilt3D() {
@@ -2201,80 +2157,7 @@ function initHeroWordReveal() {
   }
 }
 
-/* ----- Effetto V27: GUSTI PARTICLES ----- */
-function initGustiParticles() {
-  var canvas = document.getElementById('gusti-particles');
-  if (!canvas || typeof THREE === 'undefined') return;
-  if (window.innerWidth < 768) return;
-
-  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(canvas.offsetWidth || window.innerWidth, canvas.offsetHeight || window.innerHeight);
-  renderer.setClearColor(0x000000, 0);
-
-  var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(60, (canvas.offsetWidth || window.innerWidth) / (canvas.offsetHeight || window.innerHeight), 0.1, 50);
-  camera.position.z = 3;
-
-  var COUNT = 60; /* ridotto per performance */
-  var geo = new THREE.BufferGeometry();
-  var pos = new Float32Array(COUNT * 3);
-  for (var i = 0; i < COUNT * 3; i += 3) {
-    var angle = Math.random() * Math.PI * 2;
-    var radius = Math.random() * 2.8 + 0.3;
-    pos[i]   = Math.cos(angle) * radius;
-    pos[i+1] = Math.sin(angle) * radius;
-    pos[i+2] = (Math.random() - 0.5) * 10;
-  }
-  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-
-  var colors = new Float32Array(COUNT * 3);
-  for (var j = 0; j < COUNT; j++) {
-    if (Math.random() > 0.5) {
-      colors[j*3]=0.91; colors[j*3+1]=0.33; colors[j*3+2]=0.13;
-    } else {
-      colors[j*3]=0.78; colors[j*3+1]=0.53; colors[j*3+2]=0.04;
-    }
-  }
-  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-  var mat = new THREE.PointsMaterial({
-    size: 0.05, vertexColors: true,
-    transparent: true, opacity: 0.7,
-    alphaTest: 0.4, depthWrite: false,
-    sizeAttenuation: true
-  });
-  var pts = new THREE.Points(geo, mat);
-  scene.add(pts);
-
-  var positions = geo.attributes.position.array;
-
-  // Avvia/ferma RAF in base a visibilità — risparmia CPU
-  var gustiRafId = null;
-  function gustiAnimate() {
-    gustiRafId = requestAnimationFrame(gustiAnimate);
-    for (var k = 0; k < COUNT; k++) {
-      positions[k*3+2] += 0.02;
-      if (positions[k*3+2] > 4) {
-        var a = Math.random() * Math.PI * 2;
-        var r = Math.random() * 2.8 + 0.3;
-        positions[k*3]   = Math.cos(a) * r;
-        positions[k*3+1] = Math.sin(a) * r;
-        positions[k*3+2] = -8;
-      }
-    }
-    geo.attributes.position.needsUpdate = true;
-    pts.rotation.z += 0.0008;
-    renderer.render(scene, camera);
-  }
-  new IntersectionObserver(function(entries) {
-    if (entries[0].isIntersecting) {
-      if (!gustiRafId) gustiAnimate();
-    } else {
-      if (gustiRafId) { cancelAnimationFrame(gustiRafId); gustiRafId = null; }
-    }
-  }, { threshold: 0 }).observe(canvas.parentElement || canvas);
-}
+/* ----- Effetto V27: GUSTI PARTICLES — RIMOSSO, sostituito con CSS (Sprint 1) ----- */
 
 /* ----- UNICO DOMContentLoaded — tutto inizializzato qui ----- */
 document.addEventListener('DOMContentLoaded', () => {
@@ -2297,23 +2180,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = path.split('/').pop().replace('.html', '') || 'index';
   const isIndex = (page === 'index' || page === '' || path === '/');
 
+  // Funzioni che NON dipendono dai dati prodotto — esegui subito
   if (isIndex) {
     initHeroAnimation();
     initTickers();
-    renderFFGrid();
-    renderGammaGrid();
-    initGammaTabs();
-    renderRecipesPreview();
     initCarousel();
     initReviewsSlider();
     initStoriaCounters();
-
-    // Effetti premium (solo index)
     initHeroParticles();
     initGustiScrollPin();
-    initGustiParticles();
-    initSpotlight();
-    initSplashCanvas();
     initParallax();
     initCounterAnimation();
     initTextReveal();
@@ -2324,22 +2199,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (page === 'shop') {
-    initShopPage();
     initScrollRevealGSAP();
     setTimeout(initSauceDrip, 800);
   }
 
-  if (page === 'product') {
-    initProductPage();
-  }
-
   if (page === 'recipes') {
-    initRecipesPage();
     initRecipeModalListeners();
     initScrollRevealGSAP();
   }
 
-  if (page === 'cart') {
-    initCartPage();
-  }
+  // Funzioni che DIPENDONO dai dati prodotto — attendi caricamento JSON
+  const waitData = window.dataReady || Promise.resolve();
+  waitData.then(() => {
+    if (isIndex) {
+      renderFFGrid();
+      renderGammaGrid();
+      initGammaTabs();
+      renderRecipesPreview();
+    }
+    if (page === 'shop') {
+      initShopPage();
+    }
+    if (page === 'product') {
+      initProductPage();
+    }
+    if (page === 'recipes') {
+      initRecipesPage();
+    }
+    if (page === 'cart') {
+      initCartPage();
+    }
+  });
 });

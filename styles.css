@@ -20,8 +20,8 @@
   --color-text:          #1A1A1A;
   --color-text-light:    #FFFFFF;
   --color-text-muted:    #666666;
-  --color-accent:        #C8281E;
-  --color-accent-red:    #C8281E;
+  --color-accent:        #E8722A;
+  --color-accent-red:    #E8722A;
   --color-accent-orange: #E85320;
   --color-accent-blue:   #2D6FA3;
   --color-gold:          #C8860A;
@@ -46,7 +46,7 @@
   --shadow-sm:    0 2px 12px rgba(0,0,0,0.06);
   --shadow-md:    0 8px 32px rgba(0,0,0,0.10);
   --shadow-lg:    0 20px 60px rgba(0,0,0,0.15);
-  --shadow-glow:  0 0 40px rgba(200,40,30,0.25);
+  --shadow-glow:  0 0 40px rgba(232,114,42,0.25);
 
   --nav-h:        72px;
   --section-pad:  clamp(64px, 8vw, 120px);
@@ -66,6 +66,16 @@ html {
   scroll-padding-top: var(--nav-h);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Accessibility: focus-visible outline */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 body {
@@ -431,6 +441,10 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   flex-direction: column;
   gap: 5px;
   padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar__hamburger span {
@@ -442,6 +456,73 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+/* Hamburger active state (X icon) */
+.navbar__hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.navbar__hamburger.active span:nth-child(2) { opacity: 0; }
+.navbar__hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile nav open state */
+@media (max-width: 680px) {
+  .navbar__nav.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(28,14,5,0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 24px;
+    gap: 20px;
+    z-index: 999;
+    animation: navSlideDown 0.3s ease;
+  }
+  .navbar__nav.open .navbar__link {
+    font-size: 1.1rem;
+    padding: 8px 0;
+  }
+}
+@keyframes navSlideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   6b. TRUST BAR
+   ============================================================ */
+.trust-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  padding: 16px 24px;
+  background: var(--color-bg-dark);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-wrap: wrap;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.02em;
+}
+.trust-icon {
+  font-size: 1rem;
+}
+@media (max-width: 768px) {
+  .trust-bar {
+    gap: 16px;
+    padding: 12px 16px;
+  }
+  .trust-item {
+    font-size: 0.72rem;
+  }
+}
+
 /* ============================================================
    7. HERO
    ============================================================ */
@@ -449,6 +530,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   position: relative;
   min-height: 100vh;
   background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,114,42,0.06) 0%, transparent 70%),
     radial-gradient(ellipse 70% 55% at 50% 45%, rgba(180,50,15,0.16) 0%, transparent 65%),
     radial-gradient(ellipse 45% 35% at 50% 75%, rgba(200,134,10,0.09) 0%, transparent 60%),
     #0D0702;
@@ -3250,7 +3332,7 @@ section[id] { scroll-margin-top: 84px; }
 .btn-primary:hover::after { transform: translateX(0); }
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(200,40,30,0.35);
+  box-shadow: 0 12px 32px rgba(232,114,42,0.35);
 }
 
 /* --- Tab Btn V2 --- */
@@ -3673,6 +3755,8 @@ body.cursor-circle #cursor.hover {
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(circle at 20% 30%, rgba(232,114,42,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(197,165,90,0.06) 0%, transparent 50%),
     radial-gradient(ellipse 120% 60% at 20% 30%, rgba(180,60,10,0.12) 0%, transparent 60%),
     radial-gradient(ellipse 80% 80% at 80% 70%, rgba(200,134,10,0.08) 0%, transparent 60%),
     radial-gradient(ellipse 60% 40% at 50% 10%, rgba(232,83,32,0.06) 0%, transparent 50%);
@@ -3806,7 +3890,7 @@ body.cursor-circle #cursor.hover {
 .card-drip__svg { width: 100%; }
 [data-gusto="porcini-speck"]    .card-drip { color: #7B4B2A; }
 [data-gusto="tartufo-pecorino"] .card-drip { color: #5a4a3a; }
-[data-gusto="paprika-bbq"]      .card-drip { color: #C8281E; }
+[data-gusto="paprika-bbq"]      .card-drip { color: #E8722A; }
 [data-gusto="teriyaki-zenzero"] .card-drip { color: #2D5016; }
 
 /* ----- Effetto 8: Hero Canvas particles ----- */
@@ -4101,3 +4185,84 @@ body .hero {
 }
 
 /* Mushroom divider — rimosso V23 */
+
+/* ============================================================
+   MOBILE FIXES — Sprint 3
+   ============================================================ */
+
+/* Forest intro: image fallback on mobile (no Three.js canvas) */
+@media (max-width: 767px) {
+  #forest-intro {
+    background: url('IMMAGINI /foto bosco animazioni /foto bosco 4.png') center/cover no-repeat;
+  }
+  #forest-intro canvas,
+  #forest-particles {
+    display: none !important;
+  }
+  #forest-intro::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(13, 7, 2, 0.5);
+    z-index: 1;
+  }
+  #forest-logo { z-index: 5; }
+}
+
+/* Custom cursor: hide on touch devices */
+@media (hover: none), (pointer: coarse) {
+  #cursor,
+  #cursor-dot {
+    display: none !important;
+  }
+  * { cursor: auto !important; }
+}
+
+/* Mobile: ensure minimum 44px tap targets for buttons/links */
+@media (max-width: 767px) {
+  .btn,
+  .navbar__link,
+  .filter-btn,
+  .gamma-tab {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Hero text: prevent overflow */
+  .hero__headline {
+    font-size: clamp(36px, 9vw, 56px);
+    word-break: break-word;
+  }
+
+  .hero__subline {
+    font-size: 0.95rem;
+    padding: 0 8px;
+  }
+
+  .hero__ctas {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .hero__ctas .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Gamma grid: 2 columns on mobile */
+  .gamma__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+
+  /* Product cards compact on mobile */
+  .gamma__card {
+    padding: 12px;
+  }
+
+  .gamma__card img {
+    height: 120px;
+  }
+}

@@ -37,7 +37,16 @@
       "Bash(npm list:*)",
       "Bash(node remove-bg.js)",
       "Bash(node -e \"const j = require\\(''jimp''\\); console.log\\(Object.keys\\(j\\).slice\\(0,20\\)\\)\")",
-      "Bash(node -e \"const { Jimp } = require\\(''jimp''\\); console.log\\(typeof Jimp.read, typeof Jimp.prototype.scan\\)\")"
+      "Bash(node -e \"const { Jimp } = require\\(''jimp''\\); console.log\\(typeof Jimp.read, typeof Jimp.prototype.scan\\)\")",
+      "Read(//Users/federicoorefice/Desktop/claude lavora qui x sito — VARIANTE BOSCO/**)",
+      "Read(//Users/federicoorefice/Desktop/claude lavora qui x sito /.git/**)",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Bash(ls \"/Users/federicoorefice/Desktop/claude lavora qui x sito /\"*clean*)",
+      "Bash(find '/Users/federicoorefice/Desktop/claude lavora qui x sito ' -maxdepth 3 \\\\\\(-name *.png -o -name *.jpg -o -name *.jpeg -o -name *.webp \\\\\\))",
+      "Bash(find '/Users/federicoorefice/Desktop/claude lavora qui x sito ' -maxdepth 4 \\\\\\(-name *.png -o -name *.jpg -o -name *.jpeg -o -name *.webp \\\\\\))",
+      "Bash(ls -lh \"/Users/federicoorefice/Desktop/claude lavora qui x sito/\"*-clean.png)",
+      "Bash(gh pr:*)"
     ]
   }
 }
