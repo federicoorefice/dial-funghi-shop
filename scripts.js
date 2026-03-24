@@ -1179,8 +1179,20 @@ function initRecipesPage() {
   // Auto-apri modal se URL contiene ?recipe=id (link da pagina prodotto)
   const rParam = new URLSearchParams(window.location.search).get('recipe');
   if (rParam) {
-    // Aspetta render ricette poi apri
-    setTimeout(function() { openRecipeModal(rParam); }, 200);
+    // Aspetta che il DOM delle ricette sia renderizzato, poi apri il modal
+    function tryOpenRecipe(attempts) {
+      var recipe = typeof getRecipeById !== 'undefined' ? getRecipeById(rParam) : null;
+      var modal = document.getElementById('recipeModal');
+      if (recipe && modal) {
+        openRecipeModal(rParam);
+        // Scrolla alla sezione ricette per context
+        var gridSection = document.querySelector('.recipes-grid');
+        if (gridSection) gridSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (attempts > 0) {
+        setTimeout(function() { tryOpenRecipe(attempts - 1); }, 150);
+      }
+    }
+    setTimeout(function() { tryOpenRecipe(5); }, 300);
   }
 }
 
