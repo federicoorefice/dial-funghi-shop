@@ -139,66 +139,135 @@
       color: rgba(245, 236, 215, 0.6);
     }
 
-    /* Certifications Section */
-    .cert-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 32px;
-      margin-top: 48px;
+    /* Flip Card Certifications */
+    .about-certifications {
+      background: var(--color-bg, #FFF8F0);
+      padding: 80px 0;
     }
 
-    .cert-badge {
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 1100px;
+      margin: 40px auto 0;
+      padding: 0 40px;
+    }
+
+    .cert-card {
+      perspective: 1000px;
+      cursor: pointer;
+      height: 200px;
+    }
+
+    .cert-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cert-card:hover .cert-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .cert-card-front,
+    .cert-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      padding: 24px 32px;
-      background: rgba(255, 248, 240, 0.02);
-      border: 1px solid rgba(200, 165, 90, 0.12);
-      border-radius: 12px;
-      transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-
-    .cert-badge:hover {
-      transform: translateY(-2px);
-      border-color: rgba(200, 165, 90, 0.3);
-    }
-
-    .cert-badge__icon {
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, rgba(232, 114, 42, 0.1), rgba(197, 165, 90, 0.1));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
       justify-content: center;
+      padding: 20px;
     }
 
-    .cert-badge__icon svg {
-      width: 28px;
-      height: 28px;
-      stroke: var(--color-gold);
+    .cert-card-front {
+      background: #fff;
+      border: 1px solid #E5DDD4;
     }
 
-    .cert-badge__name {
-      font-family: var(--font-label);
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--color-text);
+    .cert-card-front img {
+      max-height: 70px;
+      max-width: 120px;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+
+    .cert-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #2D2926;
+    }
+
+    .cert-card-back {
+      background: var(--color-accent, #E8722A);
+      transform: rotateY(180deg);
       text-align: center;
     }
 
-    @media (max-width: 600px) {
-      .cert-badges {
-        gap: 16px;
+    .cert-card-back h4 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cert-card-back p {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.9);
+    }
+
+    @media (max-width: 768px) {
+      .cert-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 24px;
       }
-      .cert-badge {
-        padding: 20px 24px;
-        flex: 1 1 calc(50% - 16px);
-        min-width: 140px;
-      }
+    }
+
+    /* About Closing CTA */
+    .about-closing {
+      background: var(--color-bg-dark, #1C0E05);
+      padding: 100px 40px;
+      text-align: center;
+    }
+
+    .closing-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .closing-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      color: #FFF8F0;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .closing-content p {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 17px;
+      color: rgba(255,248,240,0.7);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .closing-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     /* CTA Section */
@@ -369,68 +438,77 @@
   </div>
 </section>
 
-<!-- CERTIFICATIONS SECTION -->
-<section class="about-section" style="background:var(--color-bg);">
+<!-- CERTIFICATIONS — Flip Cards -->
+<section class="about-certifications">
   <div class="container text-center">
     <span class="section-label">Standard elevati</span>
-    <h2 style="font-family:var(--font-title); font-size:2.5rem; color:var(--color-text); margin-top:12px;">Certificazioni e Qualita</h2>
-    <p style="color:var(--color-text-muted); max-width:500px; margin:20px auto 0; font-size:1rem; line-height:1.7;">Ogni prodotto Dial Funghi rispetta gli standard piu elevati del settore alimentare.</p>
+    <h2 style="font-family:var(--font-title); font-size:2.5rem; color:var(--color-text); margin-top:12px;">Qualit&agrave; Certificata</h2>
+    <p style="color:var(--color-text-muted); max-width:500px; margin:20px auto 0; font-size:1rem; line-height:1.7;">Ogni prodotto nasce in uno stabilimento certificato ai pi&ugrave; alti standard internazionali.</p>
+  </div>
 
-    <div class="cert-badges">
-      <div class="cert-badge">
-        <div class="cert-badge__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-            <polyline points="22 4 12 14.01 9 11.01"/>
-          </svg>
+  <div class="cert-grid">
+    <div class="cert-card">
+      <div class="cert-card-inner">
+        <div class="cert-card-front">
+          <img src="IMMAGINI /certificazioni /brc render.png" alt="BRC Food Safety" loading="lazy" decoding="async">
+          <span class="cert-name">BRC Food Safety</span>
         </div>
-        <span class="cert-badge__name">BRC Certified</span>
+        <div class="cert-card-back">
+          <h4>BRC Food Safety</h4>
+          <p>Certificazione internazionale che garantisce i pi&ugrave; alti standard di sicurezza alimentare, igiene e tracciabilit&agrave; in ogni fase della produzione.</p>
+        </div>
       </div>
+    </div>
 
-      <div class="cert-badge">
-        <div class="cert-badge__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
+    <div class="cert-card">
+      <div class="cert-card-inner">
+        <div class="cert-card-front">
+          <img src="IMMAGINI /certificazioni /ifs render.png" alt="IFS Food" loading="lazy" decoding="async">
+          <span class="cert-name">IFS Food</span>
         </div>
-        <span class="cert-badge__name">IFS Food</span>
+        <div class="cert-card-back">
+          <h4>IFS Food</h4>
+          <p>Standard internazionale che certifica la qualit&agrave; e sicurezza dei processi produttivi, riconosciuto dai principali retailer europei.</p>
+        </div>
       </div>
+    </div>
 
-      <div class="cert-badge">
-        <div class="cert-badge__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-          </svg>
+    <div class="cert-card">
+      <div class="cert-card-inner">
+        <div class="cert-card-front">
+          <img src="IMMAGINI /certificazioni /CERTIFICAZIONE BIO RENDER.png" alt="ICEA Biologico" loading="lazy" decoding="async">
+          <span class="cert-name">ICEA Bio</span>
         </div>
-        <span class="cert-badge__name">Gluten Free</span>
+        <div class="cert-card-back">
+          <h4>ICEA Biologico</h4>
+          <p>Certifica l'uso di ingredienti biologici coltivati senza pesticidi, con controlli periodici da ente terzo accreditato.</p>
+        </div>
       </div>
+    </div>
 
-      <div class="cert-badge">
-        <div class="cert-badge__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-            <line x1="4" y1="22" x2="4" y2="15"/>
-          </svg>
+    <div class="cert-card">
+      <div class="cert-card-inner">
+        <div class="cert-card-front">
+          <img src="IMMAGINI /certificazioni /vegan certificazione.png" alt="Qualit&agrave; Vegan" loading="lazy" decoding="async">
+          <span class="cert-name">Qualit&agrave; Vegan</span>
         </div>
-        <span class="cert-badge__name">Made in Italy</span>
+        <div class="cert-card-back">
+          <h4>Qualit&agrave; Vegan</h4>
+          <p>Garantisce l'assenza totale di ingredienti di origine animale. Riconosciuta a livello internazionale dalla comunit&agrave; vegan.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA SECTION -->
-<section class="about-section" style="background:var(--color-bg-dark);">
-  <div class="container text-center">
-    <span class="section-label">Pronto a scoprire?</span>
-    <h2 style="font-family:var(--font-title); font-size:2.5rem; color:var(--color-text-light); margin-top:12px;">Scopri i Nostri<br><em style="font-style:italic; color:var(--color-accent);">Prodotti.</em></h2>
-
-    <div class="about-cta__buttons">
-      <a href="shop.html" class="btn btn--primary btn--lg">
-        Vai allo Shop
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="contact.html" class="btn btn--outline btn--lg">Contattaci</a>
+<!-- CTA CLOSING -->
+<section class="about-closing">
+  <div class="closing-content">
+    <h2>Pronto a scoprire il gusto del Trentino?</h2>
+    <p>Dai classici funghi secchi all'innovazione delle squeeze Fior di Funghi. La qualit&agrave; di 30 anni, a portata di click.</p>
+    <div class="closing-ctas">
+      <a href="shop.html" class="btn btn--primary btn--lg">Vai allo Shop</a>
+      <a href="shop.html?cat=fior-di-funghi" class="btn btn--outline btn--lg">Scopri Fior di Funghi</a>
     </div>
   </div>
 </section>
@@ -518,5 +596,16 @@
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
 <script src="products-logic.js"></script>
 <script src="scripts.js"></script>
+<script>
+// Flip card touch support for mobile
+if ('ontouchstart' in window) {
+  document.querySelectorAll('.cert-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var inner = card.querySelector('.cert-card-inner');
+      if (inner) inner.style.transform = inner.style.transform === 'rotateY(180deg)' ? '' : 'rotateY(180deg)';
+    });
+  });
+}
+</script>
 </body>
 </html>
