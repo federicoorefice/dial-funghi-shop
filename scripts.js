@@ -1004,20 +1004,20 @@ function initProductPage() {
    ============================================================ */
 const PRODUCT_RECIPES = {
   'ffps-180-01': [
-    { img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png', name: 'Risotto cremoso ai funghi porcini', alt: 'Risotto ai porcini' },
-    { img: 'IMMAGINI/fior di funghi prodotti/ricette/teriaky zenzero e salmone .png', name: 'Crostino con porcini e speck croccante', alt: 'Crostino porcini e speck' }
+    { id: 'porcini-speck-risotto',  img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png',         name: 'Risotto cremoso al fungo',          alt: 'Risotto ai porcini' },
+    { id: 'porcini-speck-bruschette', img: 'IMMAGINI/fior di funghi prodotti/ricette/teriaky zenzero e salmone .png', name: 'Bruschette autunnali',              alt: 'Bruschette porcini e speck' }
   ],
   'fftap-180-01': [
-    { img: 'IMMAGINI/fior di funghi prodotti/ricette/tartufo e pecorino .png', name: 'Tagliatelle al tartufo e pecorino', alt: 'Tagliatelle tartufo' },
-    { img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png', name: 'Bruschetta con crema di tartufo', alt: 'Bruschetta tartufo' }
+    { id: 'tartufo-pecorino-tagliolini', img: 'IMMAGINI/fior di funghi prodotti/ricette/tartufo e pecorino .png', name: 'Tagliolini al tartufo',               alt: 'Tagliolini tartufo' },
+    { id: 'tartufo-pecorino-toast',     img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png',     name: 'Toast gourmet al tartufo',            alt: 'Toast tartufo e pecorino' }
   ],
   'ffpab-180-01': [
-    { img: 'IMMAGINI/fior di funghi prodotti/ricette/panino bbq.png', name: 'Panino gourmet BBQ ai funghi', alt: 'Panino BBQ funghi' },
-    { img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png', name: 'Patate al forno con salsa BBQ', alt: 'Patate BBQ' }
+    { id: 'paprika-bbq-hotdog',    img: 'IMMAGINI/fior di funghi prodotti/ricette/panino bbq.png',                name: 'Hot dog gourmet ai funghi',          alt: 'Panino BBQ funghi' },
+    { id: 'paprika-bbq-patatine',  img: 'IMMAGINI/fior di funghi prodotti/ricette/risotto porcini .png',          name: 'Patatine al forno BBQ',              alt: 'Patatine BBQ' }
   ],
   'fft-180-01': [
-    { img: 'IMMAGINI/fior di funghi prodotti/ricette/teriaky zenzero e salmone .png', name: 'Salmone teriyaki con zenzero', alt: 'Salmone teriyaki' },
-    { img: 'IMMAGINI/fior di funghi prodotti/ricette/panino bbq.png', name: 'Bowl di riso con funghi teriyaki', alt: 'Bowl teriyaki' }
+    { id: 'teriyaki-salmone',      img: 'IMMAGINI/fior di funghi prodotti/ricette/teriaky zenzero e salmone .png', name: 'Salmone alla brace teriyaki',        alt: 'Salmone teriyaki' },
+    { id: 'teriyaki-pollo-bowl',   img: 'IMMAGINI/fior di funghi prodotti/ricette/panino bbq.png',                name: 'Bowl di pollo teriyaki',             alt: 'Bowl teriyaki' }
   ]
 };
 
@@ -1030,15 +1030,16 @@ function renderProductRecipes(product) {
   if (!recipes || recipes.length === 0) return;
 
   grid.innerHTML = recipes.map(r => `
-    <a href="recipes.html" class="product-recipe-card">
+    <a href="recipes.html?recipe=${r.id}" class="product-recipe-card">
       <div class="product-recipe-card__img" style="background:var(--color-surface-warm);border-radius:var(--radius-md);aspect-ratio:16/9;overflow:hidden;margin-bottom:12px;">
         <img src="${r.img}" alt="${r.alt}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">
       </div>
       <span class="product-recipe-card__label">Ricetta</span>
       <p class="product-recipe-card__name">${r.name}</p>
-      <span class="product-recipe-card__link">Vedi ricetta →</span>
+      <span class="product-recipe-card__link">Apri ricetta →</span>
     </a>`).join('');
 
+  // Bottone "Tutte le ricette" già nel HTML — aggiorna il testo del primo link
   wrap.style.display = '';
 }
 
@@ -1179,6 +1180,13 @@ function initRecipesPage() {
   if (typeof RECIPES === 'undefined') return;
   renderRecipes(RECIPES);
   initFilters();
+
+  // Auto-apri modal se URL contiene ?recipe=id (link da pagina prodotto)
+  const rParam = new URLSearchParams(window.location.search).get('recipe');
+  if (rParam) {
+    // Aspetta render ricette poi apri
+    setTimeout(function() { openRecipeModal(rParam); }, 200);
+  }
 }
 
 /* ============================================================
