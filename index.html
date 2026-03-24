@@ -31,24 +31,34 @@
   }
   </script>
   <script>
-    // Logica intro bosco: mostra su reload, nuova tab, o click Home
-    var nav = window.performance && window.performance.getEntriesByType ? window.performance.getEntriesByType('navigation')[0] : null;
-    var isReload = nav && nav.type === 'reload';
-    var isNewTab = nav && nav.type === 'navigate' && document.referrer === '';
-    var isFromHome = sessionStorage.getItem('came-from-home') === '1';
-    sessionStorage.removeItem('came-from-home');
-    window.SHOW_INTRO = isReload || isNewTab || isFromHome;
+    // Logica intro bosco: mostra solo alla PRIMA visita della sessione
+    var hasSeenIntro = sessionStorage.getItem('dialFunghiIntroSeen');
+    if (hasSeenIntro) {
+      window.SHOW_INTRO = false;
+      document.documentElement.classList.add('intro-skipped');
+    } else {
+      window.SHOW_INTRO = true;
+      sessionStorage.setItem('dialFunghiIntroSeen', 'true');
+    }
   </script>
 </head>
 <body>
 
-<!-- INTRO BOSCO ANIMAZIONE -->
+<!-- INTRO BOSCO ANIMAZIONE (video) -->
 <div id="forest-intro" aria-hidden="true">
-  <div id="forest-slides">
-    <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 1.png"></div>
-    <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 2.png"></div>
-    <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 3.png"></div>
-    <div class="forest-slide" data-src="IMMAGINI /foto bosco animazioni /foto bosco 4.png"></div>
+  <div class="forest-intro-video-wrapper">
+    <video
+      id="intro-video"
+      class="forest-intro-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source src="IMMAGINI /video/intro-bosco.mp4" type="video/mp4">
+    </video>
+    <div class="forest-intro-overlay"></div>
   </div>
   <canvas id="forest-particles"></canvas>
   <div id="forest-vignette"></div>
@@ -125,7 +135,7 @@
       <span class="hero__word"><span class="hero__word-inner">I sapori del</span></span>
       <span class="hero__word"><span class="hero__word-inner">Trentino.</span></span>
       <br>
-      <span class="hero__word"><span class="hero__word-inner">Nel tuo</span></span>
+      <span class="hero__word"><span class="hero__word-inner">In ogni</span></span>
       <span class="hero__word"><span class="hero__word-inner"><em>piatto.</em></span></span>
     </h1>
 
@@ -220,14 +230,15 @@
       <span class="ticker__item">DIAL FUNGHI<span class="ticker__separator"></span></span>
       <span class="ticker__item">DAL 1992<span class="ticker__separator"></span></span>
       <span class="ticker__item">PORCINI E SPECK<span class="ticker__separator"></span></span>
-      <span class="ticker__item">TRENTINO<span class="ticker__separator"></span></span>
-      <span class="ticker__item">TARTUFO E PECORINO<span class="ticker__separator"></span></span>
-      <span class="ticker__item">MADE IN ITALY<span class="ticker__separator"></span></span>
-      <span class="ticker__item">PAPRIKA E BBQ<span class="ticker__separator"></span></span>
       <span class="ticker__item">PERGINE VALSUGANA<span class="ticker__separator"></span></span>
+      <span class="ticker__item">TARTUFO E PECORINO<span class="ticker__separator"></span></span>
+      <span class="ticker__item">TRENTINO<span class="ticker__separator"></span></span>
+      <span class="ticker__item">PAPRIKA E BBQ<span class="ticker__separator"></span></span>
+      <span class="ticker__item">MADE IN ITALY<span class="ticker__separator"></span></span>
       <span class="ticker__item">TERIYAKI E ZENZERO<span class="ticker__separator"></span></span>
       <span class="ticker__item">BRC CERTIFIED<span class="ticker__separator"></span></span>
       <span class="ticker__item">FUNGHI ITALIANI<span class="ticker__separator"></span></span>
+      <span class="ticker__item">IFS FOOD<span class="ticker__separator"></span></span>
     </template>
   </div>
 </div>
@@ -241,7 +252,7 @@
     <div class="flex-between" style="flex-wrap:wrap; gap:20px; margin-bottom:40px;">
       <div class="reveal">
         <span class="section-label">Il nostro catalogo</span>
-        <h2 data-scramble>Tutto il Gusto del Trentino</h2>
+        <h2 data-animate-text>Tutto il Gusto del Trentino</h2>
       </div>
       <a href="shop.html" class="btn btn--outline-dark reveal">Vedi tutto</a>
     </div>
@@ -287,25 +298,25 @@
   <div class="gusti-scroll__slides">
     <div class="gusto-slide" data-color="#7B4B2A" data-img="1">
       <span class="gusto-slide__num">01</span>
-      <h2 data-scramble>Porcini e Speck</h2>
+      <h2 data-animate-text>Porcini e Speck</h2>
       <p>Il gusto intenso dei porcini con la nota affumicata dello speck. Perfetto su risotto, pasta e bruschette.</p>
       <a href="product?id=ffps-180-01" class="btn btn--primary">Scopri →</a>
     </div>
     <div class="gusto-slide" data-color="#4a3828" data-img="2">
       <span class="gusto-slide__num">02</span>
-      <h2 data-scramble>Tartufo e Pecorino</h2>
+      <h2 data-animate-text>Tartufo e Pecorino</h2>
       <p>Elegante, raffinata. Con Pecorino Romano DOP per un gusto complesso e persistente.</p>
       <a href="product?id=fftap-180-01" class="btn btn--primary">Scopri →</a>
     </div>
     <div class="gusto-slide" data-color="#B83020" data-img="3">
       <span class="gusto-slide__num">03</span>
-      <h2 data-scramble>Paprika e BBQ</h2>
+      <h2 data-animate-text>Paprika e BBQ</h2>
       <p>Intensa, affumicata, irresistibile. La scelta perfetta per grigliate, burger e verdure.</p>
       <a href="product?id=ffpab-180-01" class="btn btn--primary">Scopri →</a>
     </div>
     <div class="gusto-slide" data-color="#2D5016" data-img="4">
       <span class="gusto-slide__num">04 ★</span>
-      <h2 data-scramble>Teriyaki e Zenzero</h2>
+      <h2 data-animate-text>Teriyaki e Zenzero</h2>
       <p>Limited Edition. La fusion che non ti aspetti: dolce, speziata, orientale.</p>
       <a href="product?id=fft-180-01" class="btn btn--primary">Scopri →</a>
     </div>

@@ -11,179 +11,48 @@ if (typeof gsap !== 'undefined') gsap.registerPlugin(ScrollTrigger);
    ============================================================ */
 
 function initForestIntro() {
-  // Mobile: show image fallback briefly, then fade out
-  if (window.innerWidth < 768) {
-    var el = document.getElementById('forest-intro');
-    if (el) {
-      document.body.style.overflow = 'hidden';
-      document.body.classList.add('intro-playing');
-      var logoMobile = document.getElementById('forest-logo');
-      if (logoMobile) logoMobile.style.opacity = '1';
-      setTimeout(function() {
-        el.style.transition = 'opacity 1s ease';
-        el.style.opacity = '0';
-        document.body.style.overflow = '';
-        document.body.classList.remove('intro-playing');
-        setTimeout(function() { el.remove(); }, 1000);
-      }, 2000);
-    }
-    return;
-  }
+  var introEl = document.getElementById('forest-intro');
+  var logoEl  = document.getElementById('forest-logo');
+  var video   = document.getElementById('intro-video');
+
   // Skip se non dobbiamo mostrare l'intro
   if (!window.SHOW_INTRO) {
-    var el2 = document.getElementById('forest-intro');
-    if (el2) el2.remove();
-    return;
-  }
-  if (typeof THREE === 'undefined') {
-    var el3 = document.getElementById('forest-intro');
-    if (el3) el3.remove();
+    if (introEl) introEl.remove();
     return;
   }
 
-  var introEl   = document.getElementById('forest-intro');
-  var logoEl    = document.getElementById('forest-logo');
-  var slideEls  = Array.from(document.querySelectorAll('.forest-slide'));
-  var canvas    = document.getElementById('forest-particles');
-  if (!introEl || !slideEls.length) return;
+  if (!introEl) return;
+
+  var TOTAL_DURATION = 5000;
 
   // Blocca scroll durante intro
   document.body.style.overflow = 'hidden';
-
-  var SLIDE_DURATION = 1200;  // ms per slide — LENTO
-  var CROSSFADE      = 600;   // ms crossfade
-  var TOTAL_DURATION = 6000;  // 4 foto x 1200ms + 1500ms fade
-  var currentSlide   = 0;
-
-  // Precarica tutte le immagini
-  var preloadPromises = slideEls.map(function(slide) {
-    return new Promise(function(res) {
-      var img = new Image();
-      img.onload = img.onerror = res;
-      img.src = slide.dataset.src;
-      slide.style.backgroundImage = "url('" + slide.dataset.src + "')";
-    });
-  });
-
-  Promise.all(preloadPromises).then(function() {
-    showSlide(0);
-    var slideInterval = setInterval(function() {
-      var prev = slideEls[currentSlide];
-      currentSlide++;
-      if (currentSlide < slideEls.length) {
-        prev.classList.add('leaving');
-        setTimeout(function() {
-          prev.classList.remove('active', 'leaving');
-        }, CROSSFADE);
-        showSlide(currentSlide);
-      } else {
-        clearInterval(slideInterval);
-      }
-    }, SLIDE_DURATION);
-  });
-
-  function showSlide(n) {
-    var slide = slideEls[n];
-    if (!slide) return;
-    slide.classList.add('active');
-  }
-
-  // --- Particelle Three.js sopra le foto ---
-  if (canvas) {
-    var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
-
-    var scene  = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(
-      70, window.innerWidth / window.innerHeight, 0.01, 100
-    );
-    camera.position.z = 4;
-
-    var COUNT = 150, geo = new THREE.BufferGeometry();
-    var pos = new Float32Array(COUNT * 3);
-    for (var i = 0; i < COUNT * 3; i += 3) {
-      pos[i]   = (Math.random() - 0.5) * 8;
-      pos[i+1] = (Math.random() - 0.5) * 8;
-      pos[i+2] = (Math.random() - 0.5) * 14;
-    }
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-
-    function makeCircleTex(r, g, b) {
-      var sz = 48, c = document.createElement('canvas');
-      c.width = c.height = sz;
-      var ctx = c.getContext('2d');
-      ctx.beginPath();
-      ctx.arc(sz/2, sz/2, sz/2-2, 0, Math.PI*2);
-      ctx.fillStyle = 'rgb(' + Math.round(r*255) + ',' + Math.round(g*255) + ',' + Math.round(b*255) + ')';
-      ctx.fill();
-      return new THREE.CanvasTexture(c);
-    }
-
-    var mat = new THREE.PointsMaterial({
-      size: 0.07, transparent: true, opacity: 0.55,
-      alphaTest: 0.4, depthWrite: false,
-      map: makeCircleTex(0.25, 0.55, 0.15)  // verde bosco all'inizio
-    });
-    var pts = new THREE.Points(geo, mat);
-    scene.add(pts);
-
-    var camZ = 4;
-    var startTime = Date.now();
-
-    (function animatePts() {
-      var elapsed  = Date.now() - startTime;
-      var progress = Math.min(elapsed / TOTAL_DURATION, 1);
-
-      camZ -= 0.008;
-      if (camZ < -6) camZ = 3;
-      camera.position.z = camZ;
-      pts.rotation.y += 0.0004;
-
-      // Crossfade LENTO verde → arancio (50%→90% della durata)
-      if (progress > 0.5) {
-        var t = Math.min((progress - 0.5) / 0.4, 1);
-        mat.color.setRGB(
-          0.25 + t * 0.66,
-          0.55 - t * 0.22,
-          0.15 - t * 0.15
-        );
-        mat.opacity = 0.55 + t * 0.15;
-      }
-
-      renderer.render(scene, camera);
-      if (elapsed < TOTAL_DURATION + 1000)
-        requestAnimationFrame(animatePts);
-      else renderer.dispose();
-    })();
-  }
-
-  // Aggiungi classe per nascondere hero durante intro
   document.body.classList.add('intro-playing');
 
-  // Logo appare a 2.5 secondi
-  setTimeout(function() {
-    gsap.to(logoEl, { opacity: 1, duration: 0.8, ease: 'power2.out' });
-  }, 2500);
+  // Avvia il video (fallback se autoplay bloccato)
+  if (video) {
+    video.play().catch(function() {});
+  }
 
-  // A 4s il logo esce
+  // Logo appare a 2s
   setTimeout(function() {
-    gsap.to(logoEl, { opacity: 0, duration: 0.5 });
-  }, 4000);
+    if (logoEl) gsap.to(logoEl, { opacity: 1, duration: 0.8, ease: 'power2.out' });
+  }, 2000);
 
-  // 1500ms prima della fine: sfuma tutto lentamente
+  // A 3.5s il logo esce
   setTimeout(function() {
-    document.querySelectorAll('.forest-slide').forEach(function(s) {
-      gsap.to(s, { opacity: 0, duration: 1.2, ease: 'power1.inOut' });
-    });
+    if (logoEl) gsap.to(logoEl, { opacity: 0, duration: 0.5 });
+  }, 3500);
+
+  // 1s prima della fine: sfuma video
+  setTimeout(function() {
+    if (video) gsap.to(video, { opacity: 0, duration: 1.0, ease: 'power1.inOut' });
     var pc = document.getElementById('forest-particles');
     if (pc) gsap.to(pc, { opacity: 0, duration: 1.0, ease: 'power1.inOut' });
-    gsap.to(logoEl, { opacity: 0, duration: 0.4 });
     gsap.to(introEl, { backgroundColor: '#0D0702', duration: 0.8 });
-  }, TOTAL_DURATION - 1500);
+  }, TOTAL_DURATION - 1000);
 
-  // A TOTAL_DURATION: slide-up lento
+  // A TOTAL_DURATION: slide-up e rimuovi
   setTimeout(function() {
     document.body.style.overflow = '';
     gsap.to(introEl, {
@@ -1874,32 +1743,21 @@ function initHeroParticles() {
   } catch(e) { console.warn('Three.js particles error:', e); }
 }
 
-/* ----- Effetto 9: TEXT SCRAMBLE ----- */
-function scrambleText(el) {
-  const chars  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@!';
-  const target = el.dataset.text || el.textContent;
-  let iteration = 0;
-  const interval = setInterval(() => {
-    el.textContent = target.split('').map((char, i) => {
-      if (char === ' ') return ' ';
-      if (i < iteration) return target[i];
-      return chars[Math.floor(Math.random() * chars.length)];
-    }).join('');
-    if (iteration >= target.length) clearInterval(interval);
-    iteration += 1/3;
-  }, 30);
-}
-
-function initScramble() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        scrambleText(entry.target);
-        observer.unobserve(entry.target);
+/* ----- Effetto 9: TEXT FADE IN (sostituzione scramble) ----- */
+function initTextFadeIn() {
+  if (typeof gsap === 'undefined') return;
+  gsap.utils.toArray('[data-animate-text]').forEach(el => {
+    gsap.from(el, {
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%'
       }
     });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('[data-scramble]').forEach(el => observer.observe(el));
+  });
 }
 
 /* ----- Effetto 11: PAGE LOADER ----- */
@@ -2170,7 +2028,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCustomCursor();
   initMagneticButtons();
   initScrollProgress();
-  initScramble();
+  initTextFadeIn();
   initPageLoader();
   initPageTransitions();
   initTilt3D();
