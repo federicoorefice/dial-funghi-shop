@@ -1470,18 +1470,18 @@ function initHamburger() {
   if (!btn || !nav) return;
 
   btn.addEventListener('click', () => {
-    const open = nav.style.display === 'flex';
-    nav.style.display = open ? '' : 'flex';
-    nav.style.flexDirection = open ? '' : 'column';
-    nav.style.position = open ? '' : 'absolute';
-    nav.style.top = open ? '' : '100%';
-    nav.style.left = open ? '' : '0';
-    nav.style.right = open ? '' : '0';
-    nav.style.background = open ? '' : 'rgba(28,14,5,0.98)';
-    nav.style.padding = open ? '' : '24px 24px';
-    nav.style.gap = open ? '' : '20px';
-    nav.style.backdropFilter = open ? '' : 'blur(20px)';
-    nav.style.zIndex = open ? '' : '999';
+    nav.classList.toggle('open');
+    btn.classList.toggle('active');
+    btn.setAttribute('aria-expanded', nav.classList.contains('open'));
+  });
+
+  // Close menu when a link is clicked
+  nav.querySelectorAll('.navbar__link').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      btn.classList.remove('active');
+      btn.setAttribute('aria-expanded', 'false');
+    });
   });
 }
 
