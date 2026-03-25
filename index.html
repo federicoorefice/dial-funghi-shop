@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fior di Funghi — La prima salsa ai funghi in formato squeeze | Dial Funghi</title>
-  <meta name="description" content="Scopri Fior di Funghi, la prima salsa ai funghi porcini in formato squeeze. 4 gusti irresistibili. Spedizione gratuita sopra €30. Dal 1992, Dial Funghi — Pergine Valsugana.">
+  <title>Dial Funghi — Sapori del Trentino dal 1992 | Shop Online</title>
+  <meta name="description" content="Dial Funghi: funghi, condimenti e innovazione artigianale dal 1992 a Pergine Valsugana. Scopri Fior di Funghi, la prima salsa ai funghi in squeeze. Spedizione gratuita sopra €30.">
   <link rel="stylesheet" href="styles.css">
   <script>
-    // Logica intro bosco: mostra su reload, nuova tab, o click Home
-    var nav = window.performance && window.performance.getEntriesByType ? window.performance.getEntriesByType('navigation')[0] : null;
-    var isReload = nav && nav.type === 'reload';
-    var isNewTab = nav && nav.type === 'navigate' && document.referrer === '';
-    var isFromHome = sessionStorage.getItem('came-from-home') === '1';
-    sessionStorage.removeItem('came-from-home');
-    window.SHOW_INTRO = isReload || isNewTab || isFromHome;
+    // Sprint 5 Task 3: Forest intro solo alla prima visita della sessione
+    function shouldShowIntro() {
+      return !sessionStorage.getItem('dialFunghiIntroShown');
+    }
+    function markIntroAsShown() {
+      sessionStorage.setItem('dialFunghiIntroShown', 'true');
+    }
+    window.SHOW_INTRO = shouldShowIntro();
+    if (window.SHOW_INTRO) markIntroAsShown();
   </script>
 </head>
 <body>
 
-<!-- Spotlight cursor globale — canvas fisso full-page -->
-<canvas id="global-spotlight" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9990;opacity:0;"></canvas>
+<!-- Spotlight cursor globale — SOSTITUITO CON CSS radial-gradient (Sprint 1 Task 1) -->
 
 <!-- INTRO BOSCO ANIMAZIONE -->
 <div id="forest-intro" aria-hidden="true">
@@ -97,28 +98,29 @@
 
   <!-- Content -->
   <div class="hero__content">
-    <span class="hero__label">Fior di Funghi — Dal 1992</span>
+    <span class="hero__label">Dial Funghi — Dal 1992</span>
 
     <h1 class="hero__headline" id="heroHeadline">
-      <span class="hero__word"><span class="hero__word-inner">La prima</span></span>
-      <span class="hero__word"><span class="hero__word-inner">salsa</span></span>
-      <span class="hero__word"><span class="hero__word-inner">ai funghi.</span></span>
+      <span class="hero__word"><span class="hero__word-inner">I sapori</span></span>
+      <span class="hero__word"><span class="hero__word-inner">del</span></span>
       <br>
-      <span class="hero__word"><span class="hero__word-inner">In formato</span></span>
-      <span class="hero__word"><span class="hero__word-inner"><em>squeeze.</em></span></span>
+      <span class="hero__word"><span class="hero__word-inner">Trentino.</span></span>
+      <br>
+      <span class="hero__word"><span class="hero__word-inner">Nel tuo</span></span>
+      <span class="hero__word"><span class="hero__word-inner"><em>piatto.</em></span></span>
     </h1>
 
     <p class="hero__subline">
-      4 gusti unici, 100% funghi italiani, pronta in zero secondi.<br>
-      Nata nelle Dolomiti. Fatta per ogni tavola.
+      Funghi, condimenti e innovazione artigianale<br>
+      dal 1992 — dal cuore delle Dolomiti.
     </p>
 
     <div class="hero__ctas">
       <a href="shop.html" class="btn btn--primary btn--lg">
-        Scopri Fior di Funghi
+        Scopri i Prodotti
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="shop.html" class="btn btn--outline btn--lg">Tutta la gamma</a>
+      <a href="about.html" class="btn btn--outline btn--lg">La Nostra Storia</a>
     </div>
 
   </div>
@@ -208,50 +210,120 @@
      4 GUSTI FIOR DI FUNGHI — Scroll Pinning
      ============================================================ -->
 <section class="gusti-scroll" id="gusti">
-  <canvas id="gusti-particles" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;" aria-hidden="true"></canvas>
+  <!-- gusti-particles: SOSTITUITO CON CSS (Sprint 1 Task 1) -->
   <!-- Lato sinistro: bottiglia sticky -->
   <div class="gusti-scroll__sticky">
     <div class="gusti-bottle-container">
       <img id="gusto-img-1" class="gusto-bottle active"
            src="IMMAGINI /fior di funghi prodotti /flaconi shop /porcini e speck render .png"
-           alt="Porcini e Speck">
+           alt="Porcini e Speck" loading="lazy" decoding="async">
       <img id="gusto-img-2" class="gusto-bottle"
            src="IMMAGINI /fior di funghi prodotti /flaconi shop /tartufo e pecorino render.png"
-           alt="Tartufo e Pecorino">
+           alt="Tartufo e Pecorino" loading="lazy" decoding="async">
       <img id="gusto-img-3" class="gusto-bottle"
            src="IMMAGINI /fior di funghi prodotti /flaconi shop /bbq e paprika.png"
-           alt="Paprika e BBQ">
+           alt="Paprika e BBQ" loading="lazy" decoding="async">
       <img id="gusto-img-4" class="gusto-bottle"
            src="IMMAGINI /fior di funghi prodotti /flaconi shop /teriaky e zenzero render.png"
-           alt="Teriyaki e Zenzero">
+           alt="Teriyaki e Zenzero" loading="lazy" decoding="async">
     </div>
   </div>
   <!-- Lato destro: 4 gusti che scorrono -->
   <div class="gusti-scroll__slides">
     <div class="gusto-slide" data-color="#7B4B2A" data-img="1">
       <span class="gusto-slide__num">01</span>
-      <h2 data-scramble>Porcini e Speck</h2>
+      <h2>Porcini e Speck</h2>
       <p>Il gusto intenso dei porcini con la nota affumicata dello speck. Perfetto su risotto, pasta e bruschette.</p>
       <a href="product?id=ffps-180-01" class="btn btn--primary">Scopri →</a>
     </div>
     <div class="gusto-slide" data-color="#4a3828" data-img="2">
       <span class="gusto-slide__num">02</span>
-      <h2 data-scramble>Tartufo e Pecorino</h2>
+      <h2>Tartufo e Pecorino</h2>
       <p>Elegante, raffinata. Con Pecorino Romano DOP per un gusto complesso e persistente.</p>
       <a href="product?id=fftap-180-01" class="btn btn--primary">Scopri →</a>
     </div>
     <div class="gusto-slide" data-color="#B83020" data-img="3">
       <span class="gusto-slide__num">03</span>
-      <h2 data-scramble>Paprika e BBQ</h2>
+      <h2>Paprika e BBQ</h2>
       <p>Intensa, affumicata, irresistibile. La scelta perfetta per grigliate, burger e verdure.</p>
       <a href="product?id=ffpab-180-01" class="btn btn--primary">Scopri →</a>
     </div>
     <div class="gusto-slide" data-color="#2D5016" data-img="4">
       <span class="gusto-slide__num">04 ★</span>
-      <h2 data-scramble>Teriyaki e Zenzero</h2>
+      <h2>Teriyaki e Zenzero</h2>
       <p>Limited Edition. La fusion che non ti aspetti: dolce, speziata, orientale.</p>
       <a href="product?id=fft-180-01" class="btn btn--primary">Scopri →</a>
     </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BLUR SLIDER — Fior di Funghi Product Showcase (Sprint 5 Task 6)
+     ============================================================ -->
+<section class="blur-slider-section" aria-label="Scopri i gusti Fior di Funghi">
+  <div class="blur-slider-track" id="blurSlider">
+    <div class="blur-slide active" data-id="ffps-180-01">
+      <div class="blur-slide__image">
+        <img src="IMMAGINI /fior di funghi prodotti /flaconi shop /porcini e speck render .png"
+             alt="Porcini e Speck" loading="lazy" decoding="async">
+      </div>
+      <div class="blur-slide__content">
+        <span class="blur-slide__brand">FIOR DI FUNGHI</span>
+        <h3 class="blur-slide__name">Porcini<br>e Speck</h3>
+        <p class="blur-slide__desc">Il classico del bosco. Intenso, aromatico, versatile.</p>
+        <span class="blur-slide__price">€3,99</span>
+        <a href="product.html?id=ffps-180-01" class="blur-slide__cta">ESPLORA IL PRODOTTO ↗</a>
+      </div>
+    </div>
+    <div class="blur-slide" data-id="fftap-180-01">
+      <div class="blur-slide__image">
+        <img src="IMMAGINI /fior di funghi prodotti /flaconi shop /tartufo e pecorino render.png"
+             alt="Tartufo e Pecorino" loading="lazy" decoding="async">
+      </div>
+      <div class="blur-slide__content">
+        <span class="blur-slide__brand">FIOR DI FUNGHI</span>
+        <h3 class="blur-slide__name">Tartufo<br>e Pecorino</h3>
+        <p class="blur-slide__desc">Elegante, raffinata. Con Pecorino Romano DOP per un gusto complesso e persistente.</p>
+        <span class="blur-slide__price">€3,99</span>
+        <a href="product.html?id=fftap-180-01" class="blur-slide__cta">ESPLORA IL PRODOTTO ↗</a>
+      </div>
+    </div>
+    <div class="blur-slide" data-id="ffpab-180-01">
+      <div class="blur-slide__image">
+        <img src="IMMAGINI /fior di funghi prodotti /flaconi shop /bbq e paprika.png"
+             alt="Paprika e BBQ" loading="lazy" decoding="async">
+      </div>
+      <div class="blur-slide__content">
+        <span class="blur-slide__brand">FIOR DI FUNGHI</span>
+        <h3 class="blur-slide__name">Paprika<br>e BBQ</h3>
+        <p class="blur-slide__desc">Intensa, affumicata, irresistibile. Per grigliate, burger e verdure.</p>
+        <span class="blur-slide__price">€3,99</span>
+        <a href="product.html?id=ffpab-180-01" class="blur-slide__cta">ESPLORA IL PRODOTTO ↗</a>
+      </div>
+    </div>
+    <div class="blur-slide" data-id="fft-180-01">
+      <div class="blur-slide__image">
+        <img src="IMMAGINI /fior di funghi prodotti /flaconi shop /teriaky e zenzero render.png"
+             alt="Teriyaki e Zenzero" loading="lazy" decoding="async">
+      </div>
+      <div class="blur-slide__content">
+        <span class="blur-slide__brand">FIOR DI FUNGHI ★ LIMITED</span>
+        <h3 class="blur-slide__name">Teriyaki<br>e Zenzero</h3>
+        <p class="blur-slide__desc">La fusion che non ti aspetti: dolce, speziata, orientale.</p>
+        <span class="blur-slide__price">€3,99</span>
+        <a href="product.html?id=fft-180-01" class="blur-slide__cta">ESPLORA IL PRODOTTO ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <button class="blur-slider-prev" aria-label="Prodotto precedente">←</button>
+  <button class="blur-slider-next" aria-label="Prodotto successivo">→</button>
+
+  <div class="blur-slider-dots" role="tablist" aria-label="Navigazione prodotti">
+    <span class="dot active" role="tab" aria-selected="true"></span>
+    <span class="dot" role="tab" aria-selected="false"></span>
+    <span class="dot" role="tab" aria-selected="false"></span>
+    <span class="dot" role="tab" aria-selected="false"></span>
   </div>
 </section>
 
@@ -337,7 +409,7 @@
     <div class="flex-between" style="flex-wrap:wrap; gap:20px; margin-bottom:40px;">
       <div class="reveal">
         <span class="section-label">Tutta la gamma</span>
-        <h2 data-scramble>Dial Funghi</h2>
+        <h2>Dial Funghi</h2>
       </div>
       <a href="shop.html" class="btn btn--outline-dark reveal">Vedi tutto</a>
     </div>
@@ -435,6 +507,7 @@
      STORIA AZIENDALE
      ============================================================ -->
 <section class="storia-v2" id="storia">
+  <div class="storia-v2__bg" aria-hidden="true"></div>
   <div class="container">
     <div class="storia-v2__header reveal">
       <span class="section-label">Chi siamo</span>
@@ -464,7 +537,7 @@
         <img
           src="IMMAGINI /foto aziende dial /stabilimento/stabilimento 1.jpg"
           alt="Stabilimento Dial Funghi — Pergine Valsugana"
-          loading="lazy"
+          loading="lazy" decoding="async"
         >
       </div>
     </div>
@@ -482,7 +555,7 @@
         <img
           src="IMMAGINI /foto aziende dial /lab/lab 1.png"
           alt="Laboratorio Dial Funghi"
-          loading="lazy"
+          loading="lazy" decoding="async"
         >
       </div>
     </div>
@@ -984,8 +1057,7 @@
 </div>
 <div id="cursor-dot" aria-hidden="true"></div>
 
-<!-- Effetto 6: Liquid Splash Canvas -->
-<canvas id="splashCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:0.75;" aria-hidden="true"></canvas>
+<!-- Effetto 6: Liquid Splash Canvas — RIMOSSO per performance (Sprint 1 Task 1) -->
 
 <!-- Scripts -->
   <!-- GSAP -->

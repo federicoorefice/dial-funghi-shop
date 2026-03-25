@@ -20,8 +20,8 @@
   --color-text:          #1A1A1A;
   --color-text-light:    #FFFFFF;
   --color-text-muted:    #666666;
-  --color-accent:        #C8281E;
-  --color-accent-red:    #C8281E;
+  --color-accent:        #E8722A;
+  --color-accent-red:    #E8722A;
   --color-accent-orange: #E85320;
   --color-accent-blue:   #2D6FA3;
   --color-gold:          #C8860A;
@@ -46,7 +46,7 @@
   --shadow-sm:    0 2px 12px rgba(0,0,0,0.06);
   --shadow-md:    0 8px 32px rgba(0,0,0,0.10);
   --shadow-lg:    0 20px 60px rgba(0,0,0,0.15);
-  --shadow-glow:  0 0 40px rgba(200,40,30,0.25);
+  --shadow-glow:  0 0 40px rgba(232,114,42,0.25);
 
   --nav-h:        72px;
   --section-pad:  clamp(64px, 8vw, 120px);
@@ -449,6 +449,7 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
   position: relative;
   min-height: 100vh;
   background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,114,42,0.06) 0%, transparent 70%),
     radial-gradient(ellipse 70% 55% at 50% 45%, rgba(180,50,15,0.16) 0%, transparent 65%),
     radial-gradient(ellipse 45% 35% at 50% 75%, rgba(200,134,10,0.09) 0%, transparent 60%),
     #0D0702;
@@ -1340,6 +1341,29 @@ h4 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
 .section-recipes-preview {
   background: var(--color-bg-dark);
   padding-block: var(--section-pad);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sprint 5 Task 8C: CSS particles nella sezione ricette — no canvas */
+.section-recipes-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 2px at 15% 40%, rgba(232,114,42,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1px at 65% 20%, rgba(197,165,90,0.4) 0%, transparent 100%),
+    radial-gradient(circle 3px at 80% 70%, rgba(232,114,42,0.3) 0%, transparent 100%),
+    radial-gradient(circle 1px at 35% 80%, rgba(197,165,90,0.5) 0%, transparent 100%),
+    radial-gradient(circle 2px at 90% 45%, rgba(232,114,42,0.4) 0%, transparent 100%);
+  pointer-events: none;
+  animation: particleFloat 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes particleFloat {
+  from { transform: translateY(0) scale(1); }
+  to   { transform: translateY(-15px) scale(1.03); }
 }
 
 .recipe-card {
@@ -3250,7 +3274,7 @@ section[id] { scroll-margin-top: 84px; }
 .btn-primary:hover::after { transform: translateX(0); }
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(200,40,30,0.35);
+  box-shadow: 0 12px 32px rgba(232,114,42,0.35);
 }
 
 /* --- Tab Btn V2 --- */
@@ -3806,7 +3830,7 @@ body.cursor-circle #cursor.hover {
 .card-drip__svg { width: 100%; }
 [data-gusto="porcini-speck"]    .card-drip { color: #7B4B2A; }
 [data-gusto="tartufo-pecorino"] .card-drip { color: #5a4a3a; }
-[data-gusto="paprika-bbq"]      .card-drip { color: #C8281E; }
+[data-gusto="paprika-bbq"]      .card-drip { color: #E8722A; }
 [data-gusto="teriyaki-zenzero"] .card-drip { color: #2D5016; }
 
 /* ----- Effetto 8: Hero Canvas particles ----- */
@@ -4101,3 +4125,216 @@ body .hero {
 }
 
 /* Mushroom divider — rimosso V23 */
+
+/* ============================================================
+   ATMOSFERA BOSCO — Sprint 5 Task 8
+   ============================================================ */
+
+/* 8B: Texture grana carta sull'hero */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  z-index: 1;
+}
+
+/* 8A: Heritage section parallax */
+.storia-v2 {
+  position: relative;
+  overflow: hidden;
+}
+
+.storia-v2__bg {
+  position: absolute;
+  inset: -20%;
+  background: url('IMMAGINI /foto bosco animazioni /foto bosco 4.png') center/cover no-repeat;
+  filter: brightness(0.12) saturate(0.7);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.storia-v2 .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   BLUR SLIDER — Fior di Funghi Showcase (Sprint 5 Task 6)
+   ============================================================ */
+.blur-slider-section {
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0;
+  background: var(--color-dark);
+}
+
+.blur-slider-track {
+  display: flex;
+  align-items: center;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.blur-slide {
+  min-width: 60%;
+  padding: 40px;
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  transition:
+    filter 0.5s ease,
+    transform 0.5s ease,
+    opacity 0.5s ease;
+  filter: blur(4px) brightness(0.6);
+  transform: scale(0.88);
+  opacity: 0.6;
+}
+
+.blur-slide.active {
+  filter: blur(0) brightness(1);
+  transform: scale(1);
+  opacity: 1;
+}
+
+.blur-slide__image {
+  flex: 0 0 260px;
+  height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blur-slide__image img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.blur-slide.active .blur-slide__image img {
+  animation: floatBottleSlider 4s ease-in-out infinite;
+}
+
+@keyframes floatBottleSlider {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+.blur-slide__content { flex: 1; }
+
+.blur-slide__brand {
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--color-accent);
+  opacity: 0.9;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.blur-slide__name {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: var(--color-cream);
+  margin: 0 0 16px;
+  line-height: 1.1;
+}
+
+.blur-slide__desc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(255,248,240,0.7);
+  margin-bottom: 24px;
+  max-width: 300px;
+  line-height: 1.6;
+}
+
+.blur-slide__price {
+  font-family: var(--font-label);
+  font-size: 2rem;
+  color: var(--color-gold);
+  display: block;
+  margin-bottom: 24px;
+}
+
+.blur-slide__cta {
+  font-family: var(--font-label);
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--color-cream);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--color-accent);
+  padding-bottom: 4px;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.blur-slide__cta:hover {
+  gap: 14px;
+  color: var(--color-accent);
+}
+
+.blur-slider-prev,
+.blur-slider-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,248,240,0.08);
+  border: 1px solid rgba(255,248,240,0.2);
+  color: var(--color-cream);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.blur-slider-prev { left: 24px; }
+.blur-slider-next { right: 24px; }
+.blur-slider-prev:hover,
+.blur-slider-next:hover { background: rgba(232,114,42,0.2); }
+
+.blur-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+}
+
+.blur-slider-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,248,240,0.3);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.blur-slider-dots .dot.active {
+  background: var(--color-accent);
+  transform: scale(1.3);
+}
+
+@media (max-width: 767px) {
+  .blur-slide {
+    min-width: 85%;
+    flex-direction: column;
+    padding: 24px 16px;
+    gap: 24px;
+  }
+  .blur-slide__image {
+    flex: none;
+    height: 200px;
+  }
+  .blur-slider-prev { left: 12px; }
+  .blur-slider-next { right: 12px; }
+}

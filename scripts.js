@@ -553,7 +553,7 @@ function initCarousel() {
 const GUSTO_COLORS = {
   'porcini-speck':    '#7B4B2A',
   'tartufo-pecorino': '#4a3828',
-  'paprika-bbq':      '#C8281E',
+  'paprika-bbq':      '#E8722A',
   'teriyaki-zenzero': '#2D5016'
 };
 
@@ -1631,11 +1631,15 @@ function initMagneticButtons() {
 
 /* ----- Effetto 5: SCROLL PINNING GUSTI con bounce ----- */
 var activeBottle = null;
-var GUSTO_ACCENT_COLORS = { 1: '#7B4B2A', 2: '#3D3530', 3: '#C8281E', 4: '#2D5016' };
+var isGustoAnimating = false;
+var GUSTO_ACCENT_COLORS = { 1: '#7B4B2A', 2: '#3D3530', 3: '#E8722A', 4: '#2D5016' };
 
 function switchGusto(n) {
   var next = document.getElementById('gusto-img-' + n);
   if (!next || next === activeBottle) return;
+  if (isGustoAnimating) return; // Sprint 5 Task 4: guard rapido
+
+  isGustoAnimating = true;
 
   // Nasconde bottiglia uscente
   if (activeBottle) {
@@ -1647,12 +1651,17 @@ function switchGusto(n) {
     });
   }
 
-  // Mostra nuova bottiglia — cade dall'alto con bounce
+  // Mostra nuova bottiglia — cade dall'alto con bounce e poi FERMA
   activeBottle = next;
   gsap.killTweensOf(next);
   gsap.fromTo(next,
     { opacity: 0, y: -120, scale: 0.88 },
-    { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'bounce.out', delay: 0.05 }
+    {
+      opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'bounce.out', delay: 0.05,
+      onComplete: function() {
+        isGustoAnimating = false; // bottiglia ferma, sblocca
+      }
+    }
   );
 
   // Aggiorna accent color
@@ -1877,15 +1886,16 @@ function scrambleText(el) {
 }
 
 function initScramble() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        scrambleText(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('[data-scramble]').forEach(el => observer.observe(el));
+  // DISABILITATO Sprint 5 Task 2 — effetto scramble rimosso, testi compaiono normalmente con GSAP
+  // const observer = new IntersectionObserver((entries) => {
+  //   entries.forEach(entry => {
+  //     if (entry.isIntersecting) {
+  //       scrambleText(entry.target);
+  //       observer.unobserve(entry.target);
+  //     }
+  //   });
+  // }, { threshold: 0.5 });
+  // document.querySelectorAll('[data-scramble]').forEach(el => observer.observe(el));
 }
 
 /* ----- Effetto 11: PAGE LOADER ----- */
@@ -2018,6 +2028,16 @@ function initParallax() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   var storia = document.getElementById('storia');
   if (!storia) return;
+
+  // Sprint 5 Task 8A: Parallax sfondo bosco heritage
+  var storiaBg = storia.querySelector('.storia-v2__bg');
+  if (storiaBg) {
+    gsap.to(storiaBg, {
+      yPercent: 20, ease: 'none',
+      scrollTrigger: { trigger: storia, start: 'top bottom', end: 'bottom top', scrub: true }
+    });
+  }
+
   // Immagini si muovono più lentamente
   gsap.utils.toArray('.storia-v2__img img').forEach(function(img) {
     gsap.to(img, {
@@ -2201,18 +2221,15 @@ function initHeroWordReveal() {
   }
 }
 
-/* ----- Effetto V27: GUSTI PARTICLES ----- */
+/* ----- Effetto V27: GUSTI PARTICLES — DISABILITATO Sprint 1, sostituito da CSS ----- */
 function initGustiParticles() {
+  return; // Sprint 1: rimosso canvas, usare CSS gradients al posto
   var canvas = document.getElementById('gusti-particles');
   if (!canvas || typeof THREE === 'undefined') return;
   if (window.innerWidth < 768) return;
 
-  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(canvas.offsetWidth || window.innerWidth, canvas.offsetHeight || window.innerHeight);
-  renderer.setClearColor(0x000000, 0);
-
-  var scene = new THREE.Scene();
+  // CODICE DISABILITATO — funzione con early return, non raggiunta
+  // (Three.js rimosso: WebGLRenderer e Scene non più istanziati)
   var camera = new THREE.PerspectiveCamera(60, (canvas.offsetWidth || window.innerWidth) / (canvas.offsetHeight || window.innerHeight), 0.1, 50);
   camera.position.z = 3;
 
@@ -2309,11 +2326,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initStoriaCounters();
 
     // Effetti premium (solo index)
-    initHeroParticles();
+    initHeroParticles();     // mantenuto — forest intro canvas
     initGustiScrollPin();
-    initGustiParticles();
-    initSpotlight();
-    initSplashCanvas();
+    // initGustiParticles(); // DISABILITATO Sprint 1 — sostituito da CSS gradients
+    // initSpotlight();       // DISABILITATO Sprint 1 — sostituito da CSS
+    // initSplashCanvas();    // DISABILITATO Sprint 1 — performance
+    initBlurSlider();        // Sprint 5 Task 6 — product showcase
     initParallax();
     initCounterAnimation();
     initTextReveal();
@@ -2343,3 +2361,71 @@ document.addEventListener('DOMContentLoaded', () => {
     initCartPage();
   }
 });
+
+/* ============================================================
+   BLUR SLIDER — Fior di Funghi Showcase (Sprint 5 Task 6)
+   ============================================================ */
+function initBlurSlider() {
+  var section = document.querySelector('.blur-slider-section');
+  if (!section) return;
+
+  var track  = section.querySelector('.blur-slider-track');
+  var slides = section.querySelectorAll('.blur-slide');
+  var dots   = section.querySelectorAll('.dot');
+  if (!track || !slides.length) return;
+
+  var current = 0;
+  var total   = slides.length;
+
+  function goTo(index) {
+    current = ((index % total) + total) % total;
+
+    slides.forEach(function(slide, i) {
+      slide.classList.toggle('active', i === current);
+    });
+    dots.forEach(function(dot, i) {
+      dot.classList.toggle('active', i === current);
+      dot.setAttribute('aria-selected', i === current ? 'true' : 'false');
+    });
+
+    // Centra la slide attiva con transform
+    var slideWidth = slides[0].offsetWidth;
+    var offset = current * slideWidth;
+    track.style.transform = 'translateX(calc(50% - ' + (slideWidth / 2) + 'px - ' + offset + 'px))';
+  }
+
+  // Bottoni navigazione
+  var prevBtn = section.querySelector('.blur-slider-prev');
+  var nextBtn = section.querySelector('.blur-slider-next');
+  if (prevBtn) prevBtn.addEventListener('click', function() { goTo(current - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { goTo(current + 1); });
+
+  // Dots
+  dots.forEach(function(dot, i) {
+    dot.addEventListener('click', function() { goTo(i); });
+  });
+
+  // Touch / swipe
+  var touchStartX = 0;
+  track.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  track.addEventListener('touchend', function(e) {
+    var diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? goTo(current + 1) : goTo(current - 1);
+    }
+  });
+
+  // Tastiera
+  section.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  // Inizializzazione
+  goTo(0);
+
+  // Ricalcola on resize
+  window.addEventListener('resize', function() { goTo(current); }, { passive: true });
+}
