@@ -248,40 +248,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Prodotti suggeriti
+  // Prodotti suggeriti — aspetta che i dati async siano pronti
   const sugGrid = document.getElementById('suggestedGrid');
-  if (sugGrid && typeof FIOR_DI_FUNGHI !== 'undefined') {
-    const cart = typeof getCart !== 'undefined' ? getCart() : [];
-    const cartIds = cart.map(i => i.id);
-    const suggestions = typeof ALL_PRODUCTS !== 'undefined'
-      ? ALL_PRODUCTS.filter(p => !cartIds.includes(p.id)).slice(0, 4)
-      : FIOR_DI_FUNGHI.slice(0, 4);
+  if (sugGrid) {
+    const renderSuggestions = () => {
+      const cart = typeof getCart !== 'undefined' ? getCart() : [];
+      const cartIds = cart.map(i => i.id);
+      const pool = (typeof ALL_PRODUCTS !== 'undefined' && ALL_PRODUCTS.length > 0)
+        ? ALL_PRODUCTS
+        : (typeof FIOR_DI_FUNGHI !== 'undefined' ? FIOR_DI_FUNGHI : []);
+      const suggestions = pool.filter(p => !cartIds.includes(p.id)).slice(0, 4);
 
-    sugGrid.innerHTML = suggestions.map(p => `
-      <div class="product-card" onclick="window.location='product.html?id=${p.id}'">
-        <div class="product-card__img-wrap">
-          <img src="${p.image}" alt="${p.imageAlt}" class="product-card__img" loading="lazy" id="sug-img-${p.id}" onerror="this.style.opacity='0.4'">
-          <div class="product-card__badges">
-            ${p.badges.slice(0,1).map(b => `<span class="badge badge--gf">${b}</span>`).join('')}
-          </div>
-          <button class="product-card__add-btn" onclick="event.stopPropagation(); addToCart('${p.id}'); this.closest('.product-card').style.opacity='0.6';" aria-label="Aggiungi">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          </button>
-        </div>
-        <div class="product-card__body">
-          <h3 class="product-card__name">${p.name}</h3>
-          <div class="product-card__footer">
-            <span class="product-card__price">${p.priceFormatted}</span>
-            <button class="btn btn--primary btn--sm" onclick="event.stopPropagation(); addToCart('${p.id}')">+ Aggiungi</button>
-          </div>
-        </div>
-      </div>`).join('');
+      if (suggestions.length === 0) return; // niente da mostrare
 
-    requestAnimationFrame(() => {
-      document.querySelectorAll('#suggestedGrid .product-card').forEach((c, i) => {
-        setTimeout(() => c.classList.add('visible'), i * 60);
+      sugGrid.innerHTML = suggestions.map(p => `
+        <div class="product-card" onclick="window.location='product.html?id=${p.id}'">
+          <div class="product-card__img-wrap">
+            <img src="${p.image}" alt="${p.imageAlt || p.name}" class="product-card__img" loading="lazy" onerror="this.style.opacity='0.4'">
+            <div class="product-card__badges">
+              ${(p.badges || []).slice(0,1).map(b => `<span class="badge badge--gf">${b}</span>`).join('')}
+            </div>
+            <button class="product-card__add-btn" onclick="event.stopPropagation(); addToCart('${p.id}'); this.closest('.product-card').style.opacity='0.6';" aria-label="Aggiungi">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+          <div class="product-card__body">
+            <h3 class="product-card__name">${p.name}</h3>
+            <div class="product-card__footer">
+              <span class="product-card__price">${p.priceFormatted || '€' + (p.price || '').toFixed(2)}</span>
+              <button class="btn btn--primary btn--sm" onclick="event.stopPropagation(); addToCart('${p.id}')">+ Aggiungi</button>
+            </div>
+          </div>
+        </div>`).join('');
+
+      requestAnimationFrame(() => {
+        document.querySelectorAll('#suggestedGrid .product-card').forEach((c, i) => {
+          setTimeout(() => c.classList.add('visible'), i * 60);
+        });
       });
-    });
+    };
+
+    // Usa dataReady se disponibile, altrimenti tenta dopo un breve delay
+    if (typeof window.dataReady !== 'undefined') {
+      window.dataReady.then(renderSuggestions);
+    } else {
+      setTimeout(renderSuggestions, 500);
+    }
   }
 
   // Aggiorna shipping banner quando cambia carrello

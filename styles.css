@@ -10,21 +10,29 @@
    1. CSS CUSTOM PROPERTIES
    ============================================================ */
 :root {
+  /* === Palette Bosco (sistema visivo ufficiale) === */
+  --color-bosco-notte:   #0D0F0A;
+  --color-terra:         #1A1F14;
+  --color-cream:         #FFF8F0;
+  --color-beige:         #F5EFE6;
+  --color-muschio:       #3D5A2E;
+  --color-dark:          #2D2926;
+
   --gusto-accent:        #7B4B2A;
   --color-bg:            #FFFFFF;
   --color-bg-soft:       #F8F4EF;
-  --color-bg-dark:       #1A1A1A;
-  --color-bg-mid:        #2D2D2D;
+  --color-bg-dark:       #0D0F0A;
+  --color-bg-mid:        #1A1F14;
   --color-surface:       #FFFFFF;
   --color-surface-warm:  #F8F4EF;
   --color-text:          #1A1A1A;
-  --color-text-light:    #FFFFFF;
+  --color-text-light:    #F0EDE8;
   --color-text-muted:    #666666;
   --color-accent:        #E8722A;
   --color-accent-red:    #E8722A;
   --color-accent-orange: #E85320;
   --color-accent-blue:   #2D6FA3;
-  --color-gold:          #C8860A;
+  --color-gold:          #C5A55A;
   --color-gold-light:    #F5C842;
   --color-green:         #2D5016;
   --color-border:        #E5DDD4;
@@ -4417,4 +4425,44 @@ body .hero {
   .gamma__card img {
     height: 120px;
   }
+}
+
+/* ============================================================
+   Task 09 — Dark section particles (CSS, no canvas)
+   ============================================================ */
+.gusti-section,
+.section-certificazioni,
+.footer {
+  position: relative;
+  overflow: hidden;
+}
+
+.gusti-section::before,
+.section-certificazioni::before,
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle 3px at 12% 22%, rgba(232,114,42,0.14) 0%, transparent 100%),
+    radial-gradient(circle 2px at 78% 58%, rgba(232,114,42,0.10) 0%, transparent 100%),
+    radial-gradient(circle 4px at 44% 78%, rgba(197,165,90,0.08) 0%, transparent 100%),
+    radial-gradient(circle 2px at 90% 18%, rgba(232,114,42,0.12) 0%, transparent 100%),
+    radial-gradient(circle 3px at 32% 68%, rgba(197,165,90,0.09) 0%, transparent 100%);
+  animation: darkPFloat 14s ease-in-out infinite alternate;
+}
+
+@keyframes darkPFloat {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(6px, -8px) scale(1.02); }
+  100% { transform: translate(-4px, 5px) scale(0.98); }
+}
+
+.gusti-section > *,
+.section-certificazioni > *,
+.footer > * {
+  position: relative;
+  z-index: 1;
 }
